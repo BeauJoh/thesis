@@ -1,0 +1,8 @@
+---
+header-includes:
+    - \usepackage{tabularx}
+    - \usepackage{booktabs}
+    - \usepackage{xargs}
+    - \usepackage[pdftex,dvipsnames]{xcolor}
+    - \usepackage[colorinlistoftodos,prependcaption,textsize=small,color=yellow]{todonotes}
+---
