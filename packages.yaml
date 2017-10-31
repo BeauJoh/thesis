@@ -5,4 +5,5 @@ header-includes:
     - \usepackage{xargs}
     - \usepackage[pdftex,dvipsnames]{xcolor}
     - \usepackage[colorinlistoftodos,prependcaption,textsize=small,color=yellow]{todonotes}
+    - \usepackage[binary-units]{siunitx}
 ---

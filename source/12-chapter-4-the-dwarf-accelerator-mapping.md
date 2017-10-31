@@ -151,7 +151,7 @@ The number of points is increased for each larger problem size to ensure that th
 The **tiny**, **small** and **medium** problem sizes in the first row of Table~\ref{tab:problem_sizes} correspond to L1, L2 and L3 cache respectively.
 The **large** problem size is at least four times the size of the last-level cache -- in the case of the Skylake, at least \SI{32}{\mebi\byte} -- to ensure that data are transferred between main memory and cache.
 
-\todo[insert the rest of the preliminary paper]
+\todo[inline]{insert the rest of the preliminary paper}
 
 ##Sensibly Grouping The Data
 
@@ -166,7 +166,7 @@ From this analysis we see that Prepositions 1 and 2 from the beginning of the ch
 This section presents an analysis of clock frequency on the CPU architectures.
 Of particular interest, is whether CPU devices are so susceptible to clock frequency that even the dwarfs on which that type of accelerator constantly performs best, lowering the clock frequency causes it to suffer badly enough to not be in pole position.
 
-\todo[this study should be interesting! and easy]
+\todo[inline]{this study should be interesting! and easy}
 
 ##The Impact of Tuning
 
