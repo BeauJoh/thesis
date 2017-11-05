@@ -293,6 +293,9 @@ Indeed, much of the motivation for curating OpenCL applications in Rodinia [@che
 Determining the suitability of an application regarding these characterised metrics has been evaluated by others.
 This Section examines these combined efforts in characterising workloads that are less sensitive to the architectures on which they are executed, and concludes with how these characterisation techniques have been used when assembling benchmark suites.
 
+The use of a vector-space or feature-space in order to classify the characteristics of parallel programs was performed by Meajil, El-Ghazawi and Sterling in 1997 [@meajil1997architecture].
+The target of this work was to determine the major factors in modelling performance between parallel computer architectures in an architecture-independent manner.
+The remainder of this section introduces more recent developments in using a vector-space to characterise applications.
 
 ##Microarchitecture-independent workload characterization {#sec:microarchitecture-independent}
 
