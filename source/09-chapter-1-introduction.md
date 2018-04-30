@@ -6,9 +6,52 @@ For bold, add two * on either side of the text
 For bold and italic, add _** on either side of the text
 -->
 
+<!-- Introduction to the Introduction -->
 
-The thesis builds on and contributes to work in the areas of High Performance Computing in particular workload scheduling for energy efficient supercomputing.
-The original contribution of my thesis is enabling workloads to be autonomously classified, this classification is used to autonomously map a new application code to the most suitable type of accelerator. These accelerators  are increasingly becoming the powerhouse components of these supercomputer systems.
+Supercomputers are becoming increasingly heterogenous.
+At an individual node, there is an increasing trend to use specialised hardware -- known as accelerators -- which can expedite the computation of codes from particular classes of scientific workloads.
+The next generation of these systems have been designed to incorporate a greater number of accelerators.
+For instance, the CAPI and NVLINK technologies included in the latest IBM POWER9 processor offers a high-speed interconnect which allows the rapid movement data between processor and accelerator -- NVIDIA Graphical Processing Unit (GPU) with NVLINK, and CAPI supporting Altera Field-Programmable Gate Array (FPGA), Intel Central Processing Unit (CPU) co-processors to AMD CPU and GPU devices.
+The POWER9 is set to feature in the upcoming Summit and Sierra Supercomputers.
+The support from mainframe vendors for a greater mix of heterogenous devices indicates this is the new direction of supercomputing.
+However, this development is recent, and as such the scheduling of workloads to suitable accelerator is a new problem.
+
+Independently, the characteristics of a scientific code, specifically around computation, memory, branching and parallelism, are independent of any particular device on which they may be finally executed.
+The metrics used to quantify each of these characteristics can be collected during program execution on a simulator.
+In other words, provided they are collected over a representative workload, a graph traversal program maintains the characteristics of a graph traversal program regardless of problem size.
+Moreover, these metrics can be used to accurately predict the execution time on each accelerator in a heterogenous system.
+
+This thesis outlines the methodology required to perform runtime predictions for any given code -- provided the feature metrics are pre-generated -- for any accelerator device.
+A benchmark suite is extended, a characterisation tool developed, and a model is generated to achieve the task.
+This research is of benefit to the scheduling of compute codes to the most appropriate device which in turn provides essential information for scheduling, to better utilise the next generation of supercomputers.
+Without significant improvements in effectively using accelerators on these next generation mainframes, the cost of exascale computing and their corresponding energy efficiency will be prohibitive.
+
+<!-- Context -- a brief on how the proposed solution works -->
+
+##Context
+
+OpenCL setting
+AIWC developed
+metrics AIWC collects
+Embedded into the header of codes.
+
+Runtime data over a range of devices has been measured independently.
+A predictive model has been developed to 
+
+<!-- Restatement of the problem -->
+
+##The Problem
+
+<!-- Restatement of the response -->
+
+##The Solution
+
+<!-- Roadmap -->
+
+##Roadmap
+
+The thesis builds on and contributes to work in the areas of High Performance Computing in particular workload scheduling for efficient supercomputing.
+Original contributions include:  is enabling workloads to be autonomously classified, this classification is used to autonomously map a new application code to the most suitable type of accelerator. These accelerators  are increasingly becoming the powerhouse components of these supercomputer systems.
 Although studies in diversity analysis for assembling benchmark suites have examined workload classification they have not been used for a general accelerator predictive model.
 As such, this study provides additional insight into techiques and tools, along with a wider assembleage of benchmark suite.
 This study is important to the HPC scientific computing community because scheduling generic blocks of code to the most suitable device will allow a significant reduction in power consumption and a better utilisation of supercomputers.
