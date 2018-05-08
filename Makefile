@@ -21,6 +21,18 @@ thesis-map.pdf: thesis-map.md
 		./packages.yaml \
 		-o output/thesis-map.pdf thesis-map.md
 
+introduction.pdf: source/09-chapter-1-introduction.md
+	pandoc source/09-chapter-1-introduction.md \
+		-o output/introduction.pdf \
+		--wrap=preserve \
+		--filter pandoc-crossref \
+		--filter pandoc-citeproc \
+		--filter=./pandoc-tools/table-filter.py \
+		--bibliography=source/bibliography.bib \
+		--variable papersize=a4paper \
+		--top-level-division=chapter \
+		./packages.yaml \
+
 thesis.pdf: source/08-abbreviations.md source/09-chapter-1-introduction.md
 	pandoc source/*.md \
 		-o output/thesis.pdf \
