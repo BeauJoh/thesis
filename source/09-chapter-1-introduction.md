@@ -14,7 +14,7 @@ At an individual node, there is an increasing trend to use specialised hardware 
 The next generation of these systems has been designed to incorporate a greater number of accelerators.
 For instance, the CAPI and NVLINK technologies included in the latest IBM POWER9 processor offers a high-speed interconnect which allows the rapid movement data between processor and accelerator -- NVIDIA Graphical Processing Unit (GPU) with NVLINK, and CAPI supporting Altera Field-Programmable Gate Array (FPGA), Intel Central Processing Unit (CPU) co-processors to AMD CPU and GPU devices.
 The POWER9 is set to feature in the upcoming Summit and Sierra Supercomputers.
-The support from mainframe vendors for a greater mix of heterogenous devices indicates this is the new direction of supercomputing.
+The support from hardware vendors for a greater mix of heterogenous devices indicates this is the new direction of supercomputing.
 However, this development is recent, and as such the scheduling of workloads to the suitable accelerator is a new problem.
 
 
@@ -77,27 +77,32 @@ The final model performs very well and is capable of highly accurate predictions
 The model is capable of predicting execution times for specific devices based on the computational characteristics captured by the AIWC tool, which in turn, provides a good prediction of an accelerator devices execution time needed for a real-world scheduler for nodes of future super-computing systems.
 
 <!-- Restatement of the problem -->
-
-##The Problem
+##Problems in heterogenous supercomputing
 
 The future of supercomputing comprises several heterogenous devices at the node level.
-This complicates the already complicated issue of scheduling code to the node in order to fully utilise supercomputing facilities.
+Evaluating the suitability of any given device on a node requires a comprehensive benchmark suite which is capable of efficiently executing on all devices in a hardware agnostic way.
+Unfortunately, current benchmark suites are ill-suited to the task, either consisting of several different implementations per each device or lacking a comprehensive range of scientific applications to fully explore the performance characteristics of the device.
+Further, this suitability can be concerned with energy consumption, which is critical to the proposed exascale systems envisaged in the future, making performance-per-watt a fundamental concern.
+Additionally, examining the computation characteristics of scientific workloads is difficult, and this complexity only increases when considering the wide range of hardware in heterogenous supercomputing -- and the corresponding different implementations per device.
+Both the difficulties in identifying characteristics of scientific hardware agnostic codes, and the wider diversity of devices of the next-generation of HPC systems complicates the already complicated issue of scheduling code to the node in order to fully utilise supercomputing facilities.
 
 
 <!-- Restatement of the response -->
+##Thesis Contributions
 
-
-##The Solution
+A benchmark suite is extended to include a greater range of scientific applications and over a differing problem sizes.
+Additionally, the extended suite incorporates a high precision timing library which is capable of measuring energy usage and execution times on any OpenCL device.
 
 Architecture Independent Workload Characterisation (AIWC) tool is capable of analysing kernels in order to extract a set of predefined features or characteristics.
-These metrics are used for creating the prediction model to evaluate the performance of OpenCL kernels on different hardware devices and settings.
+The tool can be used in diversity analysis -- which is essential when assembling benchmark suites and justifying the inclusion of an application.
+Furthermore, these metrics are used for creating the prediction model to evaluate the performance of OpenCL kernels on different hardware devices and settings.
 Such a model can then be applied as a prognosis tool to predict the performance of an application for a given platform without any additional instrumentation.
 This prediction adds information that can be incorporated into existing HPC schedulers and has no run-time overhead -- codes are examined one time by the developer when instrumenting with AIWC and these, in turn, are embedded into the header of each kernel code to be evaluated by the scheduler at the time of scheduling.
 
 
 <!-- Roadmap -->
 
-##Roadmap
+##Thesis Structure
 
 
 Chapter 2 discusses the extensions added to the OpenDwarfs Benchmarking Suite in ODE.
