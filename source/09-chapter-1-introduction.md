@@ -92,11 +92,13 @@ Both the difficulties in identifying characteristics of scientific hardware agno
 
 A benchmark suite is extended to include a greater range of scientific applications and over a differing problem sizes.
 Additionally, the extended suite incorporates a high precision timing library which is capable of measuring energy usage and execution times on any OpenCL device.
+Examining the performance of the benchmark suite over a range of devices allows a direct evaluation to be made between these devices on a per application basis.
+From this evaluation, the suitably of OpenCL as a hardware agnostic language is shown.
 
 Architecture Independent Workload Characterisation (AIWC) tool is capable of analysing kernels in order to extract a set of predefined features or characteristics.
 The tool can be used in diversity analysis -- which is essential when assembling benchmark suites and justifying the inclusion of an application.
 Furthermore, these metrics are used for creating the prediction model to evaluate the performance of OpenCL kernels on different hardware devices and settings.
-Such a model can then be applied as a prognosis tool to predict the performance of an application for a given platform without any additional instrumentation.
+Such a model is then applied as a prognosis tool to predict the performance of an application for any given platform without additional instrumentation.
 This prediction adds information that can be incorporated into existing HPC schedulers and has no run-time overhead -- codes are examined one time by the developer when instrumenting with AIWC and these, in turn, are embedded into the header of each kernel code to be evaluated by the scheduler at the time of scheduling.
 
 
