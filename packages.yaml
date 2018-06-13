@@ -4,6 +4,15 @@ header-includes:
     - \usepackage{booktabs}
     - \usepackage{xargs}
     - \usepackage[pdftex,dvipsnames]{xcolor}
-    - \usepackage[colorinlistoftodos,prependcaption,textsize=small,color=yellow]{todonotes}
+    - \usepackage[colorinlistoftodos,textsize=small,color=yellow]{todonotes}
+    - \usepackage{marginnote}
     - \usepackage[binary-units]{siunitx}
+    - \usepackage{threeparttable}
+    - \usepackage{MnSymbol}
+    - \usepackage{adjustbox}
+    - \usepackage{etoolbox}
+include-before:
+    - \makeatletter
+    - \renewcommand{\@todonotes@drawMarginNoteWithLine}{\begin{tikzpicture}[remember picture, overlay, baseline=-0.75ex] \node [coordinate] (inText) {};\end{tikzpicture}\marginnote[{\@todonotes@drawMarginNote\@todonotes@drawLineToLeftMargin}]{\@todonotes@drawMarginNote \@todonotes@drawLineToRightMargin}}
+    - \makeatother
 ---
