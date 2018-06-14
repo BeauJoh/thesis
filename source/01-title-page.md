@@ -6,12 +6,12 @@ This is the Latex-heavy title page.
     \begin{center}
 
         \vspace*{2.5cm}
-        
+
         \huge
-        Automatic program analysis for scheduling of scientific workloads in the heterogeneous node supercomputer setting
-        
+        Automatic program analysis and scheduling of scientific workloads for heterogenous supercomputers.
+
         \vspace{1.5cm}
-        
+
         \Large
         Beau Johnston
         
@@ -22,7 +22,7 @@ This is the Latex-heavy title page.
         \normalsize
         A thesis presented for the degree of Doctor of Philosophy\\
         of The Australian National University
-        
+
         \vfill
 
         \vspace{0.8cm}

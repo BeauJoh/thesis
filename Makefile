@@ -1,5 +1,5 @@
 
-all: thesis-map.pdf thesis.pdf
+all: thesis.pdf #thesis-map.pdf
 
 grammarly: source/09-chapter-1-introduction.md
 	pkill Grammarly || true #if grammarly already exists kill it

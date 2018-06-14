@@ -12,7 +12,8 @@ Analysis of these dwarf groups shows that:
 * particular accelerator types do perform best under all applications encompassing a dwarf,
 * and that all dwarfs are not suited to one type of accelerator -- for instance GPU type accelerators are unsuited to the combinational-logic dwarf.
 
-<!-- begin of verbatim ODE paper -->
+\todo{reduce this lead-in and remove the introduction}
+
 
 ##Introduction
 
@@ -315,7 +316,7 @@ Where $\Phi$ is substituted as the argument for each benchmark, it is taken as t
 	\end{threeparttable}
 \end{table}
 
-###Results
+##Results
 
 The primary purpose of including these time results is to demonstrate the benefits of the extensions made to the OpenDwarfs Benchmark suite.
 The use of LibSciBench allowed high resolution timing measurements over multiple code regions.
@@ -323,7 +324,7 @@ To demonstrate the portability of the Extended OpenDwarfs benchmark suite, we pr
 For 12 of the benchmarks, we measured multiple problem sizes and observed distinctly different scaling patterns between devices.
 This underscores the importance of allowing a choice of problem size in a benchmarking suite.
 
-####Time {#sec:chapter-3-results-time}
+###Time {#sec:chapter-3-results-time}
 
 We first present execution time measurements for each benchmark, starting with the Cyclic Redundancy Check \texttt{crc} benchmark which represents the Combinational Logic dwarf.
 
@@ -411,7 +412,7 @@ GPUs exhibit lower execution times than CPUs, which would be expected in a memor
 
 
 
-####Energy
+###Energy
 
 In addition to execution time, we are interested in differences in energy consumption between devices and applications.
 We measured the energy consumption of benchmark kernel execution on the Intel Skylake i7-6700k CPU and the Nvidia GTX1080 GPU, using PAPI modules for RAPL and NVML. 
@@ -445,7 +446,7 @@ All the benchmarks use more energy on the CPU, with the exception of `crc` which
 Variance with respect to energy usage is larger on the CPU, which is consistent with the execution time results.
 
 
-###Conclusions
+##Conclusions
 
 We have performed essential curation of the OpenDwarfs benchmark suite.
 We improved coverage of spectral methods by adding a new Discrete Wavelet Transform benchmark, and replacing the previous inadequate `fft` benchmark.
@@ -462,7 +463,7 @@ Finally a major contribution of this work was to integrate LibSciBench into the 
 This has allowed collection of PAPI, energy and high resolution (sub-microsecond) time measurements at all stages of each application, which has added value to the analysis of OpenCL program flow on each system, for example identifying overheads in kernel construction and buffer enqueuing.
 The use of LibSciBench has also increased the reproducibility of timing data for both the current study and on new architectures in the future.
 
-###Future Work
+##Future Work
 
 We plan to complete analysis of the remaining benchmarks in the suite for multiple problem sizes.
 In addition to comparing performance between devices, we would also like to develop some notion of "ideal" performance for each combination of benchmark and device, which would guide efforts to improve performance portability.
@@ -478,7 +479,7 @@ The original goal of this research was to discover methods for choosing the best
 Until now, we found the available OpenCL benchmark suites were not rich enough to adequately characterize performance across the diverse range of applications and computational devices of interest.
 Now that a flexible benchmark suite is in place and results can be generated quickly and reliably on a range of accelerators, we plan to use these benchmarks to evaluate scheduling approaches.
 
-###Acknowledgements
+##Acknowledgements
 
 We thank our colleagues at The University of Bristol's High Performance Computing Research group for the use of ``The Zoo`` Research cluster for experimental evaluation.
 

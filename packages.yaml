@@ -2,6 +2,7 @@
 header-includes:
     - \usepackage{tabularx}
     - \usepackage{booktabs}
+    - \usepackage{caption}
     - \usepackage{xargs}
     - \usepackage[pdftex,dvipsnames]{xcolor}
     - \usepackage[colorinlistoftodos,textsize=small,color=yellow]{todonotes}
@@ -11,6 +12,7 @@ header-includes:
     - \usepackage{MnSymbol}
     - \usepackage{adjustbox}
     - \usepackage{etoolbox}
+    - \usepackage[noend,ruled]{algorithm2e}
 include-before:
     - \makeatletter
     - \renewcommand{\@todonotes@drawMarginNoteWithLine}{\begin{tikzpicture}[remember picture, overlay, baseline=-0.75ex] \node [coordinate] (inText) {};\end{tikzpicture}\marginnote[{\@todonotes@drawMarginNote\@todonotes@drawLineToLeftMargin}]{\@todonotes@drawMarginNote \@todonotes@drawLineToRightMargin}}
