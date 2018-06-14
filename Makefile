@@ -33,7 +33,7 @@ introduction.pdf: source/09-chapter-1-introduction.md
 		--top-level-division=chapter \
 		./packages.yaml \
 
-thesis.pdf: source/08-abbreviations.md source/09-chapter-1-introduction.md source/11-chapter-3-ode.md
+thesis.pdf: 
 	pandoc source/*.md \
 		-o output/thesis.pdf \
 		--wrap=preserve \
