@@ -89,10 +89,11 @@ As it is not always feasible to perform such a detailed performance study of the
 
 \label{ssec:hardware}
 \begin{table*}[t]
-\caption{Hardware}
 \centering
+\caption{Hardware}\label{tab:hardware}
 \begin{threeparttable}
     \centering
+    \resizebox{\linewidth}{!}{%
     \begin{tabular}{l|c|c|c|r|c|c|r|c}
         Name         & Vendor   & Type  & Series    & \multicolumn{1}{m{1cm}|}{\centering Core Count} & \multicolumn{1}{m{2.5cm}|}{\centering Clock Frequency (\si{\mega\hertz}) (min/max/turbo)}  &\multicolumn{1}{m{2.1cm}|}{\centering Cache (\SI{}{\kibi\byte}) (L1/L2/L3)} & \multicolumn{1}{m{.8cm}|}{\centering TDP (\SI{}{\watt})} &  \multicolumn{1}{m{1cm}}{\centering Launch  Date} \\ \hline
         Xeon E5-2697 v2  & Intel    & CPU   &Ivy Bridge & 24$\ast$ &1200/2700/3500 & 32/256/30720 & 130 & Q3 2013\\
@@ -110,7 +111,7 @@ As it is not always feasible to perform such a detailed performance study of the
         R9 Fury X     & AMD & GPU & Fuji   & 4096$\|$ & 1050/--/-- & 16/2048/--& 273 & Q2 2015\\
         RX 480        & AMD & GPU & Polaris& 4096$\|$ & 1120/1266/-- & 16/2048/-- & 150 & Q2 2016\\
         Xeon Phi 7210 & Intel & MIC & KNL & 256\textdaggerdbl & 1300/1500/-- & 32/1024/-- & 215 & Q2 2016\\
-    \end{tabular}
+    \end{tabular}}
     \begin{tablenotes}
     \item [$\ast$] HyperThreaded cores
     \item [\textdagger] CUDA cores
@@ -118,7 +119,6 @@ As it is not always feasible to perform such a detailed performance study of the
     \item [\textdaggerdbl] Each physical core has 4 hardware threads per core, thus 64 cores
     \end{tablenotes}
 \end{threeparttable}
-\label{tab:hardware}
 \end{table*}
 
 The experiments were conducted on a varied set of 15 hardware platforms: three Intel CPU architectures, five Nvidia GPUs, six AMD GPUs, and one MIC (Intel Knights Landing Xeon Phi).
