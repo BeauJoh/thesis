@@ -33,12 +33,13 @@ introduction.pdf: source/09-chapter-1-introduction.md
 		--top-level-division=chapter \
 		./packages.yaml \
 
-thesis.pdf: source/08-abbreviations.md source/09-chapter-1-introduction.md
+thesis.pdf: source/08-abbreviations.md source/09-chapter-1-introduction.md source/11-chapter-3-ode.md
 	pandoc source/*.md \
 		-o output/thesis.pdf \
 		--wrap=preserve \
 		--filter pandoc-crossref \
 		--filter pandoc-citeproc \
+		--csl=./pandoc-tools/ieee.csl \
 		--filter=./pandoc-tools/table-filter.py \
 		--bibliography=source/bibliography.bib \
 		--variable papersize=a4paper \

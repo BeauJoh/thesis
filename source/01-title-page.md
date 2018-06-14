@@ -8,7 +8,7 @@ This is the Latex-heavy title page.
         \vspace*{2.5cm}
         
         \huge
-        Mining Dwarfs on Accelerators
+        Automatic program analysis for scheduling of scientific workloads in the heterogeneous node supercomputer setting
         
         \vspace{1.5cm}
         

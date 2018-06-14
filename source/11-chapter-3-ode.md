@@ -179,9 +179,9 @@ For this study, problem sizes were not customized to the memory hierarchy of eac
 Also, note for these CPU systems the L1 and L2 cache sizes are identical, and since we ensure that **large** is at least $4\times$ larger than L3 cache, we are guaranteed to have last-level cache misses for the **large** problem size.
 
 Caching performance was measured using PAPI counters.
-On the Skylake L1 and L2 data cache miss rates were counted using the `PAPI\_L1\_DCM` and `PAPI\_L2\_DCM` counters.
-For L3 miss events, only the total cache counter event (`PAPI\_L3\_TCM`) was available.
-The final values presented as miss results are presented as a percentage, and were determined using the number of misses counted divided by the total instructions (`PAPI\_TOT\_INS`).
+On the Skylake L1 and L2 data cache miss rates were counted using the `PAPI_L1_DCM` and `PAPI_L2_DCM` counters.
+For L3 miss events, only the total cache counter event (`PAPI_L3_TCM`) was available.
+The final values presented as miss results are presented as a percentage, and were determined using the number of misses counted divided by the total instructions (`PAPI_TOT_INS`).
 
 
 The methodology to determine the appropriate size parameters is demonstrated on the k-means benchmark.
