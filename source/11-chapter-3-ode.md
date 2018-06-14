@@ -47,7 +47,7 @@ The OpenDwarfs benchmark suite comprises a variety of OpenCL codes, classified a
 The original suite focused on collecting representative benchmarks for scientific applications, with a thorough diversity analysis to justify the addition of each benchmark to the corresponding suite.
 We aim to extend these efforts to achieve a full representation of each dwarf, both by integrating other benchmark suites and adding custom kernels.
 
-Marjanovi{\'c} et al. [@marjanovic2016hpc] argue that the selection of problem size for HPC benchmarking critically affects which hardware properties are relevant.
+Marjanović et al. [@marjanovic2016hpc] argue that the selection of problem size for HPC benchmarking critically affects which hardware properties are relevant.
 We have observed this to be true across a wide range of accelerators, therefore we have enhanced the OpenDwarfs benchmark suite to support running different problem sizes for each benchmark.
 To improve reproducibility of results, we also modified each benchmark to execute in a loop for a minimum of two seconds, to ensure that sampling of execution time and performance counters was not significantly affected by operating system noise.
 
@@ -74,7 +74,7 @@ Their focus was on comparison with CUDA; OpenCL was not considered.
 The Scalable Heterogeneous Computing benchmark suite (SHOC)[@lopez2015examining], unlike OpenDwarfs and Rodinia, supports multiple nodes using MPI for distributed parallelism.
 SHOC supports multiple programming models including OpenCL, CUDA and OpenACC, with benchmarks ranging from targeted tests of particular low-level hardware features to a handful of application kernels.
 Sun et al.[@sun2016] propose Hetero-Mark, a Benchmark Suite for CPU-GPU Collaborative Computing, which has five benchmark applications each implemented in HCC -- which compiles to OpenCL, HIP -- for a CUDA and Radeon Open Compute back-end, and a CUDA version.
-Meanwhile, Chai by G{\'o}mez-Luna et al.[@gomez2017chai], offers 15 applications in 7 different implementations with the focus on supporting integrated architectures.
+Meanwhile, Chai by Gómez-Luna et al.[@gomez2017chai], offers 15 applications in 7 different implementations with the focus on supporting integrated architectures.
 
 These benchmark suites focus on comparison between languages and environments; whereas our work focuses on benchmarking for device specific performance limitations, for example, by examining the problem sizes where these limitations occur -- this is largely ignored by benchmarking suites with fixed problem sizes.
 
@@ -135,7 +135,7 @@ On the Nvidia GPUs we used the Nvidia OpenCL driver version 375.66, provided as 
 
 The Knights Landing (KNL) architecture used the same OpenCL driver as the Intel CPU platforms, however, the 2018-R1 release of the Intel compiler was required to compile for the architecture natively on the host.
 Additionally, due to Intel removing support for OpenCL on the KNL architecture, some additional compiler flags were required.
-Unfortunately, as Intel has removed support for AVX2 vectorization (using the `{\tt -xMIC-AVX512}` flag), vector instructions use only 256-bit registers instead of the wider 512-bit registers available on KNL.
+Unfortunately, as Intel has removed support for AVX2 vectorization (using the `-xMIC-AVX512` flag), vector instructions use only 256-bit registers instead of the wider 512-bit registers available on KNL.
 This means that floating-point performance on KNL is limited to half the theoretical peak.
 
 GCC version 5.4.0 with glibc 2.23 was used for the Skylake i7 and GTX 1080,  
@@ -179,9 +179,9 @@ For this study, problem sizes were not customized to the memory hierarchy of eac
 Also, note for these CPU systems the L1 and L2 cache sizes are identical, and since we ensure that **large** is at least $4\times$ larger than L3 cache, we are guaranteed to have last-level cache misses for the **large** problem size.
 
 Caching performance was measured using PAPI counters.
-On the Skylake L1 and L2 data cache miss rates were counted using the {\tt PAPI\_L1\_DCM} and {\tt PAPI\_L2\_DCM} counters.
-For L3 miss events, only the total cache counter event ({\tt PAPI\_L3\_TCM}) was available.
-The final values presented as miss results are presented as a percentage, and were determined using the number of misses counted divided by the total instructions ({\tt PAPI\_TOT\_INS}).
+On the Skylake L1 and L2 data cache miss rates were counted using the `PAPI\_L1\_DCM` and `PAPI\_L2\_DCM` counters.
+For L3 miss events, only the total cache counter event (`PAPI\_L3\_TCM`) was available.
+The final values presented as miss results are presented as a percentage, and were determined using the number of misses counted divided by the total instructions (`PAPI\_TOT\_INS`).
 
 
 The methodology to determine the appropriate size parameters is demonstrated on the k-means benchmark.
@@ -211,13 +211,13 @@ Using this equation, we can determine the largest problem size that will fit in 
 The tiny problem size is defined to have 256 points and 30 features; from Equation~\ref{eq:kmeans_size} the total size of the main arrays is \SI{31.5}{\kibi\byte}, slightly smaller than the \SI{32}{\kibi\byte} L1 cache.
 The number of points is increased for each larger problem size to ensure that the main arrays fit within the lower levels of the cache hierarchy, measuring the total execution time and respective caching events.
 The **tiny**, **small** and **medium** problem sizes in the first row of Table~\ref{tab:problem_sizes} correspond to L1, L2 and L3 cache respectively.
-The {\bf large} problem size is at least four times the size of the last-level cache -- in the case of the Skylake, at least \SI{32}{\mebi\byte} -- to ensure that data are transferred between main memory and cache.
+The **large** problem size is at least four times the size of the last-level cache -- in the case of the Skylake, at least \SI{32}{\mebi\byte} -- to ensure that data are transferred between main memory and cache.
 
 For brevity, cache miss results are not presented in this paper but were used to verify the selection of suitable problem sizes for each benchmark.
 The procedure to select problem size parameters is specific to each benchmark, but follows a similar approach to k-means.
 
 ####lud, fft, srad, crc, nw
-The LU-Decomposition {\tt lud}, Fast Fourier Transform {\tt fft}, Speckle Reducing Anisotropic Diffusion {\tt srad}, Cyclic Redundancy Check {\tt crc} and Needleman-Wunsch {\tt nw} benchmarks did not require additional data sets.
+The LU-Decomposition `lud`, Fast Fourier Transform `fft`, Speckle Reducing Anisotropic Diffusion `srad`, Cyclic Redundancy Check `crc` and Needleman-Wunsch `nw` benchmarks did not require additional data sets.
 Where necessary these benchmarks were modified to generate the correct solution and run on modern architectures.
 Correctness was examined either by directly comparing outputs against a serial implementation of the codes (where one was available), or by adding utilities to compare norms between the experimental outputs.
 
@@ -232,23 +232,23 @@ The original gum leaf image is the large sample size has the ratio of $3648 \tim
 ####gem, nqueens, hmm
 For three of the benchmarks, we were unable to generate different problem sizes to properly exercise the memory hierarchy.
 
-Gemnoui {\tt gem} is an n-body-method based benchmark which computes electrostatic potential of biomolecular structures.
+Gemnoui \texttt{gem} is an n-body-method based benchmark which computes electrostatic potential of biomolecular structures.
 Determining suitable problem sizes was performed by initially browsing the National Center for Biotechnology Information's Molecular Modeling Database (MMDB)[@madej2013mmdb] and inspecting the corresponding Protein Data Bank format (pdb) files.
 Molecules were then selected based on complexity, since the greater the complexity the greater the number of atoms required for the benchmark and thus the larger the memory footprint.
-{\bf tiny} used the Prion Peptide 4TUT[@yu2015crystal] and was the simplest structure, consisting of a single protein (1 molecule), it had the device side memory usage of \SI{31.3}{\kibi\byte} which should fit in the L1 cache (\SI{32}{\kibi\byte}) on the Skylake processor.
-{\bf small} used a Leukocyte Receptor 2D3V[@shiroishi2006crystal] also consisting of 1 protein molecule, with an associated memory footprint of 252KiB.
-{\bf medium} used the nucleosome dataset originally provided in the OpenDwarfs benchmark suite, using \SI{7498}{\kibi\byte} of device-side memory.
-{\bf large} used an X-Ray Structure of a Nucleosome Core Particle[@davey2002solvent], consisting of 8 protein, 2 nucleotide, and 18 chemical molecules, and requiring \SI{10970.2}{\kibi\byte} of memory when executed by {\tt gem}.
-Each {\tt pdb} file was converted to the {\tt pqr} atomic particle charge and radius format using the {\tt pdb2pqr}[@dolinsky2004pdb2pqr] tool.
-Generation of the solvent excluded molecular surface used the tool {\tt msms}[@sanner1996reduced].
-Unfortunately, the molecules used for the {\bf medium} and {\bf large} problem sizes contain uninitialized values only noticed on CPU architectures and as such further work is required to ensure correctness for multiple problem sizes.
-The datasets used for {\tt gem} and all other benchmarks can be found in this paper's associated GitHub repository [@johnston2017].
+**tiny** used the Prion Peptide 4TUT[@yu2015crystal] and was the simplest structure, consisting of a single protein (1 molecule), it had the device side memory usage of \SI{31.3}{\kibi\byte} which should fit in the L1 cache (\SI{32}{\kibi\byte}) on the Skylake processor.
+**small** used a Leukocyte Receptor 2D3V[@shiroishi2006crystal] also consisting of 1 protein molecule, with an associated memory footprint of 252KiB.
+**medium** used the nucleosome dataset originally provided in the OpenDwarfs benchmark suite, using \SI{7498}{\kibi\byte} of device-side memory.
+**large** used an X-Ray Structure of a Nucleosome Core Particle[@davey2002solvent], consisting of 8 protein, 2 nucleotide, and 18 chemical molecules, and requiring \SI{10970.2}{\kibi\byte} of memory when executed by \texttt{gem}.
+Each \texttt{pdb} file was converted to the \texttt{pqr} atomic particle charge and radius format using the \texttt{pdb2pqr}[@dolinsky2004pdb2pqr] tool.
+Generation of the solvent excluded molecular surface used the tool \texttt{msms} [@sanner1996reduced].
+Unfortunately, the molecules used for the **medium** and **large** problem sizes contain uninitialized values only noticed on CPU architectures and as such further work is required to ensure correctness for multiple problem sizes.
+The datasets used for \texttt{gem} and all other benchmarks can be found in this paper's associated GitHub repository [@johnston2017].
 
-The {\tt nqueens} benchmark is a backtrack/branch-and-bound code which finds valid placements of queens on a chessboard of size n$\times$n, where each queen cannot be attacked by another.
+The \texttt{nqueens} benchmark is a backtrack/branch-and-bound code which finds valid placements of queens on a chessboard of size n$\times$n, where each queen cannot be attacked by another.
 For this code, memory footprint scales very slowly with increasing number of queens, relative to the computational cost.
 Thus it is significantly compute-bound and only one problem size is tested.
 
-The Baum-Welch Algorithm Hidden Markov Model {\tt hmm} benchmark represents the Graphical Models dwarf and did not require additional data sets, however validation of the correctness of results has not occurred apart from over the {\bf tiny} problem size, as such, it is the only size examined in the evaluation.
+The Baum-Welch Algorithm Hidden Markov Model \texttt{hmm} benchmark represents the Graphical Models dwarf and did not require additional data sets, however validation of the correctness of results has not occurred apart from over the **tiny** problem size, as such, it is the only size examined in the evaluation.
 
 ###Summary of Benchmark Settings
 
@@ -260,28 +260,27 @@ The problem size parameters for all benchmarks are presented in Table~\ref{tab:p
 		\centering
 		\caption{OpenDwarfs workload scale parameters $\Phi$}
 		\begin{tabular}{l|c|c|c|c}
-			\bf Benchmark         & \bf tiny   & \bf small  & \bf medium     & \bf large\\\hline
-			{\tt kmeans}          & 256        & 2048   & 65600      & 131072\\
-			{\tt lud}             & 80         & 240    & 1440       & 4096\\
-			{\tt csr}             & 736        & 2416   & 14336      & 16384\\
-			{\tt fft}             & 2048       & 16384  & 524288     & 2097152\\
-			{\tt dwt}             & 72x54      & 200x150& 1152x864   & 3648x2736\\       
-			{\tt srad}            & 80,16      & 128,80 & 1024,336   & 2048,1024\\
-			%{\tt cfd}             & 128        & 1284   & 45056      & 193474
-			{\tt crc}             & 2000       & 16000  & 524000     & 4194304\\
-			\todo{Replace if new results are available}
-            %{\tt bfs}             & 650        & 5376   & 172032     & 1048576\\
-            {\tt nw}              & 48         & 176    & 1008       & 4096\\
-            {\tt gem}             & 4TUT       & 2D3V   & nucleosome & 1KX5\\
-            {\tt nqueens}         & 18         & -- & -- & --\\
-            {\tt hmm}             & 8,1        & 900,1  & 1012,1024  & 2048,2048\\
+            \bf Benchmark         & \bf tiny   & \bf small  & \bf medium     & \bf large\\\hline
+            \texttt{kmeans} & 256 & 2048 & 65600 & 131072\\
+            \texttt{lud}             & 80         & 240    & 1440       & 4096\\
+            \texttt{csr}             & 736        & 2416   & 14336      & 16384\\
+            \texttt{fft}             & 2048       & 16384  & 524288     & 2097152\\
+            \texttt{dwt}             & 72x54      & 200x150& 1152x864   & 3648x2736\\       
+            \texttt{srad}            & 80,16      & 128,80 & 1024,336   & 2048,1024\\
+            %\texttt{cfd}             & 128        & 1284   & 45056      & 193474
+            \texttt{crc}             & 2000       & 16000  & 524000     & 4194304\\
+            %\texttt{bfs}             & 650        & 5376   & 172032     & 1048576\\
+            \texttt{nw}              & 48         & 176    & 1008       & 4096\\
+            \texttt{gem}             & 4TUT       & 2D3V   & nucleosome & 1KX5\\
+            \texttt{nqueens}         & 18         & -- & -- & --\\
+            \texttt{hmm}             & 8,1        & 900,1  & 1012,1024  & 2048,2048\\
 		\end{tabular}
 		\label{tab:problem_sizes}
 	\end{threeparttable}
 \end{table}
 
-Each {\bf Device} can be selected in a uniform way between applications using the same notation, on this system {\bf Device} comprises of {\tt -p 1 -d 0 -t 0} for the Intel Skylake CPU, where {\tt p} and {\tt d} are the integer identifier of the platform and device to respectively use, and {\tt -p 1 -d 0 -t 1} for the Nvidia GeForce GTX 1080 GPU.
-Each application is run as {\bf Benchmark} {\bf Device} {\tt --} {\bf Arguments}, where {\bf Arguments} is taken from Table \ref{tab:program_arguments} at the selected scale of $\Phi$.
+Each **Device** can be selected in a uniform way between applications using the same notation, on this system **Device** comprises of \texttt{-p 1 -d 0 -t 0} for the Intel Skylake CPU, where \texttt{p} and \texttt{d} are the integer identifier of the platform and device to respectively use, and \texttt{-p 1 -d 0 -t 1} for the Nvidia GeForce GTX 1080 GPU.
+Each application is run as **Benchmark** **Device** \texttt{--} **Arguments**, where **Arguments** is taken from Table \ref{tab:program_arguments} at the selected scale of $\Phi$.
 For reproducibility the entire set of Python scripts with all problem sizes is available in a GitHub repository [@johnston2017]. 
 Where $\Phi$ is substituted as the argument for each benchmark, it is taken as the respective scale from Table~\ref{tab:problem_sizes} and is inserted into Table~\ref{tab:program_arguments}.
 
@@ -302,7 +301,6 @@ Where $\Phi$ is substituted as the argument for each benchmark, it is taken as t
 			{\tt srad}& $\Phi_1$ $\Phi_2$ {\tt 0 127 0 127 0.5 1}\\
 			{\tt crc}&  {\tt -i 1000\_}$\Phi${\tt.txt}\\
 			%{\tt cfd} & $\Phi${\tt.dat}\\
-			\todo{Replace if new results are available}
             %{\tt bfs}&  {\tt 'graph}$\Phi${\tt.txt'}\\
             {\tt nw}&  $\Phi${ 10}\\
             {\tt gem} & $\Phi$ {80 1 0}\\
@@ -325,8 +323,9 @@ To demonstrate the portability of the Extended OpenDwarfs benchmark suite, we pr
 For 12 of the benchmarks, we measured multiple problem sizes and observed distinctly different scaling patterns between devices.
 This underscores the importance of allowing a choice of problem size in a benchmarking suite.
 
-####Time
-We first present execution time measurements for each benchmark, starting with the Cyclic Redundancy Check {\tt crc} benchmark which represents the Combinational Logic dwarf.
+####Time {#sec:chapter-3-results-time}
+
+We first present execution time measurements for each benchmark, starting with the Cyclic Redundancy Check \texttt{crc} benchmark which represents the Combinational Logic dwarf.
 
 \newcommand{\plotwidth}{0.24\textwidth}
 
@@ -337,27 +336,24 @@ We first present execution time measurements for each benchmark, starting with t
 	\label{fig:time-crc}
 \end{figure*}
 
-Figure~\ref{fig:time-crc} shows the execution times for the {\tt crc} benchmark over 50 iterations on each of the target architectures, including the KNL.
+Figure~\ref{fig:time-crc} shows the execution times for the \texttt{crc} benchmark over 50 iterations on each of the target architectures, including the KNL.
 
 The results are colored according to accelerator type: red for CPU devices, green for consumer GPUs, blue for HPC GPUs, and purple for the KNL MIC.
-Execution times for {\tt crc} are lowest on CPU-type architectures, probably due to the low floating-point intensity of the CRC computation\[Ch. 6\][@joshi2016thesis].
-Excluding {\tt crc}, all the other benchmarks perform best on GPU type accelerators; furthermore, the performance on the KNL is poor due to the lack of support for wide vector registers in Intel's OpenCL SDK.
+Execution times for \texttt{crc} are lowest on CPU-type architectures, probably due to the low floating-point intensity of the CRC computation\[Ch. 6\][@joshi2016thesis].
+Excluding \texttt{crc}, all the other benchmarks perform best on GPU type accelerators; furthermore, the performance on the KNL is poor due to the lack of support for wide vector registers in Intel's OpenCL SDK.
 We therefore omit results for KNL for the remaining benchmarks.
-
-\todo{We could examine the kiviat diagrams to see if they have high memory address entropy -- or high memory overhead which contributes to the why some benchmarks see a wide variation while others experience only a little, is this the major cause in variation?}
-\todo{What are the major motivations for including this results section? We should conclude with these motivations and what has been shown accordingly}
 
 Figures~\ref{fig:time} and~\ref{fig:time2} shows the distribution of kernel execution times for the remaining benchmarks.
 Some benchmarks execute more than one kernel on the accelerator device; the reported iteration time is the sum of all compute time spent on the accelerator for all kernels.
 Each benchmark corresponds to a particular dwarf: 
-Figure~\ref{fig:time}a ({\tt kmeans}) represents the MapReduce dwarf,
-Figure~\ref{fig:time}b ({\tt lud}) represents the Dense Linear Algebra dwarf,
-Figure~\ref{fig:time}c ({\tt csr}) represents Sparse Linear Algebra, 
-Figure~\ref{fig:time}d ({\tt dwt}) and Figure~\ref{fig:time}e ({\tt fft}) represent Spectral Methods,
-Figure~\ref{fig:time2}a ({\tt srad}) represents the Structured Grid dwarf and Figure~\ref{fig:time2}b ({\tt nw}) represents Dynamic Programming.
+Figure~\ref{fig:time}a (\texttt{kmeans}) represents the MapReduce dwarf,
+Figure~\ref{fig:time}b (\texttt{lud}) represents the Dense Linear Algebra dwarf,
+Figure~\ref{fig:time}c (\texttt{csr}) represents Sparse Linear Algebra, 
+Figure~\ref{fig:time}d (\texttt{dwt}) and Figure~\ref{fig:time}e (\texttt{fft}) represent Spectral Methods,
+Figure~\ref{fig:time2}a (\texttt{srad}) represents the Structured Grid dwarf and Figure~\ref{fig:time2}b (\texttt{nw}) represents Dynamic Programming.
 
 Finally, Figure~\ref{fig:time3} presents results for the three applications with restricted problem sizes and only one problem size is shown.
-The N-body Methods dwarf is represented by ({\tt gem}) and the results are shown in Figure~\ref{fig:time3}a, the Backtrack \& Branch and Bound dwarf is represented by the ({\tt nqueens}) application in Figure~\ref{fig:time3}b and ({\tt hmm}) results in Figure~\ref{fig:time3}c represent the Graphical Models dwarf.
+The N-body Methods dwarf is represented by (\texttt{gem}) and the results are shown in Figure~\ref{fig:time3}a, the Backtrack \& Branch and Bound dwarf is represented by the (\texttt{nqueens}) application in Figure~\ref{fig:time3}b and (\texttt{hmm}) results in Figure~\ref{fig:time3}c represent the Graphical Models dwarf.
 
 
 \begin{figure*}
@@ -382,14 +378,14 @@ The N-body Methods dwarf is represented by ({\tt gem}) and the results are shown
 \end{figure*}
 
 
-Examining the transition from tiny to large problem sizes (from left to right) in Figure~\ref{fig:time2}a shows the performance gap between CPU and GPU architectures widening for {\tt srad} -- indicating codes representative of structured grid dwarfs are well suited to GPUs.
+Examining the transition from tiny to large problem sizes (from left to right) in Figure~\ref{fig:time2}a shows the performance gap between CPU and GPU architectures widening for \texttt{srad} -- indicating codes representative of structured grid dwarfs are well suited to GPUs.
 
 In contrast, Figure~\ref{fig:time2}b shows Dynamic Programming problems have performance results tied to micro-architecture or OpenCL runtime support and can not be explained solely by considering accelerator type.
 For instance, the Intel CPUs and NVIDIA GPUs perform comparably over all problem sizes, whereas all AMD GPUs exhibit worse performance as size increases.
 
 For most benchmarks, the coefficient of variation in execution times is much greater for devices with a lower clock frequency, regardless of accelerator type.
 While execution time increases with problem size for all benchmarks and platforms, the modern GPUs (Titan X, GTX1080, GTX1080Ti, R9 Fury X and RX 480) performed relatively better for large problem sizes, possibly due to their greater second-level cache size compared to the other platforms.
-A notable exception is {\tt k-means} for which CPU execution times were comparable to GPU, which reflects the relatively low ratio of floating-point to memory operations in the benchmark.
+A notable exception is \texttt{k-means} for which CPU execution times were comparable to GPU, which reflects the relatively low ratio of floating-point to memory operations in the benchmark.
 
 Generally, the HPC GPUs are older and were designed to alleviate global memory limitations amongst consumer GPUs of the time.
 (Global memory size is not listed in Table~\ref{tab:hardware}.)
@@ -405,13 +401,12 @@ Increasing problem size also hinders the performance in certain circumstances fo
 For example, Figure~\ref{fig:time2}b shows a widening performance gap over each increase in problem size between AMD GPUs and the other devices.
 
 Predicted application properties for the various Berkeley Dwarfs are evident in the measured runtime results.
-For example, Asanovi\'{c} et al. [@asanovic2006landscape] state that applications from the Spectral Methods dwarf is memory latency limited.
-If we examine {\tt dwt} and {\tt fft} -- the applications which represent Spectral Methods -- in Figure~\ref{fig:time}d and Figure~\ref{fig:time}e respectively, we see that for medium problem sizes the execution times match the higher memory latency of the L3 cache of CPU devices relative to the GPU counterparts.
+For example, Asanović et al. [@asanovic2006landscape] state that applications from the Spectral Methods dwarf is memory latency limited.
+If we examine \texttt{dwt} and \texttt{fft} -- the applications which represent Spectral Methods -- in Figure~\ref{fig:time}d and Figure~\ref{fig:time}e respectively, we see that for medium problem sizes the execution times match the higher memory latency of the L3 cache of CPU devices relative to the GPU counterparts.
 The trend only increases with problem size: the large size shows the CPU devices frequently accessing main memory while the GPUs' larger memory ensures a lower memory access latency.
-\todo{What is the memory size for the GPUs, and what is the difference in latency?}
 It is expected if had we extended this study to an even larger problem size that would not fit on GPU global memory, much higher performance penalties would be experienced over GPU devices, since the PCI-E interconnect has a higher latency than a memory access to main memory from the CPU systems.
-As a further example, Asanovi\'{c} et al. [@asanovic2006landscape] state that the Structured Grid dwarf is memory bandwidth limited.
-The Structured Grid dwarf is represented by the {\tt srad} benchmark shown in Figure~\ref{fig:time2}a.
+As a further example, Asanović et al. [@asanovic2006landscape] state that the Structured Grid dwarf is memory bandwidth limited.
+The Structured Grid dwarf is represented by the \texttt{srad} benchmark shown in Figure~\ref{fig:time2}a.
 GPUs exhibit lower execution times than CPUs, which would be expected in a memory bandwidth-limited code as GPU devices offer higher bandwidth than a system interconnect.
 
 
@@ -422,12 +417,12 @@ In addition to execution time, we are interested in differences in energy consum
 We measured the energy consumption of benchmark kernel execution on the Intel Skylake i7-6700k CPU and the Nvidia GTX1080 GPU, using PAPI modules for RAPL and NVML. 
 These were the only devices examined since collection of PAPI energy measurements (with LibSciBench) requires superuser access, and these devices were the only accelerators available with this permission.
 The distributions were collected by measuring solely the kernel execution over a distribution of 50 runs.
-RAPL CPU energy measurements were collected over all cores in package 0 {\tt rapl:::PP0\_ENERGY:PACKAGE0}.
-NVML GPU energy was collected using the power usage readings {\tt nvml:::GeForce\_GTX\_1080:power} for the device and presents the total power draw (+/-5 watts) for the entire card -- memory and chip.
-Measurements results converted to energy \SI{}{\joule} \todo[inline]{power (\SI{}{\joule\per\second})} from their original resolution \SI{}{\nano\joule} and \SI{}{\milli\watt} on the CPU and GPU respectively.
+RAPL CPU energy measurements were collected over all cores in package 0 \texttt{rapl:::PP0\_ENERGY:PACKAGE0}.
+NVML GPU energy was collected using the power usage readings \texttt{nvml:::GeForce\_GTX\_1080:power} for the device and presents the total power draw (+/-5 watts) for the entire card -- memory and chip.
+Measurements results converted to energy \SI{}{\joule} from their original resolution \SI{}{\nano\joule} and \SI{}{\milli\watt} on the CPU and GPU respectively.
 
-From the time results presented in Section~\ref{ssec:time} we see the largest difference occurs between CPU and GPU type accelerators at the {\bf large} problem size.
-Thus we expect that the {\bf large} problem size will also show the largest difference in energy.
+From the time results presented in [Section @sec:chapter-3-results-time] we see the largest difference occurs between CPU and GPU type accelerators at the **large** problem size.
+Thus we expect that the **large** problem size will also show the largest difference in energy.
 
 \begin{figure*}[htb]
 \centering
@@ -439,24 +434,22 @@ Thus we expect that the {\bf large} problem size will also show the largest diff
 \label{fig:energy-log}
 \end{figure*}
 
-\todo{Does energy scale with problem size for all benchmarks? Maybe not since dwarfs with large memory access cache misses could add huge overheads}
 
-Figures~\ref{fig:energy} and~\ref{fig:energy-log} show the kernel execution energy for several benchmarks for the {\bf large} size.
+Figures~\ref{fig:energy} and~\ref{fig:energy-log} show the kernel execution energy for several benchmarks for the **large** size.
 All results are presented in joules.
 The box plots are coloured according to device: red for the Intel Skylake i7-6700k CPU and blue for the Nvidia GTX1080 GPU.
-\todo{report power as well as energy; proper analysis of the results}
 The logarithmic transformation has been applied to Figure~\ref{fig:energy-log} to emphasise the variation at smaller energy scales ($<$ \SI{1}{\joule}), which was necessary due to small execution times for some benchmarks.
 In future this will be addressed by balancing the amount of computation required for each benchmark, to standardize the magnitude of results.
 
-All the benchmarks use more energy on the CPU, with the exception of {\tt crc} which as previously mentioned has low floating-point intensity and so is not able to make use of the GPU's greater floating-point capability. 
+All the benchmarks use more energy on the CPU, with the exception of `crc` which as previously mentioned has low floating-point intensity and so is not able to make use of the GPU's greater floating-point capability. 
 Variance with respect to energy usage is larger on the CPU, which is consistent with the execution time results.
 
 
 ###Conclusions
 
 We have performed essential curation of the OpenDwarfs benchmark suite.
-We improved coverage of spectral methods by adding a new Discrete Wavelet Transform benchmark, and replacing the previous inadequate {\tt fft} benchmark.
-All benchmarks were enhanced to allow multiple problem sizes; in this paper we report results for four different problem sizes, selected according to the memory hierarchy of CPU systems as motivated by Marjanovi{\'c}'s findings [@marjanovic2016hpc].
+We improved coverage of spectral methods by adding a new Discrete Wavelet Transform benchmark, and replacing the previous inadequate `fft` benchmark.
+All benchmarks were enhanced to allow multiple problem sizes; in this paper we report results for four different problem sizes, selected according to the memory hierarchy of CPU systems as motivated by Marjanović's findings [@marjanovic2016hpc].
 These can now be easily adjusted for next generation accelerator systems using the methodology outlined in Section~\ref{ssec:setting_sizes}.
 
 We ran many of the benchmarks presented in the original OpenDwarfs [@krommydas2016opendwarfs] paper on current hardware.
@@ -472,7 +465,7 @@ The use of LibSciBench has also increased the reproducibility of timing data for
 ###Future Work
 
 We plan to complete analysis of the remaining benchmarks in the suite for multiple problem sizes.
-In addition to comparing performance between devices, we would also like to develop some notion of `ideal` performance for each combination of benchmark and device, which would guide efforts to improve performance portability.
+In addition to comparing performance between devices, we would also like to develop some notion of "ideal" performance for each combination of benchmark and device, which would guide efforts to improve performance portability.
 Additional architectures such as FPGA, DSP and Radeon Open Compute based APUs -- which further breaks down the walls between the CPU and GPU -- will be considered.
 
 Each OpenCL kernel presented in this paper has been inspected using the Architecture Independent Workload Characterization (AIWC).
@@ -489,5 +482,5 @@ Now that a flexible benchmark suite is in place and results can be generated qui
 
 We thank our colleagues at The University of Bristol's High Performance Computing Research group for the use of ``The Zoo`` Research cluster for experimental evaluation.
 
-
+\todo{State that the point of this work isn't to show that OpenCL is the optimal programming language for all accelerator devices, but instead presents a platform for the study of optimal device selection to occur.}
 
