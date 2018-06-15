@@ -106,9 +106,9 @@ This prediction adds information that can be incorporated into existing HPC sche
 
 ##Thesis Structure
 
-
-Chapter 2 discusses the extensions added to the OpenDwarfs Benchmarking Suite in ODE.
-Chapter 3 highlights the construction, design decisions made and usage of the AIWC tool.
-Chapter 4 develops the prediction model and examines the accuracy of the final predictions.
-Chapter 5 discusses conclusions of this thesis and the future work required for the predictive model to be incorporated into scheduling on future Supercomputing systems.
+Chapter 2 canvasses the existing literature and current techniques used to schedule heterogenous resources.
+Chapter 3 discusses the extensions added to the OpenDwarfs Benchmarking Suite in ODE.
+Chapter 4 highlights the construction, design decisions made and usage of the AIWC tool.
+Chapter 5 develops the prediction model and examines the accuracy of the final predictions.
+Chapter 6 discusses conclusions of this thesis and the future work required for the predictive model to be incorporated into scheduling on future Supercomputing systems.
 
