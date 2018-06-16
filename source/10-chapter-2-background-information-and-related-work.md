@@ -117,6 +117,7 @@ Table: Dwarfs and their limits. \label{tbl:dwarf-taxonomy}
 
 ## Benchmark Suites
 
+
 The NAS parallel benchmarks [@bailey1991parallel] follow a ‘pencil-and-paper‘ approach, specifying the computational problems to be included in the benchmark suite but leaving implementation choices such as language, data structures and algorithms to the user.
 The benchmarks include varied kernels and applications which allow a nuanced evaluation of a complete HPC system, however, the unconstrained approach does not readily support direct performance comparison between different hardware accelerators using a single set of codes.
 
@@ -127,13 +128,21 @@ Barnes et al. [@barnes2016evaluating] collected a representative set of applicat
 As it is not always feasible to perform such a detailed performance study of the capabilities of different computational devices for particular applications, the benchmarks described in this paper may give a rough understanding of device performance and limitations.
 
 Rodinia and the original OpenDwarfs benchmark suite focused on collecting a representative set of benchmarks for scientific applications, classified according to dwarfs, with a thorough diversity analysis to justify the addition of each benchmark to the corresponding suite.
-The Scalable Heterogeneous Computing benchmark suite [@danalis2010scalable], unlike OpenDwarfs and Rodinia, supports multiple nodes using MPI for distributed parallelism.
+
+The Scalable Heterogeneous Computing benchmark suite (SHOC)[@lopez2015examining], unlike OpenDwarfs and Rodinia, supports multiple nodes using MPI for distributed parallelism.
+SHOC supports multiple programming models including OpenCL, CUDA and OpenACC, with benchmarks ranging from targeted tests of particular low-level hardware features to a handful of application kernels.
+
 All 3 benchmark suites discussed in this Section as they feature an OpenCL implementation and 2 of the 3 have been categorised according to the Dwarf Taxonomy.
+
+Sun et al.[@sun2016] propose Hetero-Mark, a Benchmark Suite for CPU-GPU Collaborative Computing, which has five benchmark applications each implemented in HCC -- which compiles to OpenCL, HIP -- for a CUDA and Radeon Open Compute back-end, and a CUDA version.
+Meanwhile, Chai by Gómez-Luna et al.[@gomez2017chai], offers 15 applications in 7 different implementations with the focus on supporting integrated architectures.
+
+These benchmark suites focus on comparison between languages and environments; whereas our work focuses on benchmarking for device specific performance limitations, for example, by examining the problem sizes where these limitations occur -- this is largely ignored by benchmarking suites with fixed problem sizes.
+For these reasons, we introduce the enhanced OpenDwarfs benchmark suite in [Chapter @sec:chapter-3-ode] which covers a wider range of application patterns by focusing exclusively on OpenCL using higher-level benchmarks.
 
 
 ### Rodinia
 
-\todo[inline]{summarise this}
 
 Che et. al [@che2009rodinia] initially proposed a benchmark suite which cover a wide range of parallel communication
 patterns. Selection is inspired by the Berkeley dwarf taxonomy and the

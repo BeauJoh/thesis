@@ -8,7 +8,7 @@ This is the Latex-heavy title page.
         \vspace*{2.5cm}
 
         \huge
-        Automatic program analysis and scheduling of scientific workloads for heterogenous supercomputers.
+        Automatic program analysis and scheduling of scientific workloads for heterogenous supercomputers
 
         \vspace{1.5cm}
 
@@ -16,7 +16,7 @@ This is the Latex-heavy title page.
         Beau Johnston
         
         \vspace{1.5cm}
-        March 2018
+        June 2018
         \vspace{1.5cm}
 
         \normalsize

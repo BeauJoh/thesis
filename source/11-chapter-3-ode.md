@@ -1,4 +1,4 @@
-#The Dwarf Accelerator Mapping
+#The Dwarf Accelerator Mapping {#sec:chapter-3-ode}
 
 This chapter presents an extension of an existing benchmark suite -- OpenDwarfs.
 The extension focuses on adding additional benchmarks to better represent each Dwarf along with supporting a range of 4 problem sizes for each application.
@@ -37,7 +37,7 @@ Having a common back-end in the form of OpenCL allows a direct comparison of ide
 
 In this paper, we present an extended version of the OpenDwarfs benchmark suite, a set of OpenCL benchmarks for heterogeneous computing platforms.[@krommydas2016opendwarfs]
 We added new benchmarks to improve the diversity of the suite, and made a number of modifications aimed at improving the reproducibility and interpretability of results, portability between devices, and flexibility of configuration including problem sizes.
-We report preliminary results for a subset of the enhanced OpenDwarfs suite on a range of platforms including CPU, GPU and MIC devices.
+We report preliminary results for a subset of the enhanced OpenDwarfs suite on a range of platforms consisting of CPU, GPU and MIC devices.
 
 
 ##Enhancing the OpenDwarfs Benchmark Suite
@@ -63,26 +63,6 @@ We used LibSciBench to record timings in conjunction with hardware events, which
 We modified the applications in the OpenDwarfs benchmark suite to insert library calls to LibSciBench to record timings and PAPI events for the three main components of application time: kernel execution, host setup and memory transfer operations.
 Through PAPI modules such as Intel's Running Average Power Limit (RAPL) and Nvidia Management Library (NVML), LibSciBench also supports energy measurements, for which we report preliminary results in this paper.
 
-
-##Related Work
-
-The NAS parallel benchmarks [@bailey1991parallel] follow a `pencil-and-paper` approach, specifying the computational problem but leaving implementation choices such as language, data structures and algorithms to the user.
-The benchmarks include varied kernels and applications which allow a nuanced evaluation of a complete HPC system, however, the unconstrained approach does not readily support direct performance comparison between different hardware accelerators using a single set of codes.
-
-Martineau et al. [@martineau2016performance] collected a suite of benchmarks and three mini-apps to evaluate Clang OpenMP 4.5 support for Nvidia GPUs.
-Their focus was on comparison with CUDA; OpenCL was not considered.
-
-The Scalable Heterogeneous Computing benchmark suite (SHOC)[@lopez2015examining], unlike OpenDwarfs and Rodinia, supports multiple nodes using MPI for distributed parallelism.
-SHOC supports multiple programming models including OpenCL, CUDA and OpenACC, with benchmarks ranging from targeted tests of particular low-level hardware features to a handful of application kernels.
-Sun et al.[@sun2016] propose Hetero-Mark, a Benchmark Suite for CPU-GPU Collaborative Computing, which has five benchmark applications each implemented in HCC -- which compiles to OpenCL, HIP -- for a CUDA and Radeon Open Compute back-end, and a CUDA version.
-Meanwhile, Chai by Gómez-Luna et al.[@gomez2017chai], offers 15 applications in 7 different implementations with the focus on supporting integrated architectures.
-
-These benchmark suites focus on comparison between languages and environments; whereas our work focuses on benchmarking for device specific performance limitations, for example, by examining the problem sizes where these limitations occur -- this is largely ignored by benchmarking suites with fixed problem sizes.
-
-Additionally, our enhanced OpenDwarfs benchmark suite aims to cover a wider range of application patterns by focusing exclusively on OpenCL using higher-level benchmarks.
-
-Barnes et al. [@barnes2016evaluating] collected a representative set of applications from the current NERSC workload to guide optimization for Knights Landing in the Cori supercomputer.
-As it is not always feasible to perform such a detailed performance study of the capabilities of different computational devices for particular applications, the benchmarks described in this paper may give a rough understanding of device performance and limitations.
 
 ##Experimental Setup
 
@@ -131,7 +111,7 @@ For the Intel CPUs, hyper-threading was enabled and the frequency governor was s
 ###Software
 
 OpenCL version 1.2 was used for all experiments.
-On the CPUs we used the Intel OpenCL driver version 6.3, provided in 16.1.1 and the 2016-R3 opencl-sdk release.
+On the CPUs we used the Intel OpenCL driver version 6.3, provided in the 2016-R3 opencl-sdk release.
 On the Nvidia GPUs we used the Nvidia OpenCL driver version 375.66, provided as part of CUDA 8.0.61, AMD GPUs used the OpenCL driver version provided in the amdappsdk v3.0.
 
 The Knights Landing (KNL) architecture used the same OpenCL driver as the Intel CPU platforms, however, the 2018-R1 release of the Intel compiler was required to compile for the architecture natively on the host.
@@ -139,7 +119,7 @@ Additionally, due to Intel removing support for OpenCL on the KNL architecture, 
 Unfortunately, as Intel has removed support for AVX2 vectorization (using the `-xMIC-AVX512` flag), vector instructions use only 256-bit registers instead of the wider 512-bit registers available on KNL.
 This means that floating-point performance on KNL is limited to half the theoretical peak.
 
-GCC version 5.4.0 with glibc 2.23 was used for the Skylake i7 and GTX 1080,  
+GCC version 5.4.0 with glibc 2.23 was used for the Skylake i7 and GTX 1080,
 GCC version 4.8.5 with glibc 2.23 was used on the remaining platforms.
 OS Ubuntu Linux 16.04.4 with kernel version 4.4.0 was used for the Skylake CPU and GTX 1080 GPU, Red Hat 4.8.5-11 with kernel version 3.10.0 was used on the other platforms.
 
@@ -339,7 +319,7 @@ We first present execution time measurements for each benchmark, starting with t
 
 Figure~\ref{fig:time-crc} shows the execution times for the \texttt{crc} benchmark over 50 iterations on each of the target architectures, including the KNL.
 
-The results are colored according to accelerator type: red for CPU devices, green for consumer GPUs, blue for HPC GPUs, and purple for the KNL MIC.
+The results are colored according to accelerator type: purple for CPU devices, blue for consumer GPUs, green for HPC GPUs, and yellow for the KNL MIC.
 Execution times for \texttt{crc} are lowest on CPU-type architectures, probably due to the low floating-point intensity of the CRC computation\[Ch. 6\][@joshi2016thesis].
 Excluding \texttt{crc}, all the other benchmarks perform best on GPU type accelerators; furthermore, the performance on the KNL is poor due to the lack of support for wide vector registers in Intel's OpenCL SDK.
 We therefore omit results for KNL for the remaining benchmarks.
@@ -391,10 +371,10 @@ A notable exception is \texttt{k-means} for which CPU execution times were compa
 Generally, the HPC GPUs are older and were designed to alleviate global memory limitations amongst consumer GPUs of the time.
 (Global memory size is not listed in Table~\ref{tab:hardware}.)
 Despite their larger memory sizes, the clock speed of all HPC GPUs is slower than all evaluated consumer GPUs.
-While the HPC GPUs (devices 7-9, in blue) outperformed consumer GPUs of the same generation (devices 10-13, in green) for most benchmarks and problem sizes, they were always beaten by more modern GPUs.
+While the HPC GPUs (devices 7-9, in yellow) outperformed consumer GPUs of the same generation (devices 10-13, in green) for most benchmarks and problem sizes, they were always beaten by more modern GPUs.
 This is no surprise since all selected problem sizes fit within the global memory of all devices.
 
-A comparison between CPUs (devices 1-3, in red) indicates the importance of examining multiple problem sizes.
+A comparison between CPUs (devices 1-3, in purple) indicates the importance of examining multiple problem sizes.
 Medium-sized problems were designed to fit within the L3 cache of the i7-6700K system, and this conveniently also fits within the L3 cache of the Xeon E5-2697 v2.
 However, the older i5-3550 CPU has a smaller L3 cache and exhibits worse performance when moving from small to medium problem sizes, and is shown in Figures~\ref{fig:time}b,~\ref{fig:time}d,~\ref{fig:time}e and ~\ref{fig:time2}a,
 
