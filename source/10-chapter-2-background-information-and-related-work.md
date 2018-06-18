@@ -2,67 +2,63 @@
 #Background Information and Related Work
 
 The chapter presents background information, terminology and the related work drawn upon in the rest of this thesis.
-It provides a background for readers who might not be familiar with workload characterisation of programs or the performance metrics and composition of current HPC systems.
+It provides a background for readers who might not be familiar with workload characterisation of programs, the associated performance metrics or composition of current HPC systems and how their performance is evaluated.
 It begins with the definition of accelerators and a brief survey regarding their use in supercomputing and presents the hardware agnostic programming framework -- OpenCL.
 The dwarf taxonomy is introduced along with a representative sample of benchmark suites which incorporate this taxonomy.
 
 
-## Accelerator Architectures and the increasing diversity in HPC {#sec:chapter2-accelerator-architectures}
+## Accelerator Architectures and their increasing diversity in HPC {#sec:chapter2-accelerator-architectures}
 
-Existing heterogeneous SC systems include:
-
-
-* Cori system at Lawrence Berkeley National Laboratory comprises 2,388 Cray XC40 nodes with Intel Haswell Central Processing Units (CPUs), and 9,688 Intel Xeon Phi nodes [@declerck2016cori].
-* The Summit supercomputer at Oak Ridge National Laboratory is based on the IBM Power9 CPU, which includes both NVLINK [@morgan_2016], a high bandwidth interconnect between Nvidia GPUs; and CAPI, an interconnect to support FPGAs and other accelerators. [@morgan_2017]
-
-
-Future HPC systems include:
-
-
-* Fujitsu’s Post-K [@morgan_2016_postk], and
-* Cray’s CS-400, which forms the platform for the Isambard supercomputer [@feldman_2017_isambard].
-
-
+Accelerators, in this setting, refer to any form of specialised hardware which may accelerate a given application code.
+These include CPU, GPU, FPGA, DSP, ASIC and MIC devices.
+High-performance computing (HPC) hardware is becoming increasingly heterogeneous using a larger number of accelerators on a node.
+A major motivation for this is to reduce energy use; indeed, without significant improvements in energy efficiency, the cost of exascale computing will be prohibitive.
+From June 2016 to June 2017, the average energy efficiency of the top 10 of the Green500 supercomputers rose by 2.3x, from 4.8 to 11.1 gigaflops per watt [@feldman_2017].
+For many systems, this was made possible by highly energy-efficient Nvidia Tesla P100 GPUs.
+In addition to GPUs, future HPC architectures are also likely to include nodes with FPGA, DSP, ASIC and MIC components.
+A single node may be heterogeneous, containing multiple different computing devices; moreover, an HPC system may offer nodes of different types.
+For example, the Cori system at Lawrence Berkeley National Laboratory comprises 2,388 Cray XC40 nodes with Intel Haswell CPUs, and 9,688 Intel Xeon Phi nodes [@declerck2016cori].
+The Summit supercomputer at Oak Ridge National Laboratory is based on the IBM Power9 CPU, which includes both NVLINK [@morgan_2016], a high bandwidth interconnect between Nvidia GPUs; and CAPI, an interconnect to support FPGAs and other accelerators [@morgan_2017].
+Promising next-generation architectures include Fujitsu's Post-K [@morgan_2016_postk], and Cray's CS-400, which forms the platform for the Isambard supercomputer [@feldman_2017_isambard].
 Both architectures use ARM cores alongside other conventional accelerators, with several Intel Xeon Phi and Nvidia P100 GPUs per node.
-
-\todo[inline]{increase the list next generation SC systems}
-\todo[inline]{reference energy usage of these systems as a motivation}
 
 
 ## The Open Compute Language Setting
 
 OpenCL (Open Compute Language) is a standard that allows computationally intensive codes to be written once and run efficiently on any compliant accelerator device.
-OpenCL is supported on a wide range of systems including CPU, GPU and FPGA devices.
+OpenCL is supported on a wide range of systems including CPU, GPU, FPGA, DSP and MIC devices.
 While it is possible to write application code directly in OpenCL, it may also be used as a base to implement higher-level programming models.
 This technique was shown by Mitra et al., [@mitra2014implementation] where an OpenMP runtime was implemented over an OpenCL framework for Texas Instruments Keystone II DSP architecture.
-Having a common back-end in the form of OpenCL allows a direct comparison of identical code across diverse architectures, including FPGAs.
+Having a common back-end in the form of OpenCL allows a direct comparison of identical code across this diverse range of architectures.
 
 OpenCL programs comprise of a host side and a device side and the program progression is always the same.
 The Host is responsible for querying the suitable platforms, vendor OpenCL runtime drivers, and establishing a context on the selected devices.
 Next, the host sets up memory buffers, compiles a kernel program for each device -- the final compiled device binaries are generated for each specific device instruction set architecture (ISA).
 
-On the device-side, the user has very influence, a majority of the work is implemented by the hardware vendor as an OpenCL runtime.
-The only user instructions preformed on the device is the original kernel source code.
+On the device-side, the developer code is en-queued for execution.
+Device-side code is typically small intensive sub-regions of programs and is known as the kernel.
 Kernel code is written in a subset of the C programming language.
 Special functions exist to determine a threads id, this can occur via getting a global index in a given dimension directly, with `get_group_id`, or determined using `get_group_id`, `get_local_size` and `get_local_id` in each dimension.
 
 The host side is then notified once the device has completed execution -- this takes the form of either the host waiting on the `clFinish` command or if the host does not the computed results yet, say for an intermediate result on which a second kernel will operate on the same data, a `clFlush` function call.
-
 Once all device execution has completed and the host has been notified the results are transferred back to the host from the device.
-Finally the context established on the device is freed.
+Finally, the context established on the device is freed.
 
-Tuning, or parameters that can be set to positively impact on performance, in the OpenCL setting can occur by influencing the workgroup size.
+The selection of parameters on the host side can have a large impact on performance.
+One primary reason is that different accelerators benefit from different levels of parallelism -- or how many threads are executed concurrently -- for instance, GPU devices usually need a high degree of arithmetic intensive parallelism to offset the (relatively) narrow I/O pipeline, CPUs on the other hand are more general purpose and the switching of threads has a greater penalty on performance.
+The tuning of such parameters can positively impact performance, in the OpenCL setting by primarily influencing the workgroup size.
 In essence, the global work items can be viewed from the data-parallelism perspective.
 Global work indicates the number of threads or instances of a kernel to execute in total.
 Additionally, these work items can be run in teams -- denoted local work groups.
 Each local work group has a given size, and as previously mentioned can be determined on the device side, in the kernel code, with `get_local_id`.
 Incorrectly setting the number of local work groups and therefore also the size of each work group can impact on performance directly.
 Thankfully recent work shows these parameters can be automatically optimised for any accelerator architecture and is discussed in the Autotuning [Section @sec:chapter2-autotuning] further on in this chapter.
+OpenCL codes can be written to be easily linked with auto-tuners -- such as allowing the local work group size being set from the command line or as a macro in the pre-processor, these are set during execution and during compilation respectively.
 
-Kernel compilation flags are an additional tuning arguments which affects runtime performance of accelerator specific OpenCL kernel codes.
+Kernel compilation flags are an additional tuning argument which affects runtime performance of accelerator specific OpenCL kernel codes.
 These flags are set on the host side during the `clBuildProgram` procedure.
-Pre-processor macros can be defined -- which in turn allows various loop level parallelism constructs to be enabled or disabled.
-Math intrinsic options can also be set to disable double floating point precision, and change how denormalised numbers are handled.
+Pre-processor macros can also be defined on the kernel side which allows various loop level parallelism constructs to be enabled or disabled.
+Mathematical intrinsic options can also be set to disable double floating point precision, and change how denormalised numbers are handled.
 Other optimisations include using the strictest aliasing rules, use of the fast fused multiply and add instruction (with reduced precision), ignoring the signedness of floating point zeros and relaxed, finite or unsafe math operations.
 Thankfully, these can also be corrected using autotuning for both kernel specific and device specific optimisations.
 
@@ -144,63 +140,21 @@ For these reasons, we introduce the enhanced OpenDwarfs benchmark suite in [Chap
 ### Rodinia
 
 
-Che et. al [@che2009rodinia] initially proposed a benchmark suite which cover a wide range of parallel communication
-patterns. Selection is inspired by the Berkeley dwarf taxonomy and the
-selection of benchmarks are from real world high performance scientific
-computing applications. Target architectures consist of an NVIDIA GTX 280 GPU @
-1.3 GHz and an Intel Core 2 Extreme CPU running at 3.2 GHz. The diversity
-between selected benchmarks is shown by measuring execution times,
-communications overheads and energy usage of running each benchmark on the
-target architectures. Across the suite: speedups in execution times range from
-5.5x to 80.8x, communication overheads vary from 2-76% and GPU power
-consumption overheads range from 38-83 Watts. From this, the resulting
-benchmarks are proven to be useful when illustratating important architectural
-differences between the CPU and GPU. At the time this paper was written the
-Rodinia Benchmark suite consisted of nine applications, these were Leukocyte
-Tracking, Speckle Reducing Anisotropic Diffusion, HotSpot, Back Propagation,
-Needleman-Wunsch, K-means, Stream Cluster, Breadth-First Search and Similarity
-Score, but it has since been extended. Separate implementations were developed
-for each application CUDA for the GPU, and OpenMP for the CPU.
-
-Caveats:
-The selection of devices is outdated, there are many newer generations of
-NVIDIA GPUs and Intel CPUs since the paper was written. Additionally CPUs and
-GPUs from other vendors was not examined, for instance ARM and AMD. Other
-accelerator devices were also not examined FPGAs and DSP architectures could
-also be of interest to verify the diversity of the chosen benchmarks. This
-paper was published prior to the development of the OpenCL version of
-benchmarks. It would be good to see how well the selected devices perform as a
-comparison between OpenCL and the native implementations, CUDA for GPU, OpenMP
-for CPU. Still only a subset of the dwarves have been covered, namely
-Structured Grid, Unstructured Grid, Dynamic Programming, Dense Linear Algebra,
-MapReduce, and Graph Traversal.
-
-
-
-### OpenDwarfs
-
-Feng et. al [@feng2012opencl] introduce the OCD (OpenCL and the13 Dwarfs) as an OpenCL implementation of Berkeley’s 13 computational dwarfs of scientific
-computing.
-Each dwarf is named according to the general class of application it embodies.
-In this work, each selected benchmark’s inclusion is justified using microarchitecture independent characteristics such as general pattern of computation and communication, and that each of these is unique to a particular dwarf.
-
-\todo[inline]{summarise here}
-Absolute execution times were collected accross 11 benchmarks, where each
-benchmark partially represents a dwarf. Hardware for this experimental setup
-includes a Intel Xeon E5405 (4 cores @ 2GHz with 12 MB L2 cache and 2GB RAM
-resulting in 80W draw) CPU, AMD HD5450 (80 stream processing units @ 400-650
-MHz with 1GB resulting in 25W TDP) and HD5870 (1600 stream processing units @
-850 MHz with 228W TDP) and NVIDIA GT520 (48 CUDA cores @ 810 MHz with a 29W
-TDP) and C2050 (448 CUDA cores @ 1.15 GHz with a 238W TDP) GPUs.
-
-It is desirable to have these dwarfly features (computation and communication)
-to be relatively device agnostic so to avoid individual micro-architectural
-optimisations. Features collected to perform diversity analysis
-
-Cavets:
-Grouped into low and high power GPU devices, but the architectures compared are very similar. Aniquated hardware?
-
-
+Che et. al [@che2009rodinia] initially proposed a benchmark suite which cover a wide range of parallel communication patterns.
+The selection of these patterns was inspired by the Berkeley dwarf taxonomy, as discussed in [Section @sec:the-dwarf-taxonomy], and the selection of these benchmarks are from real world high performance scientific computing applications.
+Evaluated in the paper were a NVIDIA GTX 280 GPU and an Intel Core 2 Extreme CPU.
+The diversity between selected benchmarks was shown by measuring execution times, communications overheads and energy usage of running each benchmark on the target architectures.
+Across the suite: speedups in execution times ranged from 5.5x to 80.8x, communication overheads vary from 2-76% and GPU power consumption overheads range from 38-83 Watts.
+From this, the resulting benchmarks were proven to be useful when illustrating important architectural differences between the CPU and GPU.
+However, all devices presented featured applications typical of select dwarfs which benefit from GPU architectures.
+At the time this paper was written the Rodinia Benchmark suite consisted of nine applications; namely, Leukocyte Tracking, Speckle Reducing Anisotropic Diffusion, HotSpot, Back Propagation, Needleman-Wunsch, K-means, Stream Cluster, Breadth-First Search and Similarity Score, but it has since been extended.
+This extension features a subset of the dwarfs, namely, Structured Grid, Unstructured Grid, Dynamic Programming, Dense Linear Algebra, MapReduce, and Graph Traversal.
+Diversity analysis was also performed and took the form of a Micro-Architecture independent analysis study.
+The MICA framework, discussed in [Section @sec:microarchitecture-independent], was used as the basis of the evaluation and the motivation was to justify each applications inclusion in the benchmark suite by showing deviations between applications in the corresponding kiviat diagrams.
+Separate implementations were developed for each application CUDA for the GPU, and OpenMP for the CPU, OpenCL was also included for both architecture types.
+Ultimately several applications from the Rodinia benchmark suite were added to the extended OpenDwarfs benchmark suite -- developed in this thesis.
+However, ultimately, having several implementations caused fragmentation in development, where changes often resulted in the OpenCL version of each benchmark application being neglected; in some instances lacking an implementation of a given application entirely -- or at the least, missing features offered in other implementations.
+For this reason, OpenDwarfs was selected as the benchmark suite on which to perform the extension work.
 
 ### SHOC
 
@@ -211,8 +165,21 @@ The variety of language implementations for each benchmark application, was one 
 In this benchmark suite the OpenCL versions of each application have been designed to strongly mirror the CUDA counterparts, unfortunately this results in fixed tuning parameters such as local workgroup size that is well suited to GPU architectures but is not suited to CPU and other accelerator devices.
 
 However, since this suite has not been classified according to the dwarf taxonomy and also if the classification were performed during this these, adding more applications would likely need to occur to fully encompass the dwarf taxonomy; the addition of applications is more expensive in SHOC, since it would require implementations for the same application into at least 3 other languages -- which is not a motivating factor for this thesis.
-By focusing on application kernels written exclusively in OpenCL, our enhanced OpenDwarfs bench- mark suite is able to cover a wider range of application patterns.
+By focusing on application kernels written exclusively in OpenCL, our enhanced OpenDwarfs bench-mark suite is able to cover a wider range of application patterns.
 
+
+### OpenDwarfs
+
+As with Rodinia, Feng et. al [@feng2012opencl] introduce the OpenDwarfs (OpenCL and the 13 Dwarfs) as an OpenCL implementation of Berkeley’s 13 computational dwarfs of scientific computing.
+In this work, the absolute execution times were collected over 11 benchmarks.
+In this paper 11 applications were evaluated on 1 CPU, an Intel Xeon E5405, and 3 GPUs, a low power AMD HD5450 with 25W TDP, and 2 high-power GPUs AMD HD5870 and an Nvidia GT520, for scale both high-end GPUs had an energy footprint of 228-238W TDP respectively.
+A larger range of dwarfs are covered by OpenDwarfs than Rodinia; however, one dwarf, MapReduce, is still not represented by any application.
+Additionally, several dwarfs currently have one representative application which may not expose the entire set of characteristics of that dwarf.
+
+A potential criticism is that no diversity analysis was performed to justify the inclusion of each application -- however since many applications where inherited from the Rodinia code-base these applications have a proven MICA diversity.
+Recently, this work was updated and evaluated on FPGA devices by Krommydas et. al. [@krommydas2016opendwarfs] -- and adds relevancy to the OpenDwarfs benchmark suite.
+Given the focused effort of having all the dwarfs represented, the choice to have one implementation -- and that being OpenCL, and the recent use of the benchmark suite for a new accelerator architecture all result in it being the selected benchmark suite to perform the extension.
+These efforts are discussed in Chapter 3.
 
 
 
@@ -225,8 +192,9 @@ Older literature on the subject also suggests autotuning will play an increasing
 Tasks such as compiler optimisations and kernel runtime tuning parameters are well suited to auto-tuners without requiring an exhaustive search in this search space.
 
 This has been manifested in many auto-tuning libraries that use machine learning.
+Spafford et. al. [@spafford2010maestro], Chaimov et. al. [@chaimov2014toward] and, Nugteren and Codreanu [@nugteren2015cltune] all propose open source libraries capable of performing generic autotuning of dynamic execution parameters in OpenCL kernels.
 
-One of particular interest is OpenTuner [@ansel:pact:2014] since it has already been employed by Price and McIntosh-Smith [@price2017analyzing] to improve the performance of OpenCL applications.
+One auto-tuning library of particular interest is OpenTuner [@ansel:pact:2014] since it has already been employed by Price and McIntosh-Smith [@price2017analyzing] to improve the performance of OpenCL applications.
 The OpenTuner library requires the search space to be defined in order to effect the runtime performance of the application.
 These take the forms of command line of compile time arguments -- and are known as the configuration parameter when performing application execution.
 Next, machine learning techniques are used employing a black box mechanism to effectively search for the optimal configuration parameter arguments in the search space.
@@ -250,6 +218,11 @@ Additionally, since SPIR is hardware agnostic/ISA-independent the patterns of co
 Therefore, analysis such as the classification of which dwarf a new code can be identified, can be performed before any actual device execution is performed.
 Additionally, these classification and other analysis metrics can be embedded into the SPIR code as a comment in the header, which in turn can be used by a scheduler to determine which device the kernel should be executed.
 
+Closely related to the work performed in this thesis was independently performed by Muralidharan et. al. [@muralidharan2015semi].
+Wherein, they use offline ahead-of-time analysis with Oclgrind to collect an instruction histogram of each OpenCL kernel execution in order to generate an estimate of the roofline model analysis for each given accelerator.
+The resultant tool-flow methodology is used to analyse and track the performance over 3 distinct heterogeneous platforms, and results in a metric to characterise performance.
+
+
 ## Phase-Shifting
 
 Phase is defined as a set of intervals (or slices in time) within a programs execution that has similar behaviour.
@@ -263,8 +236,6 @@ Rather, the program as a whole will doubtlessly experience phase-shifts, compili
 However, the kernel in execution itself will experience very little differences in phases since by their very nature OpenCL kernels are designed small and compartmentalised sections of computation.
 Such that, if a kernel executed on a particular accelerator device is memory bound, it will consistently be memory bound.
 If the accelerator experiences consistent stalls on repeated branch mispredictions, this is consistent throughout the kernels entire execution.
-
-\todo[inline]{do we examine phase shift in OpenCL workloads? -- it could be easily done with oclgrind}
 
 ## Scaling
 
@@ -291,6 +262,7 @@ In this study, the authors show that the active state of a CPU is comparable to 
 
 Taylor [@taylor2012dark] surveys the transition of typical homogeneous cores to a potentially dark silicone -- bright future for heterogeneous systems.
 This is not because of the lack of scale from increasing cores, indeed Taylor proposes this trend will continue, but from energy concerns of having the utilisation wall[@venkatesh2010conservation].
+
 
 ### Time and Energy -- a non-linear relationship
 
@@ -320,7 +292,7 @@ Instead Hoste propose a higher level metric framework based on results which do 
 Features in this metric include instruction mix, Instruction-level parallelism (ILP), Register traffic, Working-set size, Data stream strides and Branch predictability.
 These feature results were collected using the PIN [@luk2005pin] binary instrumentation tool.
 In total 48 measurement characteristics are presented in order to classify an application in a microarchitecture agnostic manner.
-To reduce the variety of measurements presented, the authors use Principal Component Analysis to reduce the number of measurements in this feature-space to 8 dimensions -- those with the largest impact on accurately predicting 
+To reduce the variety of measurements presented, the authors use Principal Component Analysis to reduce the number of measurements in this feature-space to 8 dimensions -- those with the largest variance and corresponding impact between applications.
 
 This research is also released as the MICA software and is deployed as a PIN module.
 
@@ -336,7 +308,11 @@ Instead of using PIN events on x86 systems, this technique uses a Just-In-Time (
 The proposed framework briefly evaluates eleven SPEC benchmarks and examines 5 ISA-independent features/metrics.
 Namely, number of opcodes (e.g., add, mul), the value of branch entropy -- a measure of the randomness of branch behavior, the value of memory entropy -- a metric based on the lack of memory locality when examining accesses, the unique number of static instructions, and the unique number of data addresses.
 
-\todo[inline]{is there anything else to add -- like do we use it, if not why not?}
+The branch entropy measure presented in the Shao and Brooks paper was initially proposed by Yokota [@yokota2007introducing] and uses Shannon's information entropy to determine a score of Branch History Entropy.
+
+An additional metric, the average linear branch entropy metric , was recently suggested by De Pestel [@DePestel:2017:LBE:3057890.3057908].
+It is unique, in that the floating-point value presented linearly corresponds to the miss-rate flow of program execution; $p=0$ for branches always taken or not-taken but $p=0.5$ for the most unpredictable control flow.
+Thus, it offers a bounded value of $0-0.5$ and it additionally offers an averaging method that is also easily presented.
 
 ###Using workload characterization for diversity analysis in the benchmark suites
 
@@ -348,21 +324,24 @@ Namely, number of opcodes (e.g., add, mul), the value of branch entropy -- a mea
 
 Several benchmarks have performed characterisation of applications in the past, this has been primarily, at least historically motivated, for diversity analysis to justify the inclusion of an application into a benchmark suite.
 Rodinia used MICA as the diversity analysis framework.
-However the OpenDwarfs benchmark suite have been manually classified dwarfs and any characterisation into this taxonomy is based largely on clustering microarchitecture-dependent characteristics of applications experiencing similar hardware instruction performance being in the same dwarf [@krommydas2016opendwarfs].
+However, the OpenDwarfs benchmark suite have applications which have been manually classified as dwarfs and any characterisation into this taxonomy is based largely intuition.
+Some of the shared applications ported from the Rodinia Benchmark suite cluster microarchitecture-dependent characteristics of applications into dwarfs.
 Alas, the approach has the same limitations as those presented in [Section @sec:microarchitecture-independent].
 
+<!--
 \todo[inline]{we will do the verification?}
+-->
 
 For this reason Chapter 4 of this thesis apart from extending the OpenDwarfs Benchmark suite also adds formal verification of the diversity characterisation.
-To some extent Chapter 5 does this even more formally by generating and clustering the feature-space of all applications grouped as a dwarf.
-The evaluation on this feature-space is critical to the inclusion of particular extended OpenDwarfs applications added in Chapter 4.
+To some extent Chapter 5 does this even more formally by generating and clustering the feature-space of all applications grouped as dwarfs.
+The evaluation on the feature-space is critical to the inclusion of particular extended OpenDwarfs applications and is performed in Chapter 4.
 
-##OclGrind: Debugging OpenCL kernels via simulation{#sec:chapter2-oclgrind}
+##Oclgrind: Debugging OpenCL kernels via simulation{#sec:oclgrind}
 
-OclGrind is an OpenCL device simulator developed by Price and McIntosh-Smith [@price:15] capable of performing simulated kernel execution.
+Oclgrind is an OpenCL device simulator developed by Price and McIntosh-Smith [@price:15] capable of performing simulated kernel execution.
 It operates on a restricted LLVM IR known as Standard Portable Intermediate Representation (SPIR) established by the Khronos group consortium [@kessenich2015], thereby simulating OpenCL kernel code in a hardware agnostic manner.
 This architecture independence allows the tool to uncover many portability issues when migrating OpenCL code between devices.
-Additionally OclGrind comes with a set of tools to detect runtime API errors, race conditions and locating invalid memory accesses but also comes with an ability to generate instruction histograms.
+Additionally Oclgrind comes with a set of tools to detect runtime API errors, race conditions and locating invalid memory accesses but also comes with an ability to generate instruction histograms.
 These histograms show the computational composition of a kernel as a series of SPIR instructions with the corresponding count, these results can be used to directly infer the instruction mix similarly to the mechanisms presented in [Section @sec:chapter2-isa-independent].
 
 
@@ -376,14 +355,15 @@ We broaden this analysis by claiming that all benchmarks encompassing a dwarf wi
 Hoste et. al. [@hoste2006performance] show that the prediction of performance can be based on inherent program similarity.
 In particular, they show that the metrics collected from a program executing on a particular instruction set architecture (ISA) with a specific compiler offers a relatively accurate characterization of workload for the same application on a totally different micro-architecture.
 [Che et. al. @che2009rodinia] broadens this finding with an assumption that performing analysis on a single threaded CPU version of a benchmark application maintains the underlying set of instructions and the composition of the application.
-Therefore, it is intuitive that the composition of a program collected using a simulator (such as OclGrind discussed in [Section @sec:chapter2-oclgrind], which operates on the most common intermediate form for the OpenCL runtime) regardless of accelerator to which it is ultimately mapped, offers a more accurate architecture agnostic set of metrics around an applications workload.
+Therefore, it is intuitive that the composition of a program collected using a simulator (such as Oclgrind discussed in [Section @sec:oclgrind], which operates on the most common intermediate form for the OpenCL runtime) regardless of accelerator to which it is ultimately mapped, offers a more accurate architecture agnostic set of metrics around an applications workload.
 This, in turn, can be used as a basis for performance prediction on general accelerators.
 
-##Formal measurements
+##Formal measurements{#sec:formal-measurements}
 
 Many studies presented in this thesis use tools developed by others in order to perform the necessary measurements.
 Time measurements have primarily used LibSciBench as the default performance measurement tool.
 It allows high precision timing events to be collected for statistical analysis [@hoefler2015scientific].
 Additionally, it offers a high resolution timer in order to measure short running kernel codes, reported with one cycle resolution and roughly 6 ns of overhead.
-Throughout Chapter 4 LibSciBench was intensively used to record timings in conjunction with hardware events, which it collects via PAPI [mucci1999papi] counters.
+Throughout Chapter 4 LibSciBench was intensively used to record timings in conjunction with hardware events, which it collects via PAPI [@mucci1999papi] counters.
+
 

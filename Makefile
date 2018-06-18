@@ -1,14 +1,14 @@
 
 all: thesis.pdf #thesis-map.pdf
 
-grammarly: source/09-chapter-1-introduction.md
+grammarly: source/10-chapter-2-background-information-and-related-work.md
 	pkill Grammarly || true #if grammarly already exists kill it
 	pandoc  --wrap=preserve \
 		--filter pandoc-crossref \
 		--filter pandoc-citeproc \
 		--number-sections \
 		-t plain \
-		-o output/grammarly.txt source/09-chapter-1-introduction.md #now get just the text
+		-o output/grammarly.txt source/10-chapter-2-background-information-and-related-work.md #now get just the text
 	open -a Grammarly output/grammarly.txt #and open it in grammarly
 
 thesis-map.pdf: thesis-map.md

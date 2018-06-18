@@ -1,6 +1,16 @@
 
 #Conclusions and Future Work
 
+\todo{is this list summarised in this section? Can we think of additional contributions?}
+
+* extension of Dwarfs
+* development of AIWC analysis tool
+* addition of new metrics
+* feature space analysis of all dwarfs and potential clustering of application types
+* detailed data gathering for dwarfs on range of hardware
+* analysis to determine if feature space types map to particular hardware
+
+
 The development of ODE results in a reliable benchmark suite with multiple problem sizes and high precision measurements.
 This allows for reproducible results to be generated quickly, and over a range of heterogenous accelerator devices.
 For this thesis 15 devices were used -- and tested on -- to produce a full set of execution times and other performance metrics over all 12 applications and 42 kernels.

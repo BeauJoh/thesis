@@ -17,25 +17,14 @@ Analysis of these dwarf groups shows that:
 
 ##Introduction
 
-High performance computing (HPC) hardware is becoming increasingly heterogeneous.
-A major motivation for this is to reduce energy use; indeed, without significant improvements in energy efficiency, the cost of exascale computing will be prohibitive.
-From June 2016 to June 2017, the average energy efficiency of the top 10 of the Green500 supercomputers rose by 2.3x, from 4.8 to 11.1 gigaflops per watt [@feldman_2017].
-For many systems, this was made possible by highly energy-efficient Nvidia Tesla P100 GPUs.
-In addition to GPUs, future HPC architectures are also likely to include nodes with FPGA, DSP, ASIC and MIC components.
-A single node may be heterogeneous, containing multiple different computing devices; moreover, a HPC system may offer nodes of different types.
-For example, the Cori system at Lawrence Berkeley National Laboratory comprises 2,388 Cray XC40 nodes with Intel Haswell CPUs, and 9,688 Intel Xeon Phi nodes [@declerck2016cori].
-The Summit supercomputer at Oak Ridge National Laboratory is based on the IBM Power9 CPU, which includes both NVLINK [@morgan_2016], a high bandwidth interconnect between Nvidia GPUs; and CAPI, an interconnect to support FPGAs and other accelerators [@morgan_2017].
-Promising next generation architectures include Fujitsu's Post-K [@morgan_2016_postk], and Cray's CS-400, which forms the platform for the Isambard supercomputer [@feldman_2017_isambard].
-Both architectures use ARM cores alongside other conventional accelerators, with several Intel Xeon Phi and Nvidia P100 GPUs per node.
-
-Given this heterogeneity of hardware and the wide diversity of scientific application codes, workload characterization, performance prediction and scheduling are all becoming more challenging.
+Given the heterogeneity of hardware and the wide diversity of scientific application codes, workload characterization, performance prediction and scheduling are all becoming more challenging.
 To evaluate different approaches requires a representative benchmark suite which is portable to a wide variety of devices.
 We focus on the OpenCL programming model as it is supported on a wide range of systems including CPU, GPU and FPGA devices.
 While it is possible to write application code directly in OpenCL, it may also be used as a base to implement higher-level programming models.
 This technique was shown by Mitra et al. [@mitra2014implementation] where an OpenMP runtime was implemented over an OpenCL framework for Texas Instruments Keystone II DSP architecture.
 Having a common back-end in the form of OpenCL allows a direct comparison of identical code across diverse architectures.
 
-In this paper, we present an extended version of the OpenDwarfs benchmark suite, a set of OpenCL benchmarks for heterogeneous computing platforms.[@krommydas2016opendwarfs]
+In this chapter, we present an extended version of the OpenDwarfs benchmark suite, a set of OpenCL benchmarks for heterogeneous computing platforms.[@krommydas2016opendwarfs]
 We added new benchmarks to improve the diversity of the suite, and made a number of modifications aimed at improving the reproducibility and interpretability of results, portability between devices, and flexibility of configuration including problem sizes.
 We report preliminary results for a subset of the enhanced OpenDwarfs suite on a range of platforms consisting of CPU, GPU and MIC devices.
 
