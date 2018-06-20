@@ -1,4 +1,4 @@
-#Application-Accelerator Performance Prediction 
+#Application-Accelerator Performance Prediction {#sec:chapter-5-accelerator-predictions}
 
 <!--OpenCL Performance Prediction using Architecture-Independent Features-->
 

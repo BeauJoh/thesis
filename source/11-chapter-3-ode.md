@@ -1,21 +1,5 @@
-#The Dwarf Accelerator Mapping {#sec:chapter-3-ode}
+#Dwarfs on Accelerators {#sec:chapter-3-ode}
 
-This chapter presents an extension of an existing benchmark suite -- OpenDwarfs.
-The extension focuses on adding additional benchmarks to better represent each Dwarf along with supporting a range of 4 problem sizes for each application.
-The rationale for the latter is to survey the range of applications over a diverse set of HPC accelerators across increasing amounts of work, which allows for a deeper analysis of the memory subsystem on each of these devices.
-The corresponding analysis directly addresses the sub-question around: *Does problem size affect the optimality of a dwarf and its suitability for an accelerator type?*
-
-Next, the results are grouped according to dwarf instead of as independent results.
-Analysis of these dwarf groups shows that:
-
-* when focusing on energy analysis, certain dwarfs have results where energy is uncorrelated to execution time,
-* particular accelerator types do perform best under all applications encompassing a dwarf,
-* and that all dwarfs are not suited to one type of accelerator -- for instance GPU type accelerators are unsuited to the combinational-logic dwarf.
-
-\todo{reduce this lead-in and remove the introduction}
-
-
-##Introduction
 
 Given the heterogeneity of hardware and the wide diversity of scientific application codes, workload characterization, performance prediction and scheduling are all becoming more challenging.
 To evaluate different approaches requires a representative benchmark suite which is portable to a wide variety of devices.
@@ -28,6 +12,11 @@ In this chapter, we present an extended version of the OpenDwarfs benchmark suit
 We added new benchmarks to improve the diversity of the suite, and made a number of modifications aimed at improving the reproducibility and interpretability of results, portability between devices, and flexibility of configuration including problem sizes.
 We report preliminary results for a subset of the enhanced OpenDwarfs suite on a range of platforms consisting of CPU, GPU and MIC devices.
 
+This chapter presents an extended and enhanced version of the OpenDwarfs OpenCL benchmark suite (ODE), with a strong focus placed on the robustness of applications, curation of additional benchmarks with an increased emphasis on correctness of results and choice of problem size.
+Results and analysis are reported for eight benchmark codes on a diverse set of architectures -- three Intel CPUs, five Nvidia GPUs, six AMD GPUs and a Xeon Phi.
+ODE focuses on adding additional benchmarks to better represent each Dwarf along with supporting a range of 4 problem sizes for each application.
+The rationale for the latter is to survey the range of applications over a diverse set of HPC accelerators across increasing amounts of work, which allows for a deeper analysis of the memory subsystem on each of these devices.
+The corresponding analysis directly addresses the sub-question around: *Does problem size affect the optimality of a dwarf and its suitability for an accelerator type?*
 
 ##Enhancing the OpenDwarfs Benchmark Suite
 
@@ -448,9 +437,15 @@ The original goal of this research was to discover methods for choosing the best
 Until now, we found the available OpenCL benchmark suites were not rich enough to adequately characterize performance across the diverse range of applications and computational devices of interest.
 Now that a flexible benchmark suite is in place and results can be generated quickly and reliably on a range of accelerators, we plan to use these benchmarks to evaluate scheduling approaches.
 
-##Acknowledgements
+##Summary
 
-We thank our colleagues at The University of Bristol's High Performance Computing Research group for the use of ``The Zoo`` Research cluster for experimental evaluation.
+Essentially, the work presented in this chapter does not address the optimality of the OpenCL programming language for accelerator devices, nor does it need to.
+Instead, it presents the culmination of ground work and the associated considerations required to evaluate the performance of heterogenous devices and introduces a final benchmarking suite (ODE) which serves this purpose.
+It serves as a platform which is essential to perform workload scheduling of scientific workloads on accelerator devices which will be common to next-generation scientific HPC nodes.
 
-\todo{State that the point of this work isn't to show that OpenCL is the optimal programming language for all accelerator devices, but instead presents a platform for the study of optimal device selection to occur.}
+Separately, three major points become apparent when examining the results presented in this chapter.
+Namely, when focusing on energy analysis, certain dwarfs have results where energy is uncorrelated to execution time.
+Secondly, particular accelerator types do not perform best under all applications encompassing a dwarf.
+Finally, all dwarfs are not suited to one type of accelerator -- for instance GPU type accelerators are unsuited to the combinational-logic dwarf.
 
+These last two points reinforce the assumption that there is a most appropriate accelerator for any particular OpenCL code, this in turn raises an interesting research question, "can the automatic classification of a program binary allow the efficient scheduling of work to the most appropriate accelerator", the automatic classification tool is introduced in the next chapter whilst the broader question is addressed in [Chapter @sec:chapter-5-accelerator-predictions].
