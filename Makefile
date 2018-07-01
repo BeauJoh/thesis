@@ -39,6 +39,22 @@ thesis.pdf:
 		--wrap=preserve \
 		--filter pandoc-crossref \
 		--filter pandoc-citeproc \
+		--filter=./pandoc-tools/table-filter.py \
+		--filter ./pandoc-tools/bib-filter.py \
+		--bibliography=source/bibliography.bib \
+		--csl=./pandoc-tools/ieee.csl \
+		--variable papersize=a4paper \
+		--variable document-class=book \
+		--top-level-division=chapter \
+		./packages.yaml \
+
+thesis.tex: 
+	pandoc source/*.md \
+		-o output/thesis.tex \
+		--wrap=preserve \
+		--filter pandoc-crossref \
+		--filter pandoc-citeproc \
+		--filter ./pandoc-tools/bib-filter.py \
 		--csl=./pandoc-tools/ieee.csl \
 		--filter=./pandoc-tools/table-filter.py \
 		--bibliography=source/bibliography.bib \

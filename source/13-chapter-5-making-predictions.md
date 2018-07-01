@@ -134,7 +134,7 @@ average linear branch entropy\\
 
 ###Experimental Setup
 
-AIWC was used to characterize a variety of codes in the OpenDwarfs Extended (ODE) Benchmark Suite [@johnston17opendwarfs], and the corresponding AIWC metrics were used as predictor variables in to fit a random forest regression model.
+AIWC was used to characterize a variety of codes in the Extended OpenDwarfs (EOD) Benchmark Suite [@johnston17opendwarfs], and the corresponding AIWC metrics were used as predictor variables in to fit a random forest regression model.
 The metrics were generated over 4 problem sizes for each of the 11 applications -- and 37 computationally regions known as kernels in the OpenCL setting.
 Response variables were collected following the same methodology outlined in [@johnston17opendwarfs] -- where the details for each of the applications is also presented.
 Execution times were measured for at least 50 iterations and a total runtime of at least two seconds for each combination of device and benchmark.

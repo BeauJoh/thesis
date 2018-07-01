@@ -8,7 +8,7 @@ This is the Latex-heavy title page.
         \vspace*{2.5cm}
 
         \huge
-        Automatic program analysis and scheduling of scientific workloads for heterogenous supercomputers
+        Automatic program analysis and scheduling of scientific workloads for heterogeneous supercomputers
 
         \vspace{1.5cm}
 
@@ -20,8 +20,8 @@ This is the Latex-heavy title page.
         \vspace{1.5cm}
 
         \normalsize
-        A thesis presented for the degree of Doctor of Philosophy\\
-        of The Australian National University
+        A thesis submitted for the degree of Doctor of Philosophy\\
+        The Australian National University
 
         \vfill
 

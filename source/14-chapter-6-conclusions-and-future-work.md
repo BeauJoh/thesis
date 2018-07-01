@@ -11,8 +11,8 @@
 * analysis to determine if feature space types map to particular hardware
 
 
-The development of ODE results in a reliable benchmark suite with multiple problem sizes and high precision measurements.
-This allows for reproducible results to be generated quickly, and over a range of heterogenous accelerator devices.
+The development of EOD results in a reliable benchmark suite with multiple problem sizes and high precision measurements.
+This allows for reproducible results to be generated quickly, and over a range of heterogeneous accelerator devices.
 For this thesis 15 devices were used -- and tested on -- to produce a full set of execution times and other performance metrics over all 12 applications and 42 kernels.
 The performance metrics allow direct evaluation of devices.
 
@@ -26,7 +26,7 @@ Furthermore, these metrics are used for creating the prediction model to evaluat
 Such a model is then applied as a prognosis tool to predict the performance of an application for any given platform without additional instrumentation.
 This prediction adds information that can be incorporated into existing HPC schedulers and has no run-time overhead -- codes are examined one time by the developer when instrumenting with AIWC and these, in turn, are embedded into the header of each kernel code to be evaluated by the scheduler at the time of scheduling.
 
-##ODE
+##EOD
 
 We plan to complete analysis of the remaining benchmarks in the suite for multiple problem sizes.
 In addition to comparing performance between devices, we would also like to develop some notion of "ideal" performance for each combination of benchmark and device, which would guide efforts to improve performance portability.

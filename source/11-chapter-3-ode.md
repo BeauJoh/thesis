@@ -12,9 +12,9 @@ In this chapter, we present an extended version of the OpenDwarfs benchmark suit
 We added new benchmarks to improve the diversity of the suite, and made a number of modifications aimed at improving the reproducibility and interpretability of results, portability between devices, and flexibility of configuration including problem sizes.
 We report preliminary results for a subset of the enhanced OpenDwarfs suite on a range of platforms consisting of CPU, GPU and MIC devices.
 
-This chapter presents an extended and enhanced version of the OpenDwarfs OpenCL benchmark suite (ODE), with a strong focus placed on the robustness of applications, curation of additional benchmarks with an increased emphasis on correctness of results and choice of problem size.
+This chapter presents an extended and enhanced version of the OpenDwarfs OpenCL benchmark suite (EOD), with a strong focus placed on the robustness of applications, curation of additional benchmarks with an increased emphasis on correctness of results and choice of problem size.
 Results and analysis are reported for eight benchmark codes on a diverse set of architectures -- three Intel CPUs, five Nvidia GPUs, six AMD GPUs and a Xeon Phi.
-ODE focuses on adding additional benchmarks to better represent each Dwarf along with supporting a range of 4 problem sizes for each application.
+EOD focuses on adding additional benchmarks to better represent each Dwarf along with supporting a range of 4 problem sizes for each application.
 The rationale for the latter is to survey the range of applications over a diverse set of HPC accelerators across increasing amounts of work, which allows for a deeper analysis of the memory subsystem on each of these devices.
 The corresponding analysis directly addresses the sub-question around: *Does problem size affect the optimality of a dwarf and its suitability for an accelerator type?*
 
@@ -49,7 +49,7 @@ Through PAPI modules such as Intel's Running Average Power Limit (RAPL) and Nvid
 \label{ssec:hardware}
 \begin{table*}[t]
 \centering
-\caption{Hardware}\label{tab:hardware}
+\caption{Hardware}\label{tbl:hardware}
 \begin{threeparttable}
     \centering
     \resizebox{\linewidth}{!}{%
@@ -440,7 +440,7 @@ Now that a flexible benchmark suite is in place and results can be generated qui
 ##Summary
 
 Essentially, the work presented in this chapter does not address the optimality of the OpenCL programming language for accelerator devices, nor does it need to.
-Instead, it presents the culmination of ground work and the associated considerations required to evaluate the performance of heterogenous devices and introduces a final benchmarking suite (ODE) which serves this purpose.
+Instead, it presents the culmination of ground work and the associated considerations required to evaluate the performance of heterogenous devices and introduces a final benchmarking suite  -- EOD -- which serves this purpose.
 It serves as a platform which is essential to perform workload scheduling of scientific workloads on accelerator devices which will be common to next-generation scientific HPC nodes.
 
 Separately, three major points become apparent when examining the results presented in this chapter.

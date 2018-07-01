@@ -9,19 +9,19 @@ For bold and italic, add _** on either side of the text
 <!-- Introduction to the Introduction -->
 
 
-Supercomputers are becoming increasingly heterogenous.
+Supercomputers are becoming increasingly heterogeneous.
 At an individual node, there is an increasing trend to use specialised hardware -- known as accelerators -- which can expedite the computation of codes from particular classes of scientific workloads.
 The next generation of these systems has been designed to incorporate a greater number of accelerators.
 For instance, the CAPI and NVLINK technologies included in the latest IBM POWER9 processor offers a high-speed interconnect which allows the rapid movement data between processor and accelerator -- NVIDIA Graphical Processing Unit (GPU) with NVLINK, and CAPI supporting Altera Field-Programmable Gate Array (FPGA), Intel Central Processing Unit (CPU) co-processors to AMD CPU and GPU devices.
 The POWER9 is set to feature in the upcoming Summit and Sierra Supercomputers.
-The support from hardware vendors for a greater mix of heterogenous devices indicates this is the new direction of supercomputing.
+The support from hardware vendors for a greater mix of heterogeneous devices indicates this is the new direction of supercomputing.
 However, this development is recent, and as such the scheduling of workloads to the suitable accelerator is a new problem.
 
 
 Independently, the characteristics of a scientific code, specifically around computation, memory, branching and parallelism, are independent of any particular device on which they may be finally executed.
 The metrics used to quantify each of these characteristics can be collected during program execution on a simulator.
 In other words, provided they are collected over a representative workload, a graph traversal program maintains the characteristics of a graph traversal program regardless of problem size.
-Moreover, these metrics can be used to accurately predict the execution time on each accelerator in a heterogenous system.
+Moreover, these metrics can be used to accurately predict the execution time on each accelerator in a heterogeneous system.
 
 
 This thesis outlines the methodology required to perform runtime predictions for any given code -- provided the feature metrics are pre-generated -- for any accelerator device.
@@ -56,19 +56,19 @@ AIWC features, are generated for each kernel invocation and can be embedded as a
 Separately, additional work in this thesis comprises of the extension of a benchmark suite.
 This was needed since programs that are representative of scientific HPC applications which are capable of execution over a wide range of accelerators are few and far between, specifically with portable performance and reproducible results.
 Additionally, until this work was undertaken, the available OpenCL benchmark suites were not rich enough to adequately characterise performance across the diverse range of applications or accelerator devices of interest.
-Thus this thesis presents an enhanced version of the OpenDwarfs OpenCL benchmark suite -- denoted the OpenDwarfs Extended Benchmark Suite (ODE) -- which was developed with a strong focus placed on the robustness of applications, the curation of additional benchmarks with an increased emphasis on correctness of results and the selection of 4 problem sizes.
+Thus this thesis presents an enhanced version of the OpenDwarfs OpenCL benchmark suite -- denoted the Extended OpenDwarfs Benchmark Suite (EOD) -- which was developed with a strong focus placed on the robustness of applications, the curation of additional benchmarks with an increased emphasis on correctness of results and the selection of 4 problem sizes.
 
 
-LibSciBench was added to ODE, this includes high precision timers along with support for the collection of PAPI -- hardware performance counters -- events and energy usage information.
-Runtime, or elapsed execution times, of all ODE benchmarks, were collected on 15 unique accelerator devices suitable for current HPC systems.
+LibSciBench was added to EOD, this includes high precision timers along with support for the collection of PAPI -- hardware performance counters -- events and energy usage information.
+Runtime, or elapsed execution times, of all EOD benchmarks, were collected on 15 unique accelerator devices suitable for current HPC systems.
 Collection of these times occurs at a per kernel level along with instrumentation of other events common to the OpenCL setting, such as memory setup and timing data movement to accelerator devices.
 In addition to the higher level, total elapsed application execution time was also collected.
 
 
 Independently, the random forest algorithm is a very powerful pattern recognition technique.
 It is supervised learning algorithm that builds multiple decision trees and merges them together to achieve an accurate and stable prediction.
-The final major contribution of this thesis is the development of a predictive model, using the random forest algorithm, to show the link between AIWC features and execution times over all devices.
-Thus, the AIWC tool was run and the features collected from all the kernels of ODE.
+The final major contribution of this thesis is the development and use of a predictive model, using the random forest algorithm, to show the link between AIWC features and execution times over all devices.
+Thus, the AIWC tool was run and the features collected from all the kernels of EOD.
 These AIWC metrics were used as predictor variables into the random forest, and the time data of kernels from the experimental methodology was used as the response variables to indicate predictions.
 The accelerators examined in these predictions range from CPU, GPU and MIC, however, the methodology finally presented is expected to perform over DSP and FPGA also.
 
@@ -77,13 +77,13 @@ The final model performs very well and is capable of highly accurate predictions
 The model is capable of predicting execution times for specific devices based on the computational characteristics captured by the AIWC tool, which in turn, provides a good prediction of an accelerator devices execution time needed for a real-world scheduler for nodes of future super-computing systems.
 
 <!-- Restatement of the problem -->
-##Problems in heterogenous supercomputing
+##Problems in heterogeneous supercomputing
 
-The future of supercomputing comprises several heterogenous devices at the node level.
+The future of supercomputing comprises several heterogeneous devices at the node level.
 Evaluating the suitability of any given device on a node requires a comprehensive benchmark suite which is capable of efficiently executing on all devices in a hardware agnostic way.
 Unfortunately, current benchmark suites are ill-suited to the task, either consisting of several different implementations per each device or lacking a comprehensive range of scientific applications to fully explore the performance characteristics of the device.
 Further, this suitability can be concerned with energy consumption, which is critical to the proposed exascale systems envisaged in the future, making performance-per-watt a fundamental concern.
-Additionally, examining the computation characteristics of scientific workloads is difficult, and this complexity only increases when considering the wide range of hardware in heterogenous supercomputing -- and the corresponding different implementations per device.
+Additionally, examining the computation characteristics of scientific workloads is difficult, and this complexity only increases when considering the wide range of hardware in heterogeneous supercomputing -- and the corresponding different implementations per device.
 Both the difficulties in identifying characteristics of scientific hardware agnostic codes, and the wider diversity of devices of the next-generation of HPC systems complicates the already complicated issue of scheduling code to the node in order to fully utilise supercomputing facilities.
 
 
@@ -106,8 +106,8 @@ This prediction adds information that can be incorporated into existing HPC sche
 
 ##Thesis Structure
 
-Chapter 2 canvasses the existing literature and current techniques used to schedule heterogenous resources.
-Chapter 3 discusses the extensions added to the OpenDwarfs Benchmarking Suite in ODE.
+Chapter 2 canvasses the existing literature and current techniques used to schedule heterogeneous resources.
+Chapter 3 discusses the extensions added to the OpenDwarfs Benchmarking Suite in EOD.
 Chapter 4 highlights the construction, design decisions made and usage of the AIWC tool.
 Chapter 5 develops the prediction model and examines the accuracy of the final predictions.
 Chapter 6 discusses conclusions of this thesis and the future work required for the predictive model to be incorporated into scheduling on future Supercomputing systems.

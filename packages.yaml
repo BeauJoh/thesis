@@ -1,5 +1,7 @@
 ---
 header-includes:
+    - \usepackage[all]{hypcap}
+    - \usepackage[palatino]{./style/anuthesis}
     - \usepackage{tabularx}
     - \usepackage{booktabs}
     - \usepackage{caption}
@@ -13,8 +15,13 @@ header-includes:
     - \usepackage{adjustbox}
     - \usepackage{etoolbox}
     - \usepackage[noend,ruled]{algorithm2e}
+    - \usepackage[all]{hypcap}
+    - \usepackage[T1]{fontenc}
+    - \usepackage{./style/thesis}
+
 include-before:
     - \makeatletter
     - \renewcommand{\@todonotes@drawMarginNoteWithLine}{\begin{tikzpicture}[remember picture, overlay, baseline=-0.75ex] \node [coordinate] (inText) {};\end{tikzpicture}\marginnote[{\@todonotes@drawMarginNote\@todonotes@drawLineToLeftMargin}]{\@todonotes@drawMarginNote \@todonotes@drawLineToRightMargin}}
     - \makeatother
+    - \bibliographystyle{anuthesis}
 ---
