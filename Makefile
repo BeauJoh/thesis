@@ -34,12 +34,14 @@ introduction.pdf: source/09-chapter-1-introduction.md
 		./packages.yaml \
 
 thesis.pdf: 
+	mkdir -p output;
 	pandoc source/*.md \
 		-o output/thesis.pdf \
 		--wrap=preserve \
 		--filter pandoc-crossref \
 		--filter pandoc-citeproc \
 		--filter ./pandoc-tools/bib-filter.py \
+		--filter=./pandoc-tools/table-filter.py \
 		--bibliography=source/bibliography.bib \
 		--csl=./pandoc-tools/ieee.csl \
 		--variable papersize=a4paper \
@@ -47,7 +49,6 @@ thesis.pdf:
 		--top-level-division=chapter \
 		./packages.yaml \
 
-#		--filter=./pandoc-tools/table-filter.py \
 
 thesis.tex: 
 	pandoc source/*.md \
