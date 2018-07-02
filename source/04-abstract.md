@@ -15,12 +15,10 @@ These extensions were developed to improve portability and robustness of applica
 The culmination in this work results in measurable performance on a set 15 devices and over 11 applications.
 
 The Architecture Independent Workload Characterization (AIWC) tool was then developed to characterize OpenCL kernels according to a set of architecture-independent features.
+Features are measured by counting desired characteristics which are collected during program execution in a simulator.
+They are presented as a series of 42 metrics that indicate performance bottlenecks ranging from parallelism -- how well an algorithm scales in response to core count, compute -- such as the diversity of instructions, memory -- working memory footprint and entropy measurements which correspond to caching characteristics and control -- such as branching and program flow.
+The metrics collected are primarily used in the prediction of execution times, but since they are representative of structural characteristics of the underlying program and are free from architectural traits, they can be used in diversity analysis in benchmark suites, identifying program requirements which allows the automatic calculation of theoretical peak performance for a given device and examining phase-transitional properties of application codes.
 This work also discusses the design decisions made to collect AIWC features.
-The benefits of AIWC include that it:
-
-1) provides insights around the inclusion of an application via diversity analysis of the feature-space.
-2) measures requirements in terms of FLOPs, memory movement and integer ops of any application kernel -- which allows the automatic calculation of theoretical peak performance for a given device.
-3) can be used to examine the phase-transitional properties of application codes -- for instance if the instruction mix changes over time in terms of the balance between floating-point and memory operations.
 
 Finally, this work culminates in a methodology which uses AIWC features to form a model capable of predicting accelerator execution times.
 I use this methodology to predict execution times for a set of 37 computational kernels running on 15 different devices representing a broad range of CPU, GPU and MIC architectures.

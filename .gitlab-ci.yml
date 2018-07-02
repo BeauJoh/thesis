@@ -1,0 +1,8 @@
+compile_pdf:
+  script:
+    - make
+  artifacts:
+    paths:
+      - output/thesis.pdf
+    expire_in: 1 week
+

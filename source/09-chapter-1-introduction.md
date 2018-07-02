@@ -11,11 +11,13 @@ For bold and italic, add _** on either side of the text
 
 Supercomputers are becoming increasingly heterogeneous.
 At an individual node, there is an increasing trend to use specialised hardware -- known as accelerators -- which can expedite the computation of codes from particular classes of scientific workloads.
-The next generation of these systems has been designed to incorporate a greater number of accelerators.
+The use of accelerators for certain programs offers a shorter time to completion, and less energy expenditure, when compared to a conventional CPU architecture.
+The next generation of these systems has been designed to incorporate a greater number of accelerators, and of varying types per node.
 For instance, the CAPI and NVLINK technologies included in the latest IBM POWER9 processor offers a high-speed interconnect which allows the rapid movement data between processor and accelerator -- NVIDIA Graphical Processing Unit (GPU) with NVLINK, and CAPI supporting Altera Field-Programmable Gate Array (FPGA), Intel Central Processing Unit (CPU) co-processors to AMD CPU and GPU devices.
-The POWER9 is set to feature in the upcoming Summit and Sierra Supercomputers.
+The POWER9 is featured in the latest Summit and forthcoming Sierra Supercomputers, and is configured such with two GPUs per CPU.
 The support from hardware vendors for a greater mix of heterogeneous devices indicates this is the new direction of supercomputing.
 However, this development is recent, and as such the scheduling of workloads to the suitable accelerator is a new problem.
+Without significant improvements in effectively using accelerators on these future systems, the cost of exascale computing and their corresponding energy efficiency will be prohibitive.
 
 
 Independently, the characteristics of a scientific code, specifically around computation, memory, branching and parallelism, are independent of any particular device on which they may be finally executed.
@@ -27,7 +29,6 @@ Moreover, these metrics can be used to accurately predict the execution time on 
 This thesis outlines the methodology required to perform runtime predictions for any given code -- provided the feature metrics are pre-generated -- for any accelerator device.
 A benchmark suite is extended, a characterisation tool developed, and a model is generated to achieve the task.
 This research is of benefit to the scheduling of codes to the most appropriate device which in turn provides essential information for scheduling, to better utilise the next-generation of supercomputers.
-Without significant improvements in effectively using accelerators on these future systems, the cost of exascale computing and their corresponding energy efficiency will be prohibitive.
 
 
 <!-- Context -- a brief on how the proposed solution works -->
@@ -64,10 +65,7 @@ Runtime, or elapsed execution times, of all EOD benchmarks, were collected on 15
 Collection of these times occurs at a per kernel level along with instrumentation of other events common to the OpenCL setting, such as memory setup and timing data movement to accelerator devices.
 In addition to the higher level, total elapsed application execution time was also collected.
 
-
-Independently, the random forest algorithm is a very powerful pattern recognition technique.
-It is supervised learning algorithm that builds multiple decision trees and merges them together to achieve an accurate and stable prediction.
-The final major contribution of this thesis is the development and use of a predictive model, using the random forest algorithm, to show the link between AIWC features and execution times over all devices.
+The final major contribution of this thesis is the development and use of a predictive model, using the random forest algorithm -- a supervised learning algorithm and powerful pattern recognition technique -- to show the link between AIWC features and execution times over all devices.
 Thus, the AIWC tool was run and the features collected from all the kernels of EOD.
 These AIWC metrics were used as predictor variables into the random forest, and the time data of kernels from the experimental methodology was used as the response variables to indicate predictions.
 The accelerators examined in these predictions range from CPU, GPU and MIC, however, the methodology finally presented is expected to perform over DSP and FPGA also.
@@ -84,7 +82,7 @@ Evaluating the suitability of any given device on a node requires a comprehensiv
 Unfortunately, current benchmark suites are ill-suited to the task, either consisting of several different implementations per each device or lacking a comprehensive range of scientific applications to fully explore the performance characteristics of the device.
 Further, this suitability can be concerned with energy consumption, which is critical to the proposed exascale systems envisaged in the future, making performance-per-watt a fundamental concern.
 Additionally, examining the computation characteristics of scientific workloads is difficult, and this complexity only increases when considering the wide range of hardware in heterogeneous supercomputing -- and the corresponding different implementations per device.
-Both the difficulties in identifying characteristics of scientific hardware agnostic codes, and the wider diversity of devices of the next-generation of HPC systems complicates the already complicated issue of scheduling code to the node in order to fully utilise supercomputing facilities.
+Both the difficulties in identifying characteristics of scientific hardware agnostic codes, and the wider diversity of devices of the next-generation of HPC systems further compounds the issue of scheduling code within a node in order to fully utilise supercomputing facilities.
 
 
 <!-- Restatement of the response -->
@@ -96,6 +94,11 @@ Examining the performance of the benchmark suite over a range of devices allows 
 From this evaluation, the suitably of OpenCL as a hardware agnostic language is shown.
 
 Architecture Independent Workload Characterisation (AIWC) tool is capable of analysing kernels in order to extract a set of predefined features or characteristics.
+The benefits of AIWC include that it:
+
+1) provides insights around the inclusion of an application via diversity analysis of the feature-space.
+2) measures requirements in terms of FLOPs, memory movement and integer ops of any application kernel -- which allows the automatic calculation of theoretical peak performance for a given device.
+3) can be used to examine the phase-transitional properties of application codes -- for instance if the instruction mix changes over time in terms of the balance between floating-point and memory operations.
 The tool can be used in diversity analysis -- which is essential when assembling benchmark suites and justifying the inclusion of an application.
 Furthermore, these metrics are used for creating the prediction model to evaluate the performance of OpenCL kernels on different hardware devices and settings.
 Such a model is then applied as a prognosis tool to predict the performance of an application for any given platform without additional instrumentation.

@@ -16,7 +16,7 @@ This is the Latex-heavy title page.
         Beau Johnston
         
         \vspace{1.5cm}
-        June 2018
+        July 2018
         \vspace{1.5cm}
 
         \normalsize
