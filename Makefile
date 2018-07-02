@@ -39,7 +39,6 @@ thesis.pdf:
 		--wrap=preserve \
 		--filter pandoc-crossref \
 		--filter pandoc-citeproc \
-		--filter=./pandoc-tools/table-filter.py \
 		--filter ./pandoc-tools/bib-filter.py \
 		--bibliography=source/bibliography.bib \
 		--csl=./pandoc-tools/ieee.csl \
@@ -47,6 +46,8 @@ thesis.pdf:
 		--variable document-class=book \
 		--top-level-division=chapter \
 		./packages.yaml \
+
+#		--filter=./pandoc-tools/table-filter.py \
 
 thesis.tex: 
 	pandoc source/*.md \
