@@ -18,7 +18,6 @@ Feedback:
 - Contributions: Try to make broader claims, e.g. "The first-the only-the most comprehensive". For example, "A benchmark suite is extended to include a greater range of scientific applications and over a differing problem sizes." - why is this important? What makes your extended benchmark suite the best in some respect?
 - AIWC: diversity analysis - what does this mean? how is it demonstrated in the thesis?
 - Does a "scientific hardware agnostic code" exist? Are you confident to claim that OpenCL is hardware agnostic? (Several reviewers have said otherwise.)
-- the last sentence of the third paragraph is a return to stating the problem. It should probably be part of the first paragraph.
 - try to use fewer linking introductory words like "Independently,/Additionally,/Separately,/Further," - they don't add anything to the meaning
 
 
@@ -44,6 +43,7 @@ Done
 - "the characteristics of a scientific code, specifically around computation, memory, branching and parallelism, are independent of any particular device on which they may be finally executed ... regardless of problem size" - is this true of the AIWC metrics, including all the memory metrics? -- YES!
 - random forest is not a focus of the thesis (and anyway, isn’t it mostly Greg's contribution?)
 - "complicates the already complicated issue"
+- the last sentence of the third paragraph is a return to stating the problem. It should probably be part of the first paragraph.
 
 After Thesis Draft
 ------------------

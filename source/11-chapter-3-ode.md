@@ -439,12 +439,11 @@ Now that a flexible benchmark suite is in place and results can be generated qui
 
 ##Summary
 
-Essentially, the work presented in this chapter does not address the optimality of the OpenCL programming language for accelerator devices, nor does it need to.
-Instead, it presents the culmination of ground work and the associated considerations required to evaluate the performance of heterogenous devices and introduces a final benchmarking suite  -- EOD -- which serves this purpose.
+The work presented in this chapter does not address the optimality of the OpenCL programming language for accelerator devices, nor does it need to, instead, it presents the culmination of ground work and the associated considerations required to evaluate the performance of heterogenous devices and introduces a final benchmarking suite  -- EOD -- which serves this purpose.
 It serves as a platform which is essential to perform workload scheduling of scientific workloads on accelerator devices which will be common to next-generation scientific HPC nodes.
 
 Separately, three major points become apparent when examining the results presented in this chapter.
-Namely, when focusing on energy analysis, certain dwarfs have results where energy is uncorrelated to execution time.
+Generally, energy is correlated to execution time for most applications.
 Secondly, particular accelerator types do not perform best under all applications encompassing a dwarf.
 Finally, all dwarfs are not suited to one type of accelerator -- for instance GPU type accelerators are unsuited to the combinational-logic dwarf.
 
