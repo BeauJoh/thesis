@@ -15,6 +15,8 @@ The use of accelerators for certain programs offers a shorter time to completion
 The next generation of these systems has been designed to incorporate a greater number of accelerators, and of varying types per node.
 For instance, the CAPI and NVLINK technologies included in the latest IBM POWER9 processor offers a high-speed interconnect which allows the rapid movement data between processor and accelerator -- NVIDIA Graphical Processing Unit (GPU) with NVLINK, and CAPI supporting Altera Field-Programmable Gate Array (FPGA), Intel Central Processing Unit (CPU) co-processors to AMD CPU and GPU devices.
 The POWER9 is featured in the latest Summit and forthcoming Sierra Supercomputers, and is configured such with two GPUs per CPU.
+High bandwidth, low latency interconnects such as the CRAY XC50 *Aries*, Fujitsu Post-K *Tofu* and IBM Power9 *Bluelink*, support tighter integration between compute devices on a node.
+Some interconnects support multiple different kinds of devices on a single node, for example *Bluelink* features both NVLINK support for Nvidia GPUs and CAPI for other emerging accelerators such as DSPs, FPGAs and MICs.
 The support from hardware vendors for a greater mix of heterogeneous devices indicates this is the new direction of supercomputing.
 However, this development is recent, and as such the scheduling of workloads to the suitable accelerator is a new problem.
 Without significant improvements in effectively using accelerators on these future systems, the cost of exascale computing and their corresponding energy efficiency will be prohibitive.

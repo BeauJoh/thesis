@@ -111,7 +111,7 @@ Table: Dwarfs and their limits. \label{tbl:dwarf-taxonomy}
 
 
 
-## Benchmark Suites
+## Benchmark Suites{#sec:chapter2-benchmark-suites}
 
 
 The NAS parallel benchmarks [@bailey1991parallel] follow a ‘pencil-and-paper‘ approach, specifying the computational problems to be included in the benchmark suite but leaving implementation choices such as language, data structures and algorithms to the user.
@@ -185,6 +185,7 @@ These efforts are discussed in Chapter 3.
 
 ## Autotuning{#sec:chapter2-autotuning}
 
+When combined with autotuning, an OpenCL code may exhibit good performance across varied devices.
 Every application presented in the Rodinia Benchmark Suite \[sec:rodinia\] requires a local workgroup to be passed.
 In the OpenDwarfs set of benchmarks 9 out of 14 allow for local workgroup tuning.
 Therefore, given a majority of OpenCL programs use local workgroup tuning, serious considerations need be given regarding how to ensure an accurate depiction of execution times for all accelerators is given.
@@ -192,7 +193,8 @@ Older literature on the subject also suggests autotuning will play an increasing
 Tasks such as compiler optimisations and kernel runtime tuning parameters are well suited to auto-tuners without requiring an exhaustive search in this search space.
 
 This has been manifested in many auto-tuning libraries that use machine learning.
-Spafford et. al. [@spafford2010maestro], Chaimov et. al. [@chaimov2014toward] and, Nugteren and Codreanu [@nugteren2015cltune] all propose open source libraries capable of performing generic autotuning of dynamic execution parameters in OpenCL kernels.
+Spafford et al. [@spafford2010maestro], Chaimov et al. [@chaimov2014toward] and Nugteren and Codreanu [@nugteren2015cltune] all propose open source libraries capable of performing autotuning of dynamic execution parameters in OpenCL kernels.
+Additionally, Price and McIntosh-Smith [@price2017analyzing] have demonstrated high performance using a general purpose autotuning library [@ansel:pact:2014], for three applications across twelve devices.
 
 One auto-tuning library of particular interest is OpenTuner [@ansel:pact:2014] since it has already been employed by Price and McIntosh-Smith [@price2017analyzing] to improve the performance of OpenCL applications.
 The OpenTuner library requires the search space to be defined in order to effect the runtime performance of the application.

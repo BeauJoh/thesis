@@ -1,43 +1,15 @@
 #AIWC: OpenCL based Architecture Independent Workload Characterization
 
-This chapter focuses on generating the feature-space representation of a dwarf.
-The methodology starts by reproducing the results shown in established literature -- using Microarchitectural hardware counters followed by principal component analysis, and compares these results to the newly generated feature-spaces using simulator instrumentation tools.
-
-The results presented are used to evalute the sub-questions regarding:
-
-* *Does Phase-Shifting occur within OpenCL kernels?*
-* *Are the principal components used when performing microarchitecture independent analysis transferable to architecture independent analysis.*
-* *How is the feature space generated from instrumentation tools -- such as `oclgrind` -- comparable to those generated from hardware monitoring processes -- namely PIN. Is it more accurate or applicable to the OpenCL platform.*
-* *In what ways does incorrectly setting tuning arguments and compiler flags effect the features-space of an OpenCL kernel?*
-
 OpenCL is an attractive programming model for high performance computing systems composed of heterogeneous compute devices, with wide support from hardware vendors allowing portability of application codes.
 For accelerator designers and HPC integrators, understanding the performance characteristics of scientific workloads is of utmost importance.
 However, if these characteristics are tied to architectural features that are specific to a particular system, they may not generalize well to alternative or future systems. 
 A architecture-independent method ensures an accurate characterization of inherent program behavior, without bias due to architectural-dependent features that vary widely between different types of accelerators.
 This work presents the first architecture-independent workload characterization framework for heterogeneous compute platforms.
-The tool, AIWC, is capable of characterizing OpenCL workloads currently in use in the supercomputing setting, and is deployed as part of the open source Oclgrind simulator.
-An evaluation of the metrics collected over a subset of the Extended OpenDwarfs Benchmark Suite is also presented.
-
-
-##Introduction
-
-Cutting-edge high-performance computing (HPC) systems are typically heterogeneous, with a single node comprising a traditional CPU and an accelerator such as a GPU or many-integrated-core device (MIC).
-High bandwidth, low latency interconnects such as the CRAY XC50 *Aries*, Fujitsu Post-K *Tofu* and IBM Power9 *Bluelink*, support tighter integration between compute devices on a node.
-Some interconnects support multiple different kinds of devices on a single node, for example *Bluelink* features both NVLINK support for Nvidia GPUs and CAPI for other emerging accelerators such as DSPs, FPGAs and MICs.
-
-The OpenCL programming framework is well-suited to such heterogeneous computing environments, as a single OpenCL code may be executed on multiple different device types.
-When combined with autotuning, an OpenCL code may exhibit good performance across varied devices.
-Spafford et al. [@spafford2010maestro], Chaimov et al. [@chaimov2014toward] and Nugteren and Codreanu [@nugteren2015cltune] all propose open source libraries capable of performing autotuning of dynamic execution parameters in OpenCL kernels.
-Additionally, Price and McIntosh-Smith [@price2017analyzing] have demonstrated high performance using a general purpose autotuning library [@ansel:pact:2014], for three applications across twelve devices.
-
-Given a diversity of application codes and computational capabilities of accelerators, optimal performance of each code may vary between devices.
-Hardware designers and HPC integrators would benefit from accurate and systematic performance prediction for combinations of different codes and accelerators, for example, in designing a HPC system, to choose a mix of accelerators that is well-suited to the expected workload.
-
-To this end, we present the Architecture Independent Workload Characterization (AIWC) tool.
+The Architecture Independent Workload Characterization (AIWC) tool, is capable of characterizing OpenCL workloads currently in use in the supercomputing setting, and is deployed as part of the open source Oclgrind simulator.
 AIWC simulates execution of OpenCL kernels to collect architecture-independent features which characterize each code, and may also be used in performance prediction.
-We demonstrate the use of AIWC to characterize a variety of codes in the Extended OpenDwarfs Benchmark Suite [@johnston17opendwarfs].
+We demonstrate the use of AIWC, and the associated metrics, to characterize a variety of codes over a subset from the EOD Benchmark Suite presented in [Chapter @sec:chapter-3-ode].
 
-##Related Work
+##AIWC's Back story
 
 Oclgrind is an OpenCL device simulator developed by Price and McIntosh-Smith [@price:15] capable of performing simulated kernel execution.
 It operates on a restricted LLVM IR known as Standard Portable Intermediate Representation (SPIR) [@kessenich2015], thereby simulating OpenCL kernel code in a hardware agnostic manner.
@@ -289,7 +261,15 @@ The additional architecture independent characteristics of a scientific workload
 Caparrós Cabezas and Stanley-Marbell [@CaparrosCabezas:2011:PDM:1989493.1989506] examine the Berkeley dwarf taxonomy by measuring instruction-level parallelism, thread parallelism, and data movement.
 They propose a sophisticated metric to assess ILP by examining the data dependency graph of the instruction stream.
 Similarly, Thread-Level-Parallelism was measured by analysing the block dependency graph.
-Whilst we propose alternative metrics to evaluate ILP and TLP -- using the max, mean and standard deviation statistics of SIMD width and the total barriers hit and Instructions To Barrier metrics respectively -- a quantitative evaluation of the dwarf taxonomy using these metrics is left as future work.
-We expect that the additional AIWC metrics will generate a comprehensive feature-space representation which will permit cluster analysis and comparison with the dwarf taxonomy.
+Whilst we propose alternative metrics to evaluate ILP and TLP -- using the max, mean and standard deviation statistics of SIMD width and the total barriers hit and Instructions To Barrier metrics respectively -- a quantitative evaluation of the dwarf taxonomy could be performed by examining these metrics.
+This evaluation could be used to examine the legitimacy of the Dwarf Taxonomy.
+For instance, it is envisaged that if the original proposal of 13 dwarfs is correct, such that all scientific applications can be identified by one or more of these dwarfs, this implies that each individual kernel is demonstrated by one dwarf.
+One would then expect that each AIWC metric would have -- at the most -- 13 unique clusters corresponding to each of the 13 dwarfs for any individual kernel analysis.
+If this is true then the legitimacy is confirmed, however if not, perhaps AIWC metrics are a better and more direct measure of application diversity when assembling a benchmark suite.
+This is left as future work, however, we expect that the additional AIWC metrics will generate a comprehensive feature-space representation which will permit cluster analysis and comparison with the dwarf taxonomy.
 
+The coverage of characteristics and the suitability AIWC metrics can now be assessed.
+This is performed in in the next [Chapter @sec:chapter-5-accelerator-predictions] where these AIWC metrics -- from the collection over all EOD applications and over all problem sizes -- are used as predictor variables to form a model with the aim of performing execution time predictions.
+Which could in turn be directly used to schedule devices in the HPC mult-accelerator node setting.
+The feature-space collected from AIWC is also evaluated -- if accurate model predictions are achieved, relative to the actual measured execution times presented in [Chapter @sec:chapter-3-ode], then the metrics selected during the design of AIWC are valid -- since all significant components that depict an applications execution time on any accelerator have been measured.
 

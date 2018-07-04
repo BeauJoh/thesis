@@ -8,11 +8,8 @@ While it is possible to write application code directly in OpenCL, it may also b
 This technique was shown by Mitra et al. [@mitra2014implementation] where an OpenMP runtime was implemented over an OpenCL framework for Texas Instruments Keystone II DSP architecture.
 Having a common back-end in the form of OpenCL allows a direct comparison of identical code across diverse architectures.
 
-In this chapter, we present an extended version of the OpenDwarfs benchmark suite, a set of OpenCL benchmarks for heterogeneous computing platforms.[@krommydas2016opendwarfs]
-We added new benchmarks to improve the diversity of the suite, and made a number of modifications aimed at improving the reproducibility and interpretability of results, portability between devices, and flexibility of configuration including problem sizes.
-We report preliminary results for a subset of the enhanced OpenDwarfs suite on a range of platforms consisting of CPU, GPU and MIC devices.
-
-This chapter presents an extended and enhanced version of the OpenDwarfs OpenCL benchmark suite (EOD), with a strong focus placed on the robustness of applications, curation of additional benchmarks with an increased emphasis on correctness of results and choice of problem size.
+Alternative benchmark suites are discussed in [Section @sec:chapter2-benchmark-suites] the work presented in this Chapter focuses on the OpenDwarfs benchmark suite, a set of OpenCL benchmarks for heterogeneous computing platforms.[@krommydas2016opendwarfs]
+Instead, we present an extended and enhanced version of the OpenDwarfs OpenCL benchmark suite (EOD), with a strong focus placed on the robustness of applications, curation of additional benchmarks with an increased emphasis on correctness of results and choice of problem size.
 Results and analysis are reported for eight benchmark codes on a diverse set of architectures -- three Intel CPUs, five Nvidia GPUs, six AMD GPUs and a Xeon Phi.
 EOD focuses on adding additional benchmarks to better represent each Dwarf along with supporting a range of 4 problem sizes for each application.
 The rationale for the latter is to survey the range of applications over a diverse set of HPC accelerators across increasing amounts of work, which allows for a deeper analysis of the memory subsystem on each of these devices.
