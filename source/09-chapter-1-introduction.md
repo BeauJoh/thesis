@@ -10,13 +10,12 @@ For bold and italic, add _** on either side of the text
 
 
 Supercomputers are becoming increasingly heterogeneous.
-At an individual node, there is an increasing trend to use specialised hardware -- known as accelerators -- which can expedite the computation of codes from particular classes of scientific workloads.
+At an individual node, there is a trend towards specialised hardware -- known as accelerators -- which can expedite the computation of codes from particular classes of scientific workloads.
 The use of accelerators for certain programs offers a shorter time to completion, and less energy expenditure, when compared to a conventional CPU architecture.
 The next generation of these systems has been designed to incorporate a greater number of accelerators, and of varying types per node.
-For instance, the CAPI and NVLINK technologies included in the latest IBM POWER9 processor offers a high-speed interconnect which allows the rapid movement data between processor and accelerator -- NVIDIA Graphical Processing Unit (GPU) with NVLINK, and CAPI supporting Altera Field-Programmable Gate Array (FPGA), Intel Central Processing Unit (CPU) co-processors to AMD CPU and GPU devices.
+For instance, the CAPI and NVLINK technologies included in the latest IBM POWER9 processor offers a high-speed interconnect which allows the rapid movement data between processor and accelerator -- NVIDIA Graphical Processing Unit (GPU) with NVLink, and CAPI supporting Altera Field-Programmable Gate Array (FPGA), Digital Signal Processors (DSPs)\todo{cite vendor -- maybe TI?}, Intel Many-Integrated-Core (MIC) devices, and both Intel and AMD Central Processing Unit (CPU) and AMD GPU devices.
 The POWER9 is featured in the latest Summit and forthcoming Sierra Supercomputers, and is configured such with two GPUs per CPU.
-High bandwidth, low latency interconnects such as the CRAY XC50 *Aries*, Fujitsu Post-K *Tofu* and IBM Power9 *Bluelink*, support tighter integration between compute devices on a node.
-Some interconnects support multiple different kinds of devices on a single node, for example *Bluelink* features both NVLINK support for Nvidia GPUs and CAPI for other emerging accelerators such as DSPs, FPGAs and MICs.
+High bandwidth, low latency interconnects such as the Cray XC50 *Aries*, Fujitsu Post-K *Tofu* and IBM POWER9 *Bluelink*, support tighter integration between compute devices on a node.
 The support from hardware vendors for a greater mix of heterogeneous devices indicates this is the new direction of supercomputing.
 However, this development is recent, and as such the scheduling of workloads to the suitable accelerator is a new problem.
 Without significant improvements in effectively using accelerators on these future systems, the cost of exascale computing and their corresponding energy efficiency will be prohibitive.
@@ -73,7 +72,7 @@ These AIWC metrics were used as predictor variables into the random forest, and 
 The accelerators examined in these predictions range from CPU, GPU and MIC, however, the methodology finally presented is expected to perform over DSP and FPGA also.
 
 
-The final model performs very well and is capable of highly accurate predictions which on average differ from the measured experimental run-times by 1.1%, which correspond to actual execution time mispredictions of 8 $\mu s$ to 1 secs according to problem size.
+The final model performs well and is capable of highly accurate predictions which on average differ from the measured experimental run-times by 1.1%, which correspond to actual execution time mispredictions of 8 $\mu s$ to 1 secs according to problem size.
 The model is capable of predicting execution times for specific devices based on the computational characteristics captured by the AIWC tool, which in turn, provides a good prediction of an accelerator devices execution time needed for a real-world scheduler for nodes of future super-computing systems.
 
 <!-- Restatement of the problem -->
