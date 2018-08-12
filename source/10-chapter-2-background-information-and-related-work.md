@@ -318,6 +318,8 @@ Thus, it offers a bounded value of $0-0.5$ and it additionally offers an averagi
 
 ###Using workload characterization for diversity analysis in the benchmark suites
 
+\todo[inline]{summarise this}https://www.hindawi.com/journals/sp/2015/859491/
+
 <!--
 * existing benchmarks have performed characterisation on applications in the past, this has historically targeted for diversity between applications in order to justify inclusion into a benchmark suite
 * Rodinia used MICA for the diversity analysis framework
@@ -357,6 +359,9 @@ We broaden this analysis by claiming that all benchmarks encompassing a dwarf wi
 Hoste et. al. [@hoste2006performance] show that the prediction of performance can be based on inherent program similarity.
 In particular, they show that the metrics collected from a program executing on a particular instruction set architecture (ISA) with a specific compiler offers a relatively accurate characterization of workload for the same application on a totally different micro-architecture.
 [Che et. al. @che2009rodinia] broadens this finding with an assumption that performing analysis on a single threaded CPU version of a benchmark application maintains the underlying set of instructions and the composition of the application.
+
+\todo[inline]{summarise this}https://www.hindawi.com/journals/sp/2015/859491/
+
 Therefore, it is intuitive that the composition of a program collected using a simulator (such as Oclgrind discussed in [Section @sec:oclgrind], which operates on the most common intermediate form for the OpenCL runtime) regardless of accelerator to which it is ultimately mapped, offers a more accurate architecture agnostic set of metrics around an applications workload.
 This, in turn, can be used as a basis for performance prediction on general accelerators.
 
@@ -368,4 +373,21 @@ It allows high precision timing events to be collected for statistical analysis 
 Additionally, it offers a high resolution timer in order to measure short running kernel codes, reported with one cycle resolution and roughly 6 ns of overhead.
 Throughout Chapter 4 LibSciBench was intensively used to record timings in conjunction with hardware events, which it collects via PAPI [@mucci1999papi] counters.
 
+#Predictions and Modelling
 
+\todo[inline]{Summarise this work!}
+https://ieeexplore.ieee.org/abstract/document/6714232/
+
+\todo[inline]{Summarise this :(}http://faculty.engineering.asu.edu/carolewu/wp-content/uploads/2012/12/Lee_iiswc2017_final.pdf
+
+\todo[inline]{Summarise this :(}http://inf-server.inf.uth.gr/~mispyrou/files/Spyrou_Michalis_presentation.pdf
+
+\todo[inline]{Summarise this :(} https://tigerprints.clemson.edu/cgi/viewcontent.cgi?article=3760&context=all_theses
+
+http://users.ece.utexas.edu/~derek/Papers/HPCA2015_GPUPowerModel.pdf
+
+https://dl.acm.org/citation.cfm?id=2812722
+
+http://www.cs.virginia.edu/~skadron/Papers/benchfriend_author_version.pdf
+
+http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.298.3365&rep=rep1&type=pdf
