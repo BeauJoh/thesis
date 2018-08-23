@@ -6,12 +6,67 @@ It provides a background for readers who might not be familiar with workload cha
 It begins with the definition of accelerators and a brief survey regarding their use in supercomputing and presents the hardware agnostic programming framework -- OpenCL.
 The dwarf taxonomy is introduced along with a representative sample of benchmark suites which incorporate this taxonomy.
 
+## The Dwarf Taxonomy
 
-## Accelerator Architectures and their increasing diversity in HPC {#sec:chapter2-accelerator-architectures}
+The Berkeley Dwarf taxonomy was initially performed by the Asanovic et. al. [@asanovic2006landscape] and is grounded on the discussion on the seven dwarfs of high performance computing by Colella [@colelladefining].
+
+It outlines that many applications in scientific computing share parallel patterns of communication and computation dispite being removed from specific implementations.
+From the original of 7 dwarfs proposed by Colella, they were increased to 13 based on the study presented in this work.
+Clusters of applications with similar patterns of computation and communication are defined as being represented by a dwarf.
+There are 13 dwarfs in total.
+A summary of a diverse set of application benchmarks is presented and whilst it is believed that more dwarfs may be added to this list in the future all currently encountered scientific codes can be classified as belonging to one or more of these dwarfs.
+For each of the dwarfs presented the authors indicate the performance limit, in other words whether the dwarf is compute bound, memory latency limited or memory bandwidth limited.
+All dwarfs and the corresponding limiting factor are presented in Table \ref{tbl:dwarf-taxonomy}.
+Note, the **?** symbol indicates the unknown performance limit at the time of publication.
+
+
+Table: Dwarfs and their limits. \label{tbl:dwarf-taxonomy}
+
++-----------------------------------+-------------------------------+
+|Dwarf                              |Performance Limit              |
++===================================+===============================+
+|Dense Linear Algebra               |Compute                        |
++-----------------------------------+-------------------------------+
+|Sparse Linear Algebra              |Memory Bandwidth and Compute   |
++-----------------------------------+-------------------------------+
+|Spectral Methods                   |Memory Latency                 |
++-----------------------------------+-------------------------------+
+|N-Body Methods                     |Compute                        |
++-----------------------------------+-------------------------------+
+|Structured Grid                    |Memory Bandwidth               |
++-----------------------------------+-------------------------------+
+|Unstructured Grid                  |Memory Latency                 |
++-----------------------------------+-------------------------------+
+|Map Reduce                         |**?**                          |
++-----------------------------------+-------------------------------+
+|Combinational Logic                |Memory Bandwidth and Compute   |
++-----------------------------------+-------------------------------+
+|Graph Traversal                    |Memory Latency                 |
++-----------------------------------+-------------------------------+
+|Dynamic Programming                |Memory Latency                 |
++-----------------------------------+-------------------------------+
+|Backtrack and Branch and Bound     |**?**                          |
++-----------------------------------+-------------------------------+
+|Graphical Methods                  |**?**                          |
++-----------------------------------+-------------------------------+
+|Finite State Machines              |**?**                          |
++-----------------------------------+-------------------------------+
+
+
+
+
+## Accelerator Architectures in HPC {#sec:chapter2-accelerator-architectures}
 
 Accelerators, in this setting, refer to any form of specialised hardware which may accelerate a given application code.
-These include CPU, GPU, FPGA, DSP, ASIC and MIC devices.
-High-performance computing (HPC) hardware is becoming increasingly heterogeneous using a larger number of accelerators on a node.
+These commonly include CPU, GPU, FPGA, DSP, ASIC and MIC devices.
+Central Processing Unit (CPUs) have additional circuitry for branch control logic, and generally operate at a high frequency, ensuring this architecture is highly suited to sequential tasks or workloads with many divergent logical comparisons -- corresponding to the finite-state machine, combinational logic, dynamic programming and backtrack branch and bound dwarfs of the Berkeley Taxonomy.
+\todo[inline]{GPU}
+\todo[inline]{FPGA}
+\todo[inline]{DSP}
+\todo[inline]{ASIC}
+\todo[inline]{MIC}
+
+Given the variation between accelerators, they are becoming increasingly used in High-performance computing (HPC) -- where heterogeneity is increased by using a greater number of accelerators within a node.
 A major motivation for this is to reduce energy use; indeed, without significant improvements in energy efficiency, the cost of exascale computing will be prohibitive.
 From June 2016 to June 2017, the average energy efficiency of the top 10 of the Green500 supercomputers rose by 2.3x, from 4.8 to 11.1 gigaflops per watt [@feldman_2017].
 For many systems, this was made possible by highly energy-efficient Nvidia Tesla P100 GPUs.
@@ -61,53 +116,6 @@ Pre-processor macros can also be defined on the kernel side which allows various
 Mathematical intrinsic options can also be set to disable double floating point precision, and change how denormalised numbers are handled.
 Other optimisations include using the strictest aliasing rules, use of the fast fused multiply and add instruction (with reduced precision), ignoring the signedness of floating point zeros and relaxed, finite or unsafe math operations.
 Thankfully, these can also be corrected using autotuning for both kernel specific and device specific optimisations.
-
-## The Dwarf Taxonomy
-
-The Berkeley Dwarf taxonomy was initially performed by the Asanovic et. al. [@asanovic2006landscape] and is grounded on the discussion on the seven dwarfs of high performance computing by Colella [@colelladefining].
-
-It outlines that many applications in scientific computing share parallel patterns of communication and computation dispite being removed from specific implementations.
-From the original of 7 dwarfs proposed by Colella, they were increased to 13 based on the study presented in this work.
-Clusters of applications with similar patterns of computation and communication are defined as being represented by a dwarf.
-There are 13 dwarfs in total.
-A summary of a diverse set of application benchmarks is presented and whilst it is believed that more dwarfs may be added to this list in the future all currently encountered scientific codes can be classified as belonging to one or more of these dwarfs.
-For each of the dwarfs presented the authors indicate the performance limit, in other words whether the dwarf is compute bound, memory latency limited or memory bandwidth limited.
-All dwarfs and the corresponding limiting factor are presented in Table \ref{tbl:dwarf-taxonomy}.
-Note, the **?** symbol indicates the unknown performance limit at the time of publication.
-
-
-Table: Dwarfs and their limits. \label{tbl:dwarf-taxonomy}
-
-+-----------------------------------+-------------------------------+
-|Dwarf                              |Performance Limit              |
-+===================================+===============================+
-|Dense Linear Algebra               |Compute                        |
-+-----------------------------------+-------------------------------+
-|Sparse Linear Algebra              |Memory Bandwidth and Compute   |
-+-----------------------------------+-------------------------------+
-|Spectral Methods                   |Memory Latency                 |
-+-----------------------------------+-------------------------------+
-|N-Body Methods                     |Compute                        |
-+-----------------------------------+-------------------------------+
-|Structured Grid                    |Memory Bandwidth               |
-+-----------------------------------+-------------------------------+
-|Unstructured Grid                  |Memory Latency                 |
-+-----------------------------------+-------------------------------+
-|Map Reduce                         |**?**                          |
-+-----------------------------------+-------------------------------+
-|Combinational Logic                |Memory Bandwidth and Compute   |
-+-----------------------------------+-------------------------------+
-|Graph Traversal                    |Memory Latency                 |
-+-----------------------------------+-------------------------------+
-|Dynamic Programming                |Memory Latency                 |
-+-----------------------------------+-------------------------------+
-|Backtrack and Branch and Bound     |**?**                          |
-+-----------------------------------+-------------------------------+
-|Graphical Methods                  |**?**                          |
-+-----------------------------------+-------------------------------+
-|Finite State Machines              |**?**                          |
-+-----------------------------------+-------------------------------+
-
 
 
 
@@ -373,7 +381,7 @@ It allows high precision timing events to be collected for statistical analysis 
 Additionally, it offers a high resolution timer in order to measure short running kernel codes, reported with one cycle resolution and roughly 6 ns of overhead.
 Throughout Chapter 4 LibSciBench was intensively used to record timings in conjunction with hardware events, which it collects via PAPI [@mucci1999papi] counters.
 
-#Predictions and Modelling
+##Predictions and Modelling
 
 \todo[inline]{Summarise this work!}
 https://ieeexplore.ieee.org/abstract/document/6714232/

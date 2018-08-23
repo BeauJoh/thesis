@@ -130,6 +130,34 @@ These problem sizes are based on the memory hierarchy of the Skylake CPU.
 Specifically, **tiny** should just fit within L1 cache, on the Skylake this corresponds to \SI{32}{\kibi\byte} of data cache, **small** should fit within the \SI{256}{\kibi\byte} L2 data cache, **medium** should fit within \SI{8192}{\kibi\byte} of the L3 cache, and **large** must be much larger than \SI{8192}{\kibi\byte} to avoid caching and operate out of main memory.
 
 The memory footprint was verified for each benchmark by printing the sum of the size of all memory allocated on the device.
+The applications examined in this work are presented in Table\ref{table:applications-and-dwarf} alongside their representative dwarf from the Berkeley Taxonomy.
+
+\begin{table}
+\centering
+\caption{List of Extended OpenDwarfs Applications and their respective dwarfs}
+\label{table:applications-and-dwarf}
+\begin{adjustbox}{max width=0.7\textwidth}
+\begin{tabular}{@{}ll@{}}
+\hline {Dwarf} & {Extended OpenDwarfs Application}\\\hline
+
+Dense Linear Algebra & LU Decomposition\\
+Sparse Linear Algebra & Compressed Sparse Row\\
+Spectral Methods & DWT2D, FFT\\
+N-Body Methods & Gemnoui\\
+Structured Grid & Speckle Reducing Anisotropic Diffusion\\
+Unstructured Grid & Computational Fluid Dynamics\\
+Map Reduce & K-Means\\
+Combinational Logic & Cyclic-Redundancy Check\\
+Graph Traversal & Breadth First Search\\
+Dynamic Programming & Smith-Waterman\\
+Backtrack and Branch and Bound & N-Queens\\
+Graphical Methods & Hidden Markov Models\\
+Finite State Machines & Temporal Data Mining\\
+\hline
+
+\end{tabular}
+\end{adjustbox}
+\end{table}
 
 For this study, problem sizes were not customized to the memory hierarchy of each platform, since the CPU is the most sensitive to cache performance.
 Also, note for these CPU systems the L1 and L2 cache sizes are identical, and since we ensure that **large** is at least $4\times$ larger than L3 cache, we are guaranteed to have last-level cache misses for the **large** problem size.
