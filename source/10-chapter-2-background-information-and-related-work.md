@@ -3,20 +3,22 @@
 
 The chapter presents background information, terminology and the related work drawn upon in the rest of this thesis.
 It provides a background for readers who might not be familiar with workload characterisation of programs, the associated performance metrics or composition of current HPC systems and how their performance is evaluated.
-It begins with the definition of accelerators and a brief survey regarding their use in supercomputing and presents the hardware agnostic programming framework -- OpenCL.
-The dwarf taxonomy is introduced along with a representative sample of benchmark suites which incorporate this taxonomy.
+It begins with an introduction of the Dwarf Taxonomy.
+Next, the definition of accelerators and a brief survey regarding their use in supercomputing and presents the hardware agnostic programming framework -- OpenCL.
+Finally, a discussion of benchmark suites which incorporate the dwarf taxonomy is presented.
 
 ## The Dwarf Taxonomy
 
-The Berkeley Dwarf taxonomy was initially performed by the Asanovic et. al. [@asanovic2006landscape] and is grounded on the discussion on the seven dwarfs of high performance computing by Colella [@colelladefining].
-
-It outlines that many applications in scientific computing share parallel patterns of communication and computation dispite being removed from specific implementations.
-From the original of 7 dwarfs proposed by Colella, they were increased to 13 based on the study presented in this work.
-Clusters of applications with similar patterns of computation and communication are defined as being represented by a dwarf.
+Phil Colella [@colelladefining] identified seven motifs of numerical methods which he thought would be important for the next decade.
+Based on this style of analysis, The Berkeley Dwarf Taxonomy was conceived.
+Initially performed by the Asanovic et. al. [@asanovic2006landscape], the Dwarf Taxonomy outlines that many applications in scientific computing share parallel patterns of communication and computation.
+Applications with similar patterns are defined as being represented by a single dwarf.
+Dwarfs are removed from specific implementations and optimisations.
 There are 13 dwarfs in total.
-A summary of a diverse set of application benchmarks is presented and whilst it is believed that more dwarfs may be added to this list in the future all currently encountered scientific codes can be classified as belonging to one or more of these dwarfs.
-For each of the dwarfs presented the authors indicate the performance limit, in other words whether the dwarf is compute bound, memory latency limited or memory bandwidth limited.
-All dwarfs and the corresponding limiting factor are presented in Table \ref{tbl:dwarf-taxonomy}.
+
+During the Asanovic et. al. [@asanovic2006landscape] paper, a summary of the diverse set of application benchmarks is presented and whilst it is believed that more dwarfs may be added to this list in the future all currently encountered scientific codes can be classified as belonging to one or more of these dwarfs.
+For each of the 13 dwarfs the authors indicate the performance limit -- in other words, whether the dwarf is compute bound, memory latency limited or memory bandwidth limited.
+The dwarfs and their limiting factors are presented in Table \ref{tbl:dwarf-taxonomy}.
 Note, the **?** symbol indicates the unknown performance limit at the time of publication.
 
 
@@ -53,6 +55,8 @@ Table: Dwarfs and their limits. \label{tbl:dwarf-taxonomy}
 +-----------------------------------+-------------------------------+
 
 
+Implementations of applications that are represented by the dwarf taxonomy are discussed in the benchmark evaluations presented in Section \ref{sec:chapter2-benchmark-suites}.
+However, having familiarity with the division of applications and tasks commonly performed on supercomputers positions the use of accelerators for specific dwarfs.
 
 
 ## Accelerator Architectures in HPC {#sec:chapter2-accelerator-architectures}
