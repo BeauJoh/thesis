@@ -12,13 +12,13 @@ Finally, a discussion of benchmark suites which incorporate the dwarf taxonomy i
 Phil Colella [@colelladefining] identified seven motifs of numerical methods which he thought would be important for the next decade.
 Based on this style of analysis, The Berkeley Dwarf Taxonomy was conceived.
 Initially performed by the Asanovic et. al. [@asanovic2006landscape], the Dwarf Taxonomy outlines that many applications in scientific computing share parallel patterns of communication and computation.
-Applications with similar patterns are defined as being represented by a single dwarf.
+Applications with similar patterns are defined as being represented by a single Dwarf.
 Dwarfs are removed from specific implementations and optimisations.
-There are 13 dwarfs in total.
+There are 13 Dwarfs in total.
 
-During the Asanovic et. al. [@asanovic2006landscape] paper, a summary of the diverse set of application benchmarks is presented and whilst it is believed that more dwarfs may be added to this list in the future all currently encountered scientific codes can be classified as belonging to one or more of these dwarfs.
-For each of the 13 dwarfs the authors indicate the performance limit -- in other words, whether the dwarf is compute bound, memory latency limited or memory bandwidth limited.
-The dwarfs and their limiting factors are presented in Table \ref{tbl:dwarf-taxonomy}.
+During the Asanovic et. al. [@asanovic2006landscape] paper, a summary of the diverse set of application benchmarks is presented and whilst it is believed that more Dwarfs may be added to this list in the future all currently encountered scientific codes can be classified as belonging to one or more of these Dwarfs.
+For each of the 13 Dwarfs the authors indicate the performance limit -- in other words, whether the dwarf is compute bound, memory latency limited or memory bandwidth limited.
+The Dwarfs and their limiting factors are presented in Table \ref{tbl:dwarf-taxonomy}.
 Note, the **?** symbol indicates the unknown performance limit at the time of publication.
 
 
@@ -55,19 +55,33 @@ Table: Dwarfs and their limits. \label{tbl:dwarf-taxonomy}
 +-----------------------------------+-------------------------------+
 
 
-Implementations of applications that are represented by the dwarf taxonomy are discussed in the benchmark evaluations presented in Section \ref{sec:chapter2-benchmark-suites}.
-However, having familiarity with the division of applications and tasks commonly performed on supercomputers positions the use of accelerators for specific dwarfs.
+Implementations of applications that are represented by the Dwarf Taxonomy are discussed in the benchmark evaluations presented in Section \ref{sec:chapter2-benchmark-suites}.
+However, having familiarity with the division of applications and tasks commonly performed on supercomputers positions the use of accelerators for specific Dwarfs.
 
 
 ## Accelerator Architectures in HPC {#sec:chapter2-accelerator-architectures}
 
 Accelerators, in this setting, refer to any form of specialised hardware which may accelerate a given application code.
-These commonly include CPU, GPU, FPGA, DSP, ASIC and MIC devices.
-Central Processing Unit (CPUs) have additional circuitry for branch control logic, and generally operate at a high frequency, ensuring this architecture is highly suited to sequential tasks or workloads with many divergent logical comparisons -- corresponding to the finite-state machine, combinational logic, dynamic programming and backtrack branch and bound dwarfs of the Berkeley Taxonomy.
-\todo[inline]{GPU}
-\todo[inline]{FPGA}
-\todo[inline]{DSP}
-\todo[inline]{ASIC}
+Fortunately, from The Dwarf Taxonomy previously presented it is envisaged that all applications represented by a dwarf are are better suited to specific types of accelerator.
+Accelerators commonly include CPU, GPU, FPGA, DSP, ASIC and MIC devices.
+
+Central Processing Units (CPU) have additional circuitry for branch control logic, and generally operate at a high frequency, ensuring this architecture is highly suited to sequential tasks or workloads with many divergent logical comparisons -- corresponding to the finite-state machine, combinational logic, dynamic programming and backtrack branch and bound dwarfs of the Berkeley Dwarf Taxonomy.
+
+Graphics Processing Units (GPU) as the name would suggest, accelerate manipulating computer graphics and image processing and is achieved by having circuit designs to apply the same alterations to many portions of memory at once.
+This highly parallel structure makes them suitable for applications which involve processing large blocks of data.
+
+Field-Programmable Gate Arrays (FPGA) are accelerators which allow their physical hardware to be reconfigured for any specific task.
+They are comprised of a high number of logic-gates organised into logic-blocks with fast I/O rates and bi-directional communication between them.
+Despite the diversity of these accelerators, indeed they seem to be suited to the characteristics of many dwarfs, the compilation or configuring the hardware for an application takes many orders of magnitude longer than any of the other examined accelerator architectures.
+
+Application-Specific Integrated Circuit (ASIC) is an integrated circuit designed for a specific task.
+In this regard, they are akin to FPGAs without the ability to be reconfigured.
+They have been actively used to accelerate the hashing workloads from the Combinational Logic dwarf for bitcoin mining tasks.
+
+Digital Signal Processors (DSP) have their origins in audio processing -- specifically in telephone exchanges and more recently in mobile phones -- where streams of data are constantly arriving and an identical task is needed to be applied.
+Audio compression is one example.
+They operate on a separate clock and have circular memory buffers which allow a host device -- using shared memory -- to provide and remove data for processing without ever interrupting the DSP.
+
 \todo[inline]{MIC}
 
 Given the variation between accelerators, they are becoming increasingly used in High-performance computing (HPC) -- where heterogeneity is increased by using a greater number of accelerators within a node.
