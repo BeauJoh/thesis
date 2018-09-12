@@ -70,7 +70,10 @@ Central Processing Units (CPU) have additional circuitry for branch control logi
 Graphics Processing Units (GPU) as the name would suggest, accelerate manipulating computer graphics and image processing and is achieved by having circuit designs to apply the same alterations to many portions of memory at once.
 This highly parallel structure makes them suitable for applications which involve processing large blocks of data.
 
-Field-Programmable Gate Arrays (FPGA) are accelerators which allow their physical hardware to be reconfigured for any specific task.
+Many Integrated Core (MIC) architectures are an Intel Corporation specific accelerator.
+It is similar to a GPU, by having many low frequency in-order cores sharing the same bus however the primary difference being each core is based on conventional CPU x86 architectures.
+
+Field-Programmable Gate Arrays (FPGA) are accelerators which allows the physical hardware to be reconfigured for any specific task.
 They are comprised of a high number of logic-gates organised into logic-blocks with fast I/O rates and bi-directional communication between them.
 Despite the diversity of these accelerators, indeed they seem to be suited to the characteristics of many dwarfs, the compilation or configuring the hardware for an application takes many orders of magnitude longer than any of the other examined accelerator architectures.
 
@@ -81,8 +84,6 @@ They have been actively used to accelerate the hashing workloads from the Combin
 Digital Signal Processors (DSP) have their origins in audio processing -- specifically in telephone exchanges and more recently in mobile phones -- where streams of data are constantly arriving and an identical task is needed to be applied.
 Audio compression is one example.
 They operate on a separate clock and have circular memory buffers which allow a host device -- using shared memory -- to provide and remove data for processing without ever interrupting the DSP.
-
-\todo[inline]{MIC}
 
 Given the variation between accelerators, they are becoming increasingly used in High-performance computing (HPC) -- where heterogeneity is increased by using a greater number of accelerators within a node.
 A major motivation for this is to reduce energy use; indeed, without significant improvements in energy efficiency, the cost of exascale computing will be prohibitive.
