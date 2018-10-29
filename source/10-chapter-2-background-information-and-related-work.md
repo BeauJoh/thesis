@@ -4,13 +4,14 @@
 The chapter presents background information, terminology and the related work drawn upon in the rest of this thesis.
 It provides a background for readers who might not be familiar with workload characterisation of programs, the associated performance metrics or composition of current HPC systems and how their performance is evaluated.
 It begins with an introduction of the Dwarf Taxonomy.
-Next, the definition of accelerators and a brief survey regarding their use in supercomputing and presents the hardware agnostic programming framework -- OpenCL.
-Finally, a discussion of benchmark suites which incorporate the dwarf taxonomy is presented.
+Next, we define accelerators and a provide brief survey regarding their use in supercomputing.
+The hardware agnostic programming framework OpenCL is presented.
+Finally, this section culminates in a discussion of benchmark suites, applications and where they are incorporated into the dwarf taxonomy.
 
 ## The Dwarf Taxonomy
 
 Phil Colella [@colelladefining] identified seven motifs of numerical methods which he thought would be important for the next decade.
-Based on this style of analysis, The Berkeley Dwarf Taxonomy was conceived.
+Based on this style of analysis, The Berkeley Dwarf Taxonomy was conceived to present the motifs commonplace in HPC.
 Initially performed by the Asanovic et. al. [@asanovic2006landscape], the Dwarf Taxonomy outlines that many applications in scientific computing share parallel patterns of communication and computation.
 Applications with similar patterns are defined as being represented by a single Dwarf.
 Dwarfs are removed from specific implementations and optimisations.
@@ -87,6 +88,52 @@ They operate on a separate clock and have circular memory buffers which allow a 
 
 Given the variation between accelerators, they are becoming increasingly used in High-performance computing (HPC) -- where heterogeneity is increased by using a greater number of accelerators within a node.
 A major motivation for this is to reduce energy use; indeed, without significant improvements in energy efficiency, the cost of exascale computing will be prohibitive.
+This is best shown in a survey of accelerator usage and energy consumption in the worlds leading supercomputers.
+The complete results from the TOP500 and Green500 lists [@feldman_2017] were examined, over consecutive years from 2013 to 2018.
+Each dataset was taken from the June editions of the yearly listings.
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{analysis/top500_percentage_of_supercomputers_with_accelerators.pdf}
+    \caption{The percentage of accelerators in use in the Top500 supercomputers over time.}
+    \label{fig:top500-percentage-of-supercomputers-using-accelerators}
+\end{figure*}
+
+Figure~\ref{top500-percentage-of-supercomputers-using-accelerators} shows steady increase in the use of accelerators in supercomputers.
+In 2013 11\% of systems in the TOP500 used accelerators, this increased by roughly 2\% per year.
+As of 2018 22\% of the TOP500 use accelerators.
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{analysis/top10_percentage_of_supercomputers_with_accelerators.pdf}
+    \caption{The percentage of accelerators in use in the top 10 ranked of the Top500 supercomputers.}
+    \label{fig:top10-percentage-of-supercomputers-using-accelerators}
+\end{figure*}
+
+Similarly, the results presented in Figure~\ref{top10-percentage-of-supercomputers-using-accelerators} examines the prevalence of accelerator usage in the TOP500 lists, but confined solely to the top 10 most powerful supercomputers of each year.
+The finer resolution presented in this figure shows that the most recently updated/installed systems have a much higher reliance on accelerators in order to place amongst these top supercomputers.
+By 2013 40\% of these systems used accelerators to secure a spot in the top 10 of the TOP500, this flat-lined till to 2015.
+In 2016 and 2017 the use of accelerators in the top 10 dropped to 30\%; this corresponds to the introduction of the Sunway TaihuLight system -- which buck the trend since they are composed of many conventional cores and follow a classical, non-accelerator, approach.
+However, as of 2018 the use of accelerators in the top 10 has jumped to 60\%.
+Since the percentages of the use of accelerators in the top 10 is much higher than general, in the remainder of the TOP500, we can conclude that the use of accelerators gives an edge to the ranking of these systems.
+Still, the general trend of increased use of accelerators throughout all of the TOP500 continues to increase and reinforces the importance of accelerators in this space.
+
+To further investigate this conclusion a further analysis is presented, the emphasis if placed on the reliance of accelerators to secure the place of the list for these accelerator systems.
+The percentage of cores in each system that is made up of accelerator / co-processor cores relative to the total number of cores, and is presented in Figures~\ref{top500-ratio-of-cpu-vs-accelerator-cores} and \ref{top10-ratio-of-cpu-vs-accelerator-cores}.
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{analysis/top500_ratio_of_cpu_vs_accelerator_cores.pdf}
+    \caption{The percentage of Accelerator Cores vs Total Cores available in each supercomputer to examine the reliance on accelerators.}
+    \label{top500-ratio-of-cpu-vs-accelerator-cores}
+\end{figure*}
+
+
+
+\todo[inline]{reliance on CPU vs accelerator cores}
+
+\todo[inline]{accelerators for energy efficiency}
+
 From June 2016 to June 2017, the average energy efficiency of the top 10 of the Green500 supercomputers rose by 2.3x, from 4.8 to 11.1 gigaflops per watt [@feldman_2017].
 For many systems, this was made possible by highly energy-efficient Nvidia Tesla P100 GPUs.
 In addition to GPUs, future HPC architectures are also likely to include nodes with FPGA, DSP, ASIC and MIC components.
@@ -95,6 +142,7 @@ For example, the Cori system at Lawrence Berkeley National Laboratory comprises 
 The Summit supercomputer at Oak Ridge National Laboratory is based on the IBM Power9 CPU, which includes both NVLINK [@morgan_2016], a high bandwidth interconnect between Nvidia GPUs; and CAPI, an interconnect to support FPGAs and other accelerators [@morgan_2017].
 Promising next-generation architectures include Fujitsu's Post-K [@morgan_2016_postk], and Cray's CS-400, which forms the platform for the Isambard supercomputer [@feldman_2017_isambard].
 Both architectures use ARM cores alongside other conventional accelerators, with several Intel Xeon Phi and Nvidia P100 GPUs per node.
+
 
 
 ## The Open Compute Language Setting
@@ -155,13 +203,16 @@ Rodinia and the original OpenDwarfs benchmark suite focused on collecting a repr
 The Scalable Heterogeneous Computing benchmark suite (SHOC)[@lopez2015examining], unlike OpenDwarfs and Rodinia, supports multiple nodes using MPI for distributed parallelism.
 SHOC supports multiple programming models including OpenCL, CUDA and OpenACC, with benchmarks ranging from targeted tests of particular low-level hardware features to a handful of application kernels.
 
-All 3 benchmark suites discussed in this Section as they feature an OpenCL implementation and 2 of the 3 have been categorised according to the Dwarf Taxonomy.
 
 Sun et al.[@sun2016] propose Hetero-Mark, a Benchmark Suite for CPU-GPU Collaborative Computing, which has five benchmark applications each implemented in HCC -- which compiles to OpenCL, HIP -- for a CUDA and Radeon Open Compute back-end, and a CUDA version.
 Meanwhile, Chai by Gómez-Luna et al.[@gomez2017chai], offers 15 applications in 7 different implementations with the focus on supporting integrated architectures.
 
 These benchmark suites focus on comparison between languages and environments; whereas our work focuses on benchmarking for device specific performance limitations, for example, by examining the problem sizes where these limitations occur -- this is largely ignored by benchmarking suites with fixed problem sizes.
 For these reasons, we introduce the enhanced OpenDwarfs benchmark suite in [Chapter @sec:chapter-3-ode] which covers a wider range of application patterns by focusing exclusively on OpenCL using higher-level benchmarks.
+
+Barnes et al.[@barnes2016evaluating] collected a representative set of applications from the current NERSC workload to guide optimization for Knights Landing in the Cori supercomputer.
+As it is not always feasible to perform such a detailed performance study of the capabilities of different computational devices for particular applications, the benchmarks described in this paper may give a rough understanding of device performance and limitations.
+
 
 
 ### Rodinia
@@ -378,6 +429,10 @@ These histograms show the computational composition of a kernel as a series of S
 
 ##Schedulers and Predicting the most Appropriate Accelerator
 
+Predicting the performance of a particular application on a given device is challenging due to complex interactions between the computational requirements of the code and the capabilities of the target device.
+Certain classes of application are better suited to a certain type of accelerator [@che2008accelerating], and choosing the wrong device results in slower and more energy-intensive computation [@yildirim2012single].
+Thus accurate performance prediction is critical to making optimal scheduling decisions in a heterogeneous supercomputing environment.
+
 Lyerly [@lyerly2014automatic] demonstrates by executing a subset of applications from OpenDwarfs it becomes apparent that not one accelerator has the fastest execution time for all benchmarks.
 This contribution focuses on developing a scheduler to delegate the most appropriate accelerator for a given program.
 This was achieved by developing a partitioning tool to separate computationally intensive OpenMP regions from C, extracting to and building a predictive model based on past history of the programs executing on the accelerators.
@@ -401,6 +456,25 @@ Additionally, it offers a high resolution timer in order to measure short runnin
 Throughout Chapter 4 LibSciBench was intensively used to record timings in conjunction with hardware events, which it collects via PAPI [@mucci1999papi] counters.
 
 ##Predictions and Modelling
+
+Augonnet et al. [@augonnet2010data] propose a task scheduling framework for efficiently issuing work between multiple heterogeneous accelerators on a per-node basis.
+They focus on the dynamic scheduling of tasks while automating data transfers between processing units to better utilise GPU-based HPC systems.
+Much of this work is placed on evaluating the scaling of two applications over multiple nodes -- each of which are comprised of many GPUs.
+Unfortunately, the presented methodology requires code to be rewritten using their MPI-like library.
+OpenCL, by comparison, has been in use since 2008 and supports heterogeneous execution on most accelerator devices.
+The algorithms presented to automate data movement should be reused for scheduling of OpenCL kernels to heterogeneous accelerator systems.
+
+Existing works, [@topcuoglu1999task], [@bajaj2004improving], [@xiaoyong2011novel] and [@sinnen2004list], have addressed heterogeneous distributed system scheduling and in particular the use of Directed Acyclic Graphs to track dependencies of high priority tasks.
+Provided the parallelism of each dependency is expressed as OpenCL kernels, the model proposed here can be used to improve each of these scheduler algorithms by providing accurate estimates of execution time for each task for each potential accelerator on which the computation could be performed.
+
+One such approach uses partial execution, as introduced by Yang et al. [@yang2005cross] enables low-cost performance estimates over a wide range of execution platforms.
+Here a short portion of a parallel code is executed and, since parallel codes are iterative behave predictably after the initial startup portion.
+An important restriction for this approach is it requires execution on each of the accelerators for a given code, which may be complicated to achieve using common HPC scheduling systems.
+
+An alternative performance prediction approach is given by Carrington et al. [@carrington2006performance].
+Their solution generates two separate models each requiring two fundamental components: firstly, a machine profile of each system generated by running micro-benchmarks to probe simple performance attributes of each machine; and secondly, application signatures generated by instrumented runs which measure block information such as floating-point utilization and load/store unit usage of an application.
+In their method, no training takes place and the micro-benchmarks were developed with CPU memory hierarchy in mind, thus it is unsuited to a broader range of accelerator devices.
+There are also many components and tools in use, for instance, network traffic is interpreted separately and requires the communication model to be developed from a different set of network performance capabilities, which needs more micro-benchmarks.
 
 \todo[inline]{Summarise this work!}
 https://ieeexplore.ieee.org/abstract/document/6714232/

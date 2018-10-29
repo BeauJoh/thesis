@@ -1,25 +1,24 @@
 #Dwarfs on Accelerators {#sec:chapter-3-ode}
 
+This chapter presents an extended and enhanced version of the OpenDwarfs OpenCL benchmark suite (EOD) to provide a test platform of representative codes.
+It will be later used for workload characterization, performance prediction and ultimately scheduling, but these sophisticated studies first need simple empirical data.
+However, methodologies to acquire these results -- in the form of execution times -- must first be presented.
+Additionally, for reproducibility and assurances of realistic scientific applications, the codes, settings and range of heterogeneous accelerator devices must be disclosed.
 
-Given the heterogeneity of hardware and the wide diversity of scientific application codes, workload characterization, performance prediction and scheduling are all becoming more challenging.
-To evaluate different approaches requires a representative benchmark suite which is portable to a wide variety of devices.
-We focus on the OpenCL programming model as it is supported on a wide range of systems including CPU, GPU and FPGA devices.
-While it is possible to write application code directly in OpenCL, it may also be used as a base to implement higher-level programming models.
-This technique was shown by Mitra et al. [@mitra2014implementation] where an OpenMP runtime was implemented over an OpenCL framework for Texas Instruments Keystone II DSP architecture.
-Having a common back-end in the form of OpenCL allows a direct comparison of identical code across diverse architectures.
-
-Alternative benchmark suites are discussed in [Section @sec:chapter2-benchmark-suites] the work presented in this Chapter focuses on the OpenDwarfs benchmark suite, a set of OpenCL benchmarks for heterogeneous computing platforms.[@krommydas2016opendwarfs]
-Instead, we present an extended and enhanced version of the OpenDwarfs OpenCL benchmark suite (EOD), with a strong focus placed on the robustness of applications, curation of additional benchmarks with an increased emphasis on correctness of results and choice of problem size.
-Results and analysis are reported for eight benchmark codes on a diverse set of architectures -- three Intel CPUs, five Nvidia GPUs, six AMD GPUs and a Xeon Phi.
-EOD focuses on adding additional benchmarks to better represent each Dwarf along with supporting a range of 4 problem sizes for each application.
+The OpenDwarfs benchmark suite [@krommydas2016opendwarfs] was selected from a set of benchmark suites -- discussed in [Section @sec:chapter2-benchmark-suites] -- but required several essential extensions to meet the needs of the broader goals of this thesis.
+EOD places a strong focus on the robustness of applications, curation of additional benchmarks with an increased emphasis on correctness of results and choice of problem size.
+Other improvements focus on adding additional benchmarks to better represent each Dwarf along with supporting a range of 4 problem sizes for each application.
 The rationale for the latter is to survey the range of applications over a diverse set of HPC accelerators across increasing amounts of work, which allows for a deeper analysis of the memory subsystem on each of these devices.
-The corresponding analysis directly addresses the sub-question around: *Does problem size affect the optimality of a dwarf and its suitability for an accelerator type?*
+Having a common back-end in the form of OpenCL allows a direct comparison of identical code across diverse architectures.
+Results and analysis are reported for eight benchmark codes on a diverse set of architectures -- three Intel CPUs, five Nvidia GPUs, six AMD GPUs and a Xeon Phi.
+
+<!-- The corresponding analysis directly addresses the sub-question around: *Does problem size affect the optimality of a dwarf and its suitability for an accelerator type?* -->
 
 ##Enhancing the OpenDwarfs Benchmark Suite
 
 \label{sec:extending_the_opendwarfs_benchmark_suite}
 
-The OpenDwarfs benchmark suite comprises a variety of OpenCL codes, classified according to patterns of computation and communication known as the 13 Berkeley Dwarfs [@asanovic2006landscape].
+The OpenDwarfs benchmark suite comprises a variety of OpenCL codes, classified according to the Dwarf Taxonomy [@asanovic2006landscape].
 The original suite focused on collecting representative benchmarks for scientific applications, with a thorough diversity analysis to justify the addition of each benchmark to the corresponding suite.
 We aim to extend these efforts to achieve a full representation of each dwarf, both by integrating other benchmark suites and adding custom kernels.
 
@@ -29,14 +28,14 @@ To improve reproducibility of results, we also modified each benchmark to execut
 
 For the Spectral Methods dwarf, the original OpenDwarfs version of the FFT benchmark was complex, with several code paths that were not executed for the default problem size, and returned incorrect results or failures on some combinations of platforms and problem sizes we tested.
 We replaced it with a simpler high-performance FFT benchmark created by Eric Bainville [@bainville2010fft], which worked correctly in all our tests.
-We have also added a 2-D discrete wavelet transform from the Rodinia suite [@che2009rodinia] (with modifications to improve portability), and we plan to add a continuous wavelet transform code.
+We have also added a 2-D discrete wavelet transform from the Rodinia suite [@che2009rodinia] -- with modifications to improve portability.
 
 To understand benchmark performance, it is useful to be able to collect hardware performance counters associated with each timing segment.
 LibSciBench is a performance measurement tool which allows high precision timing events to be collected for statistical analysis [@hoefler2015scientific].
 It offers a high resolution timer in order to measure short running kernel codes, reported with one cycle resolution and roughly \SI{6}{\nano\second} of overhead.
 We used LibSciBench to record timings in conjunction with hardware events, which it collects via PAPI [@mucci1999papi] counters.
 We modified the applications in the OpenDwarfs benchmark suite to insert library calls to LibSciBench to record timings and PAPI events for the three main components of application time: kernel execution, host setup and memory transfer operations.
-Through PAPI modules such as Intel's Running Average Power Limit (RAPL) and Nvidia Management Library (NVML), LibSciBench also supports energy measurements, for which we report preliminary results in this paper.
+Through PAPI modules such as Intel's Running Average Power Limit (RAPL) and Nvidia Management Library (NVML), LibSciBench also supports energy measurements, for which we report preliminary results in this chapter.
 
 
 ##Experimental Setup
@@ -197,7 +196,7 @@ The number of points is increased for each larger problem size to ensure that th
 The **tiny**, **small** and **medium** problem sizes in the first row of Table~\ref{tab:problem_sizes} correspond to L1, L2 and L3 cache respectively.
 The **large** problem size is at least four times the size of the last-level cache -- in the case of the Skylake, at least \SI{32}{\mebi\byte} -- to ensure that data are transferred between main memory and cache.
 
-For brevity, cache miss results are not presented in this paper but were used to verify the selection of suitable problem sizes for each benchmark.
+For brevity, cache miss results are not presented in this chapter but were used to verify the selection of suitable problem sizes for each benchmark.
 The procedure to select problem size parameters is specific to each benchmark, but follows a similar approach to k-means.
 
 ####lud, fft, srad, crc, nw
@@ -226,7 +225,7 @@ Molecules were then selected based on complexity, since the greater the complexi
 Each \texttt{pdb} file was converted to the \texttt{pqr} atomic particle charge and radius format using the \texttt{pdb2pqr}[@dolinsky2004pdb2pqr] tool.
 Generation of the solvent excluded molecular surface used the tool \texttt{msms} [@sanner1996reduced].
 Unfortunately, the molecules used for the **medium** and **large** problem sizes contain uninitialized values only noticed on CPU architectures and as such further work is required to ensure correctness for multiple problem sizes.
-The datasets used for \texttt{gem} and all other benchmarks can be found in this paper's associated GitHub repository [@johnston2017].
+The datasets used for \texttt{gem} and all other benchmarks can be found in this chapter's associated GitHub repository [@johnston2017].
 
 The \texttt{nqueens} benchmark is a backtrack/branch-and-bound code which finds valid placements of queens on a chessboard of size n$\times$n, where each queen cannot be attacked by another.
 For this code, memory footprint scales very slowly with increasing number of queens, relative to the computational cost.
@@ -428,39 +427,6 @@ In future this will be addressed by balancing the amount of computation required
 All the benchmarks use more energy on the CPU, with the exception of `crc` which as previously mentioned has low floating-point intensity and so is not able to make use of the GPU's greater floating-point capability. 
 Variance with respect to energy usage is larger on the CPU, which is consistent with the execution time results.
 
-
-##Conclusions
-
-We have performed essential curation of the OpenDwarfs benchmark suite.
-We improved coverage of spectral methods by adding a new Discrete Wavelet Transform benchmark, and replacing the previous inadequate `fft` benchmark.
-All benchmarks were enhanced to allow multiple problem sizes; in this paper we report results for four different problem sizes, selected according to the memory hierarchy of CPU systems as motivated by Marjanović's findings [@marjanovic2016hpc].
-These can now be easily adjusted for next generation accelerator systems using the methodology outlined in Section~\ref{ssec:setting_sizes}.
-
-We ran many of the benchmarks presented in the original OpenDwarfs [@krommydas2016opendwarfs] paper on current hardware.
-This was done for two reasons, firstly to investigate the original findings to the state-of-the-art systems and secondly to extend the usefulness of the benchmark suite.
-Re-examining the original codes on range of modern hardware showed limitations, such as the fixed problem sizes along with many platform-specific optimizations (such as local work-group size).
-In the best case, such optimizations resulted in sub-optimal performance for newer systems (many problem sizes favored the original GPUs on which they were originally run).
-In the worst case, they resulted in failures when running on untested platforms or changed execution arguments.
-
-Finally a major contribution of this work was to integrate LibSciBench into the benchmark suite, which adds a high precision timing library and support for statistical analysis and visualization.
-This has allowed collection of PAPI, energy and high resolution (sub-microsecond) time measurements at all stages of each application, which has added value to the analysis of OpenCL program flow on each system, for example identifying overheads in kernel construction and buffer enqueuing.
-The use of LibSciBench has also increased the reproducibility of timing data for both the current study and on new architectures in the future.
-
-##Future Work
-
-We plan to complete analysis of the remaining benchmarks in the suite for multiple problem sizes.
-In addition to comparing performance between devices, we would also like to develop some notion of "ideal" performance for each combination of benchmark and device, which would guide efforts to improve performance portability.
-Additional architectures such as FPGA, DSP and Radeon Open Compute based APUs -- which further breaks down the walls between the CPU and GPU -- will be considered.
-
-Each OpenCL kernel presented in this paper has been inspected using the Architecture Independent Workload Characterization (AIWC).
-Analysis using AIWC helps understand how the structure of kernels contributes to the varying runtime characteristics between devices that are presented in this work, and will be published in the future.
-
-Certain configuration parameters for the benchmarks, e.g. local workgroup size, are amenable to auto-tuning.
-We plan to integrate auto-tuning into the benchmarking framework to provide confidence that the optimal parameters are used for each combination of code and accelerator.
-
-The original goal of this research was to discover methods for choosing the best device for a particular computational task, for example to support scheduling decisions under time and/or energy constraints.
-Until now, we found the available OpenCL benchmark suites were not rich enough to adequately characterize performance across the diverse range of applications and computational devices of interest.
-Now that a flexible benchmark suite is in place and results can be generated quickly and reliably on a range of accelerators, we plan to use these benchmarks to evaluate scheduling approaches.
 
 ##Summary
 

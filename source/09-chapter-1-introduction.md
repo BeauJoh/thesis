@@ -13,17 +13,17 @@ Supercomputers are becoming increasingly heterogeneous.
 At an individual node, there is a trend towards specialised hardware -- known as accelerators -- which can expedite the computation of codes from particular classes of scientific workloads.
 The use of accelerators for certain programs offers a shorter time to completion, and less energy expenditure, when compared to a conventional CPU architecture.
 The next generation of these systems has been designed to incorporate a greater number of accelerators, and of varying types per node.
-For instance, the CAPI and NVLINK technologies included in the latest IBM POWER9 processor offers a high-speed interconnect which allows the rapid movement data between processor and accelerator -- NVIDIA Graphical Processing Unit (GPU) with NVLink, and CAPI supporting Altera Field-Programmable Gate Array (FPGA), Digital Signal Processors (DSPs)\todo{cite vendor -- maybe TI?}, Intel Many-Integrated-Core (MIC) devices, and both Intel and AMD Central Processing Unit (CPU) and AMD GPU devices.
+For instance, the CAPI and NVLINK technologies included in the latest IBM POWER9 processor offers a high-speed interconnect which allows the rapid movement data between processor and accelerator --  where NVIDIA Graphical Processing Unit (GPU) use NVLink, whereas other accelerator devices such as Altera Field-Programmable Gate Array (FPGA), Digital Signal Processors (DSPs), Intel Many-Integrated-Core (MIC) devices, and both Intel and AMD Central Processing Unit (CPU) and AMD GPU devices can utilise the CAPI interconnect.
 The POWER9 is featured in the latest Summit and forthcoming Sierra Supercomputers, and is configured such with two GPUs per CPU.
 High bandwidth, low latency interconnects such as the Cray XC50 *Aries*, Fujitsu Post-K *Tofu* and IBM POWER9 *Bluelink*, support tighter integration between compute devices on a node.
 The support from hardware vendors for a greater mix of heterogeneous devices indicates this is the new direction of supercomputing.
-However, this development is recent, and as such the scheduling of workloads to the suitable accelerator is a new problem.
-Without significant improvements in effectively using accelerators on these future systems, the cost of exascale computing and their corresponding energy efficiency will be prohibitive.
+However, this development is recent, and as such the scheduling of workloads to the most suitable accelerator is a new problem.
+The cost of exascale computing and their corresponding energy efficiency will be prohibitive without significant improvements in effectively using accelerators on current and future HPC systems.
 
 
 Independently, the characteristics of a scientific code, specifically around computation, memory, branching and parallelism, are independent of any particular device on which they may be finally executed.
 The metrics used to quantify each of these characteristics can be collected during program execution on a simulator.
-In other words, provided they are collected over a representative workload, a graph traversal program maintains the characteristics of a graph traversal program regardless of problem size.
+In other words, provided they are collected over a representative workload, a graph traversal program maintains the characteristics of a graph traversal program regardless of problem size or on what platform it is run.
 Moreover, these metrics can be used to accurately predict the execution time on each accelerator in a heterogeneous system.
 
 

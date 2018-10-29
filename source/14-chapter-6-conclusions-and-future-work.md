@@ -28,6 +28,60 @@ This prediction adds information that can be incorporated into existing HPC sche
 
 ##EOD
 
+<!-- Begin verbatim from the EOD paper chapter -->
+###Conclusions
+
+We have performed essential curation of the OpenDwarfs benchmark suite.
+We improved coverage of spectral methods by adding a new Discrete Wavelet Transform benchmark, and replacing the previous inadequate `fft` benchmark.
+All benchmarks were enhanced to allow multiple problem sizes; in this paper we report results for four different problem sizes, selected according to the memory hierarchy of CPU systems as motivated by Marjanović's findings [@marjanovic2016hpc].
+These can now be easily adjusted for next generation accelerator systems using the methodology outlined in Section~\ref{ssec:setting_sizes}.
+
+We ran many of the benchmarks presented in the original OpenDwarfs [@krommydas2016opendwarfs] paper on current hardware.
+This was done for two reasons, firstly to investigate the original findings to the state-of-the-art systems and secondly to extend the usefulness of the benchmark suite.
+Re-examining the original codes on range of modern hardware showed limitations, such as the fixed problem sizes along with many platform-specific optimizations (such as local work-group size).
+In the best case, such optimizations resulted in sub-optimal performance for newer systems (many problem sizes favored the original GPUs on which they were originally run).
+In the worst case, they resulted in failures when running on untested platforms or changed execution arguments.
+
+Finally a major contribution of this work was to integrate LibSciBench into the benchmark suite, which adds a high precision timing library and support for statistical analysis and visualization.
+This has allowed collection of PAPI, energy and high resolution (sub-microsecond) time measurements at all stages of each application, which has added value to the analysis of OpenCL program flow on each system, for example identifying overheads in kernel construction and buffer enqueuing.
+The use of LibSciBench has also increased the reproducibility of timing data for both the current study and on new architectures in the future.
+
+###Future Work
+
+We plan to complete analysis of the remaining benchmarks in the suite for multiple problem sizes.
+In addition to comparing performance between devices, we would also like to develop some notion of "ideal" performance for each combination of benchmark and device, which would guide efforts to improve performance portability.
+Additional architectures such as FPGA, DSP and Radeon Open Compute based APUs -- which further breaks down the walls between the CPU and GPU -- will be considered.
+
+Each OpenCL kernel presented in this paper has been inspected using the Architecture Independent Workload Characterization (AIWC).
+Analysis using AIWC helps understand how the structure of kernels contributes to the varying runtime characteristics between devices that are presented in this work, and will be published in the future.
+
+Certain configuration parameters for the benchmarks, e.g. local workgroup size, are amenable to auto-tuning.
+We plan to integrate auto-tuning into the benchmarking framework to provide confidence that the optimal parameters are used for each combination of code and accelerator.
+
+The original goal of this research was to discover methods for choosing the best device for a particular computational task, for example to support scheduling decisions under time and/or energy constraints.
+Until now, we found the available OpenCL benchmark suites were not rich enough to adequately characterize performance across the diverse range of applications and computational devices of interest.
+Now that a flexible benchmark suite is in place and results can be generated quickly and reliably on a range of accelerators, we plan to use these benchmarks to evaluate scheduling approaches.
+
+
+<!-- End verbatim from the EOD paper chapter -->
+
+<!-- Begin verbatim from the EOD paper chapter -->
+
+#Conclusions and Future Work
+
+A highly accurate model has been presented that is capable of predicting execution times of OpenCL kernels on specific devices based on the computational characteristics captured by the AIWC tool.
+A real-world scheduler could be developed based on the accuracy of the presented model.
+
+We do not suppose that we have used a fully representative suite of kernels, however, we have shown that this approach can be used in the supercomputer accelerator scheduling setting, and the model can be extended/augmented with additional training kernels using  the methodology presented in this paper.
+
+We expect that a similar model could be constructed to predict energy or power consumption, where the response variable can be directly swapped for an energy consumption metric -- such as joules -- instead of execution time.
+However, we have not yet collected the energy measurements required to construct such a model.
+Finally, we show the predictions made are accurate enough to inform scheduling decisions.
+
+
+<!-- End verbatim from the predicting paper chapter -->
+
+
 We plan to complete analysis of the remaining benchmarks in the suite for multiple problem sizes.
 In addition to comparing performance between devices, we would also like to develop some notion of "ideal" performance for each combination of benchmark and device, which would guide efforts to improve performance portability.
 Additional architectures such as FPGA, DSP and Radeon Open Compute based APUs -- which further breaks down the walls between the CPU and GPU -- will be considered.

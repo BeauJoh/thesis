@@ -17,7 +17,7 @@ This work manifests in performance measurements on a set 15 devices and over 11 
 
 We next present the Architecture Independent Workload Characterization (AIWC) tool which characterizes OpenCL kernels according to a set of architecture-independent features.
 Features are measured by counting target characteristics which are collected during program execution in a simulator.
-They are presented as a 42 metrics that indicate performance bottlenecks ranging from parallelism -- how well an algorithm scales in response to core count, compute -- such as the diversity of instructions, memory -- working memory footprint and entropy measurements which correspond to caching characteristics and control -- such as branching and program flow.
+They are presented as 42 metrics that indicate performance bottlenecks ranging from parallelism -- how well an algorithm scales in response to core count, compute -- such as the diversity of instructions, memory -- working memory footprint and entropy measurements which correspond to caching characteristics and control -- such as branching and program flow.
 The metrics collected are primarily used in the prediction of execution times, but since they are representative of structural characteristics of the underlying program and are free from architectural traits, they can be used in diversity analysis in benchmark suites, identifying program requirements which allows the automatic calculation of theoretical peak performance for a given device and examining phase-transitional properties of application codes.
 This work also discusses the design decisions made to collect AIWC features.
 

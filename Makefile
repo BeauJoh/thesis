@@ -1,5 +1,8 @@
 
-all: thesis.pdf #thesis-map.pdf
+all: survey thesis.pdf #thesis-map.pdf
+
+survey: analysis/analysis.R
+	cd analysis; Rscript analysis.R; cd ..;
 
 grammarly: source/10-chapter-2-background-information-and-related-work.md
 	pkill Grammarly || true #if grammarly already exists kill it
