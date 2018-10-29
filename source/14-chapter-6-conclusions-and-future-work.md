@@ -26,10 +26,9 @@ Furthermore, these metrics are used for creating the prediction model to evaluat
 Such a model is then applied as a prognosis tool to predict the performance of an application for any given platform without additional instrumentation.
 This prediction adds information that can be incorporated into existing HPC schedulers and has no run-time overhead -- codes are examined one time by the developer when instrumenting with AIWC and these, in turn, are embedded into the header of each kernel code to be evaluated by the scheduler at the time of scheduling.
 
-##EOD
 
 <!-- Begin verbatim from the EOD paper chapter -->
-###Conclusions
+## Extended OpenDwarfs
 
 We have performed essential curation of the OpenDwarfs benchmark suite.
 We improved coverage of spectral methods by adding a new Discrete Wavelet Transform benchmark, and replacing the previous inadequate `fft` benchmark.
@@ -46,7 +45,7 @@ Finally a major contribution of this work was to integrate LibSciBench into the 
 This has allowed collection of PAPI, energy and high resolution (sub-microsecond) time measurements at all stages of each application, which has added value to the analysis of OpenCL program flow on each system, for example identifying overheads in kernel construction and buffer enqueuing.
 The use of LibSciBench has also increased the reproducibility of timing data for both the current study and on new architectures in the future.
 
-###Future Work
+<!--###Future Work-->
 
 We plan to complete analysis of the remaining benchmarks in the suite for multiple problem sizes.
 In addition to comparing performance between devices, we would also like to develop some notion of "ideal" performance for each combination of benchmark and device, which would guide efforts to improve performance portability.
@@ -61,13 +60,36 @@ We plan to integrate auto-tuning into the benchmarking framework to provide conf
 The original goal of this research was to discover methods for choosing the best device for a particular computational task, for example to support scheduling decisions under time and/or energy constraints.
 Until now, we found the available OpenCL benchmark suites were not rich enough to adequately characterize performance across the diverse range of applications and computational devices of interest.
 Now that a flexible benchmark suite is in place and results can be generated quickly and reliably on a range of accelerators, we plan to use these benchmarks to evaluate scheduling approaches.
-
-
 <!-- End verbatim from the EOD paper chapter -->
 
-<!-- Begin verbatim from the EOD paper chapter -->
+<!-- Begin verbatim from the AIWC paper chapter -->
+We have presented the Architecture-Independent Workload Characterization tool (AIWC), which supports the collection of architecture-independent features of OpenCL application kernels.
+It is the first workload characterization tool to support multi-threaded or parallel workloads.
+These features can be used to predict the most suitable device for a particular kernel, or to determine the limiting factors for performance on a particular device, allowing OpenCL developers to try alternative implementations of a program for the available accelerators -- for instance, by reorganizing branches, eliminating intermediate variables et cetera.
+In addition, the architecture independent characteristics of a scientific workload will inform designers and integrators of HPC systems, who must ensure that compute architectures are suitable for the intended workloads.
 
-#Conclusions and Future Work
+Caparrós Cabezas and Stanley-Marbell [@CaparrosCabezas:2011:PDM:1989493.1989506] examine the Berkeley dwarf taxonomy by measuring instruction-level parallelism (ILP), thread-level parallelism (TLP), and data movement.
+They propose a sophisticated metric to assess ILP by examining the data dependency graph of the instruction stream.
+Similarly, TLP was measured by analysing the block dependency graph.
+While we propose alternative metrics to evaluate ILP and TLP -- using the max, mean and standard deviation statistics of SIMD and barrier metrics respectively -- a quantitative evaluation of the dwarf taxonomy using these metrics is left as future work.
+<!-- killing dwarfs -->
+We expect that the AIWC metrics will generate a comprehensive feature-space representation which will permit cluster analysis and comparison with the dwarf taxonomy.
+
+We believe AIWC will also be useful in guiding device-specific optimization by providing feedback on how particular optimizations change performance-critical characteristics.
+To identify which AIWC characteristics are the best indicators of opportunities for optimization, we are currently looking at how individual characteristics change for a particular code through the application of best-practice optimizations for CPUs and GPUs (as recommended in vendor optimization guides).
+
+A major limitation of running large applications under AIWC is the high memory footprint.
+Memory access entropy scores require a full recorded trace of every memory access during a kernel's execution.
+However, a graceful degradation in performance is preferable to an abrupt crash in AIWC if virtual memory is exhausted.
+For this reason, work is currently being undertaken for an optional build of AIWC with low memory usage by writing these traces to disk.
+The coverage of characteristics and the suitability AIWC metrics can now be assessed.
+This is performed in in the next [Chapter @sec:chapter-5-accelerator-predictions] where these AIWC metrics -- from the collection over all EOD applications and over all problem sizes -- are used as predictor variables to form a model with the aim of performing execution time predictions.
+Which could in turn be directly used to schedule devices in the HPC mult-accelerator node setting.
+The feature-space collected from AIWC is also evaluated -- if accurate model predictions are achieved, relative to the actual measured execution times presented in [Chapter @sec:chapter-3-ode], then the metrics selected during the design of AIWC are valid -- since all significant components that depict an applications execution time on any accelerator have been measured.
+<!-- End verbatim from the AIWC paper chapter -->
+
+
+<!-- Begin verbatim from the predicting paper chapter -->
 
 A highly accurate model has been presented that is capable of predicting execution times of OpenCL kernels on specific devices based on the computational characteristics captured by the AIWC tool.
 A real-world scheduler could be developed based on the accuracy of the presented model.

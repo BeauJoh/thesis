@@ -4,5 +4,5 @@ compile_pdf:
   artifacts:
     paths:
       - output/thesis.pdf
-    expire_in: never
+    expire_in: 1 month
 
