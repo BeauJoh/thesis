@@ -359,5 +359,3 @@ For all other device pairs, the relative order for the `kmeansPoint` kernel is c
 Additionally, the `lud_diagonal` kernel suffers from systematic under-prediction of execution times on AMD GPU devices, however the relative ordering is still correct.
 As such, the proposed model provides sufficiently accurate execution time predictions to be useful for scheduling to heterogeneous compute devices on supercomputers.
 
-
-

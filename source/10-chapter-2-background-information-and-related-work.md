@@ -175,6 +175,9 @@ Additionally, these work items can be run in teams -- denoted local work groups.
 Each local work group has a given size, and as previously mentioned can be determined on the device side, in the kernel code, with `get_local_id`.
 Incorrectly setting the number of local work groups and therefore also the size of each work group can impact on performance directly.
 Thankfully recent work shows these parameters can be automatically optimised for any accelerator architecture and is discussed in the Autotuning [Section @sec:chapter2-autotuning] further on in this chapter.
+
+The OpenCL programming framework is well-suited to such heterogeneous computing environments, as a single OpenCL code may be executed on multiple different device types.
+When combined with autotuning, an OpenCL code may exhibit good performance across varied devices. [@spafford2010maestro, @chaimov2014toward, @nugteren2015cltune, @price2017analyzing]
 OpenCL codes can be written to be easily linked with auto-tuners -- such as allowing the local work group size being set from the command line or as a macro in the pre-processor, these are set during execution and during compilation respectively.
 
 Kernel compilation flags are an additional tuning argument which affects runtime performance of accelerator specific OpenCL kernel codes.
