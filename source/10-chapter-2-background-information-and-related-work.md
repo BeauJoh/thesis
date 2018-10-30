@@ -191,6 +191,11 @@ Thankfully, these can also be corrected using autotuning for both kernel specifi
 
 ## Benchmark Suites{#sec:chapter2-benchmark-suites}
 
+Benchmarking forms the basis on which comparisons between languages and environments are made.
+Benchmark suites are large sets of benchmark codes used to reliably compare and measure realistic problems under realistic settings.
+Our work focuses on benchmarking for device specific performance limitations, for example, by examining the problem sizes where these limitations occur -- this is largely ignored by benchmarking suites with fixed problem sizes.
+For these reasons, we introduce the Extended OpenDwarfs benchmark suite in [Chapter @sec:chapter-3-ode] which covers a wider range of application patterns by focusing exclusively on OpenCL using higher-level benchmarks.
+Before jumping into this work an evaluation of existing benchmark suites is considered in the remainder of this section.
 
 The NAS parallel benchmarks [@bailey1991parallel] follow a ‘pencil-and-paper‘ approach, specifying the computational problems to be included in the benchmark suite but leaving implementation choices such as language, data structures and algorithms to the user.
 The benchmarks include varied kernels and applications which allow a nuanced evaluation of a complete HPC system, however, the unconstrained approach does not readily support direct performance comparison between different hardware accelerators using a single set of codes.
@@ -206,25 +211,19 @@ Rodinia and the original OpenDwarfs benchmark suite focused on collecting a repr
 The Scalable Heterogeneous Computing benchmark suite (SHOC)[@lopez2015examining], unlike OpenDwarfs and Rodinia, supports multiple nodes using MPI for distributed parallelism.
 SHOC supports multiple programming models including OpenCL, CUDA and OpenACC, with benchmarks ranging from targeted tests of particular low-level hardware features to a handful of application kernels.
 
-
-Sun et al.[@sun2016] propose Hetero-Mark, a Benchmark Suite for CPU-GPU Collaborative Computing, which has five benchmark applications each implemented in HCC -- which compiles to OpenCL, HIP -- for a CUDA and Radeon Open Compute back-end, and a CUDA version.
+Sun et al.[@sun2016] propose Hetero-Mark, a Benchmark Suite for CPU-GPU Collaborative Computing, which has five benchmark applications each implemented in the Heterogeneous Compute Compiler (HCC) -- which compiles to OpenCL and HIP which converts CUDA codes to the AMD Radeon Open Compute back-end.
 Meanwhile, Chai by Gómez-Luna et al.[@gomez2017chai], offers 15 applications in 7 different implementations with the focus on supporting integrated architectures.
-
-These benchmark suites focus on comparison between languages and environments; whereas our work focuses on benchmarking for device specific performance limitations, for example, by examining the problem sizes where these limitations occur -- this is largely ignored by benchmarking suites with fixed problem sizes.
-For these reasons, we introduce the enhanced OpenDwarfs benchmark suite in [Chapter @sec:chapter-3-ode] which covers a wider range of application patterns by focusing exclusively on OpenCL using higher-level benchmarks.
 
 Barnes et al.[@barnes2016evaluating] collected a representative set of applications from the current NERSC workload to guide optimization for Knights Landing in the Cori supercomputer.
 As it is not always feasible to perform such a detailed performance study of the capabilities of different computational devices for particular applications, the benchmarks described in this paper may give a rough understanding of device performance and limitations.
 
 
-
 ### Rodinia
 
 
-Che et. al [@che2009rodinia] initially proposed a benchmark suite which cover a wide range of parallel communication patterns.
-The selection of these patterns was inspired by the Berkeley dwarf taxonomy, as discussed in [Section @sec:the-dwarf-taxonomy], and the selection of these benchmarks are from real world high performance scientific computing applications.
-Evaluated in the paper were a NVIDIA GTX 280 GPU and an Intel Core 2 Extreme CPU.
-The diversity between selected benchmarks was shown by measuring execution times, communications overheads and energy usage of running each benchmark on the target architectures.
+Che et. al [@che2009rodinia] initially proposed a benchmark suite to cover a wide range of parallel communication patterns.
+The benchmarks were selected following the Berkeley Dwarf Taxonomy and are from real world high performance computing applications.
+The diversity between selected benchmarks was shown by measuring execution times, communications overheads and energy usage of running each benchmark on an NVIDIA GTX 280 GPU and an Intel Core 2 Extreme CPU.
 Across the suite: speedups in execution times ranged from 5.5x to 80.8x, communication overheads vary from 2-76% and GPU power consumption overheads range from 38-83 Watts.
 From this, the resulting benchmarks were proven to be useful when illustrating important architectural differences between the CPU and GPU.
 All devices presented featured applications typical of select dwarfs which benefit from GPU architectures.
@@ -263,8 +262,48 @@ Given the focused effort of having all the dwarfs represented, the choice to hav
 These efforts are discussed in Chapter 3.
 
 
+## Hardware Performance and Scaling
 
-## Autotuning{#sec:chapter2-autotuning}
+The performance of heterogeneous devices is often evaluated against a theoretical upper-bound.
+Computing this limit requires an understanding of a couple of important hardware characteristics.
+This sections discusses scaling with respect to clock frequency and core count.
+Also included, is a discussion on the impact frequency has on energy consumption.
+
+### Frequency
+
+Changing the clock frequency of a conventional CPU core ultimately change performance results, execution times are impacted but the energy efficiency of the device is also affected.
+Choi, Soma and Pedram [@choi2005fine] present an intra-process dynamic voltage and frequency scaling with the goal of minimising energy consumption yet maximising performance by dynamically changing the clock frequency of the CPU.
+This is achieved by modelling the on-chip / off-chip ratio which is updated using runtime event monitoring.
+Hardware measurements showed that dynamically lowing the clock frequency for memory bound problems up to 70% energy was saved with a 12% performance loss, compute bound workloads 15-60% energy savings were had at a cost of a performance drop of 5-20%.
+
+Meanwhile, Agarwal et. al. [@Agarwal:2000:CRV:339647.339691] show that wire latencies (which correspond to memory movement and chip-to-chip communication) have not matched the increase in the range of clock-frequency.
+As such the impact of increasing the clock frequency is having (and will continue to have) less of an impact on computational efficiency.
+
+Recently, Brown [@brown2010toward] discusses how increasing the clock frequency to generate a result faster (known as race-to-idle or race-to-sleep) saves up to 95% of energy if the entire system can be put in a suspended state -- as in embedded and mobile systems.
+In 2014, this was validated for hardware used in HPC provided it supports a sleep state.
+Albers and Antoniadis [@Albers:2014:RIN:2578852.2556953] present a framework to accurately approximate the energy cost of speed scaling with a sleep state.
+In this study, the authors show that the active state of a CPU is comparable to the dynamic energy needed for processing.
+
+### Core count
+
+\todo[inline]{elaborate}
+Taylor [@taylor2012dark] surveys the transition of typical homogeneous cores to a potentially dark silicone -- bright future for heterogeneous systems.
+This is not because of the lack of scale from increasing cores, indeed Taylor proposes this trend will continue, but from energy concerns of having the utilisation wall[@venkatesh2010conservation].
+
+
+### Time and Energy -- a non-linear relationship
+\todo[inline]{elaborate}
+Additionally, there exist applications where the coupling between execution time and energy consumption is non-linear[lively2011energy], and as such, there should be dwarfs wherein this non-linear relationship holds.
+
+
+## OpenCL Performance
+
+The performance of OpenCL Kernels are lately affected by runtime parameters considering how work is divided, this allocation and partitioning of work changes between devices.
+Much of the partitioning can occur automatically using autotuning.
+Autotuning and tools and techniques used to measure device performance are summarised in this subsection.
+Also discussed, is the common issue of phase shifting and how it relates to measuring OpenCL performance.
+
+### Autotuning{#sec:chapter2-autotuning}
 
 When combined with autotuning, an OpenCL code may exhibit good performance across varied devices.
 Every application presented in the Rodinia Benchmark Suite \[sec:rodinia\] requires a local workgroup to be passed.
@@ -291,22 +330,7 @@ The usefulness of this multi-objective auto-tuning technique is demonstrated and
 Additionally the literature shows that over-optimisation hurts performance portability.
 
 
-
-## Offline Ahead-of-Time Analysis
-
-The term offline analysis, in this setting, is defined as the detailed examination of the structure of code and that it requires the entire data set is given in advance.
-Ahead-of-time indicates that this analysis be done before the program is executed.
-The combination of theses two terms is directly applicable to OpenCL SPIR codes, which is based on LLVM, since LLVM is well suited to performing ahead-of-time optimised native code generation [@lattner2004llvm].
-Additionally, since SPIR is hardware agnostic/ISA-independent the patterns of computation and communication as shown in the dwarf taxonomy it can be done once the OpenCL source is converted to SPIR and the dwarf represented by the kernel will always be the same.
-Therefore, analysis such as the classification of which dwarf a new code can be identified, can be performed before any actual device execution is performed.
-Additionally, these classification and other analysis metrics can be embedded into the SPIR code as a comment in the header, which in turn can be used by a scheduler to determine which device the kernel should be executed.
-
-Closely related to the work performed in this thesis was independently performed by Muralidharan et. al. [@muralidharan2015semi].
-Wherein, they use offline ahead-of-time analysis with Oclgrind to collect an instruction histogram of each OpenCL kernel execution in order to generate an estimate of the roofline model analysis for each given accelerator.
-The resultant tool-flow methodology is used to analyse and track the performance over 3 distinct heterogeneous platforms, and results in a metric to characterise performance.
-
-
-## Phase-Shifting
+### Phase-Shifting
 
 Phase is defined as a set of intervals (or slices in time) within a programs execution that has similar behaviour.
 Therefore, the term phase-shifting refers to change of the execution of a program with temporal adjacency such that the program experiences time-varying effects.
@@ -320,36 +344,28 @@ The kernel in execution itself will experience very little differences in phases
 Such that, if a kernel executed on a particular accelerator device is memory bound, it will consistently be memory bound.
 If the accelerator experiences consistent stalls on repeated branch mispredictions, this is consistent throughout the kernels entire execution.
 
-## Scaling
+###Formal measurements{#sec:formal-measurements}
 
-This sections discusses scaling with respect to clock frequency and core count respectively.
-Included in this summary of the relevant literature is the impact it has on energy consumption -- namely the non-linear relationship between time and energy.
-
-### Frequency
-
-Changing the clock frequency of a conventional CPU core ultimately change performance results -- not solely just on execution times.
-
-Choi, Soma and Pedram [@choi2005fine] present an intra-process dynamic voltage and frequency scaling with the goal of minimising energy consumption yet maximising performance by dynamically changing the clock frequency of the CPU.
-This is achieved by modelling the on-chip / off-chip ratio which is updated using runtime event monitoring.
-Hardware measurements showed that dynamically lowing the clock frequency for memory bound problems up to 70% energy was saved with a 12% performance loss, compute bound workloads 15-60% energy savings were had at a cost of losing 5-20% performance.
-
-Meanwhile, Agarwal et. al. [@Agarwal:2000:CRV:339647.339691] show that wire latencies (which correspond to memory movement and chip-to-chip communication) have not matched the increase in the range of clock-frequency.
-As such the impact of increasing the clock frequency is having (and will continue to have) less of an impact on computational efficiency.
-
-Recently, Brown [@brown2010toward] discusses how increasing the clock frequency to generate a result faster (known as race-to-idle or race-to-sleep) saves up to 95% of energy if the entire system can be put in a suspended state -- as in embedded and mobile systems.
-In 2014, this was validated for hardware used in HPC provided it supports a sleep state.
-Albers and Antoniadis [@Albers:2014:RIN:2578852.2556953] present a framework to accurately approximate the energy cost of speed scaling with a sleep state.
-In this study, the authors show that the active state of a CPU is comparable to the dynamic energy needed for processing.
-
-### Core count
-
-Taylor [@taylor2012dark] surveys the transition of typical homogeneous cores to a potentially dark silicone -- bright future for heterogeneous systems.
-This is not because of the lack of scale from increasing cores, indeed Taylor proposes this trend will continue, but from energy concerns of having the utilisation wall[@venkatesh2010conservation].
+Many studies presented in this thesis use tools developed by others in order to perform the necessary measurements.
+Time measurements of OpenCL kernels have primarily used LibSciBench as the default performance measurement tool.
+It allows high precision timing events to be collected for statistical analysis [@hoefler2015scientific].
+Additionally, it offers a high resolution timer in order to measure short running kernel codes, reported with one cycle resolution and roughly 6 ns of overhead.
+Throughout Chapter 3 LibSciBench was intensively used to record timings in conjunction with hardware events, which it collects via PAPI [@mucci1999papi] counters.
 
 
-### Time and Energy -- a non-linear relationship
+## Offline Ahead-of-Time Analysis
 
-Additionally, there exist applications where the coupling between execution time and energy consumption is non-linear[lively2011energy], and as such, there should be dwarfs wherein this non-linear relationship holds.
+The term offline analysis, in this setting, is defined as the detailed examination of the structure of code and that it requires the entire data set is given in advance.
+Ahead-of-time indicates that this analysis be done before the program is executed.
+The combination of theses two terms is directly applicable to OpenCL SPIR codes, which is based on LLVM, since LLVM is well suited to performing ahead-of-time optimised native code generation [@lattner2004llvm].
+Additionally, since SPIR is hardware agnostic/ISA-independent the patterns of computation and communication as shown in the dwarf taxonomy it can be done once the OpenCL source is converted to SPIR and the dwarf represented by the kernel will always be the same.
+Therefore, analysis such as the classification of which dwarf a new code can be identified, can be performed before any actual device execution is performed.
+Additionally, these classification and other analysis metrics can be embedded into the SPIR code as a comment in the header, which in turn can be used by a scheduler to determine which device the kernel should be executed.
+
+Closely related to the work performed in this thesis was independently performed by Muralidharan et. al. [@muralidharan2015semi].
+Wherein, they use offline ahead-of-time analysis with Oclgrind to collect an instruction histogram of each OpenCL kernel execution in order to generate an estimate of the roofline model analysis for each given accelerator.
+The resultant tool-flow methodology is used to analyse and track the performance over 3 distinct heterogeneous platforms, and results in a metric to characterise performance.
+The basis of our work on AIWC is built on offline ahead-of-time analysis techniques and is presented in Chapter 4.
 
 ##Program Diversity Analysis and characterization {#sec:chapter2-program-diversity-analysis}
 
@@ -365,15 +381,6 @@ The remainder of this section introduces more recent developments in using a vec
 
 ##Microarchitecture-independent workload characterization {#sec:microarchitecture-independent}
 
-<!-- TODO: Begin chunk to disseminate -->
-
-Oclgrind is an OpenCL device simulator developed by Price and McIntosh-Smith [@price:15] capable of performing simulated kernel execution.
-It operates on a restricted LLVM IR known as Standard Portable Intermediate Representation (SPIR) [@kessenich2015], thereby simulating OpenCL kernel code in a hardware agnostic manner.
-This architecture independence allows the tool to uncover many portability issues when migrating OpenCL code between devices.
-Additionally, Oclgrind comes with a set of tools to detect runtime API errors, race conditions and invalid memory accesses, and generate instruction histograms.
-AIWC is added as a tool to Oclgrind and leverages its ability to simulate OpenCL device execution using LLVM IR codes.
-
-AIWC relies on the selection of the instruction set architecture (ISA)-independent features determined by Shao and Brooks [@shao2013isa], which in turn builds on earlier work in microarchitecture-independent workload characterization.
 Hoste and Eeckout [@hoste2007microarchitecture] show that although conventional microarchitecture-dependent characteristics are useful in locating performance bottlenecks [@ganesan2008performance,@prakash2008performance], they are misleading when used as a basis on which to differentiate benchmark applications.
 Microarchitecture-independent workload characterization and the associated analysis tool, known as MICA, was proposed to collect metrics to characterize an application independent of particular microarchitectural characteristics.
 Architecture-dependent characteristics typically include instructions per cycle (IPC) and miss rates -- cache, branch misprediction and translation look-aside buffer (TLB) -- and are collected from hardware performance counter results, typically PAPI.
@@ -387,66 +394,37 @@ A caveat in the MICA approach is that the results presented are not ISA-independ
 Additionally, since the metrics collected rely heavily on Pin instrumentation, characterization of multi-threaded workloads or accelerators are not supported.
 As such, it is unsuited to conventional supercomputing workloads which make heavy use of parallelism and accelerators.
 
-Shao and Brooks [@shao2013isa] have since extended the generality of the MICA to be ISA independent.
+
+### Architecture Independent Workload Characterization{#sec:chapter2-isa-independent}
+
+Recently, Shao and Brooks [@shao2013isa] have since extended the generality of the MICA to be ISA independent.
 The primary motivation for this work was in evaluating the suitability of benchmark suites when targeted on general purpose accelerator platforms.
 The proposed framework briefly evaluates eleven SPEC benchmarks and examines 5 ISA-independent features/metrics.
 Namely, number of opcodes (e.g., add, mul), the value of branch entropy -- a measure of the randomness of branch behaviour, the value of memory entropy -- a metric based on the lack of memory locality when examining accesses, the unique number of static instructions, and the unique number of data addresses.
 
-Related to the chapter, Shao also presents a proof of concept implementation (WIICA) which uses an LLVM IR Trace Profiler to generate an execution trace, from which a python script collects the ISA independent metrics.
+Related to the paper, Shao also presents a proof of concept implementation (WIICA) which uses an LLVM IR Trace Profiler to generate an execution trace, from which a python script collects the ISA independent metrics.
 Any results gleaned from WIICA are easily reproducible, the execution trace is generated by manually selecting regions of code built from the LLVM IR Trace Profiler.
 Unfortunately, use of the tool is non-trivial given the complexity of the toolchain and the nature of dependencies (LLVM 3.4 and Clang 3.4).
 Additionally, WIICA operates on `C` and `C++` code, which cannot be executed directly on any accelerator device aside from the CPU.
-Our work extends this implementation to the broader OpenCL setting to collect architecture independent metrics from a hardware-agnostic language -- OpenCL.
+Our work on Architecture Independent Workload Characterisation or known as (AIWC) is presented in Chapter 4, and extends Shao's work to the broader OpenCL setting to collect architecture independent metrics from a hardware-agnostic language -- OpenCL.
 Additional metrics, such as Instructions To Barrier (ITB), Vectorization (SIMD) indicators and Instructions Per Operand (SIMT) were also determined and added by us in order to perform a similar analysis for concurrent and accelerator workloads.
+
+AIWC relies on the selection of the instruction set architecture (ISA)-independent features determined by Shao and Brooks [@shao2013isa], which in turn builds on earlier work in microarchitecture-independent workload characterization discussed in [Section @sec:microarchitecture-independent].
 
 The branch entropy measure used by Shao and Brooks [@shao2013isa] was initially proposed by Yokota [@yokota2007introducing] and uses Shannon's information entropy to determine a score of Branch History Entropy.
 De Pestel, Eyerman and Eeckhout [@depestel2017linear] proposed an alternative metric, average linear branch entropy metric, to allow accurate prediction of miss rates across a range of branch predictors.
-As their metric is more suitable for architecture-independent studies, we adopt it for this work.
+As their metric is more suitable for architecture-independent studies, we adopt it for our work on AIWC.
 
-Caparrós Cabezas and Stanley-Marbell [@CaparrosCabezas:2011:PDM:1989493.1989506] present a framework for characterizing instruction- and thread-level parallelism, thread parallelism, and data movement, based on cross-compilation to a MIPS-IV simulator of an ideal machine with perfect caches and branch prediction and unlimited functional units.
+Caparrós Cabezas and Stanley-Marbell [@CaparrosCabezas:2011:PDM:1989493.1989506] present a framework for characterizing instruction and thread-level parallelism, thread parallelism, and data movement, based on cross-compilation to a MIPS-IV simulator of an ideal machine with perfect caches and branch prediction and unlimited functional units.
 Instruction-level and thread-level parallelism are identified through analysis of data dependencies between instructions and basic blocks.
 The current version of AIWC does not perform dependency analysis for characterizing parallelism, however, we hope to include such metrics in future versions.
 
-In contrast to our multidimensional workload characterization, models such as Roofline [@williams2009roofline] and Execution-Cache-Memory [@hager2013exploring] seek to characterize an application based on one or two limiting factors such as memory bandwidth.
+### Using workload characterization for diversity analysis in the benchmark suites
+
+In contrast to our proposed multidimensional workload characterization, models such as Roofline [@williams2009roofline] and Execution-Cache-Memory [@hager2013exploring] seek to characterize an application based on one or two limiting factors such as memory bandwidth.
 The advantage of these approaches is the simplicity of analysis and interpretation.
 We view these models as capturing a 'principal component' of a more complex performance space; we claim that by allowing the capture of additional dimensions, AIWC supports performance prediction for a greater range of applications.
 
-<!-- End of chunk to disseminate -->
-
-
-Hoste and Eeckhout [@hoste2007microarchitecture] propose metrics to characterise an application independent to the corresponding microarchitectural characteristics.
-In this work, Hoste and Eeckout show that despite being useful when locating performance bottlenecks [@ganesan2008performance] [@prakash2008performance], the conventional microarchitecture-dependent characteristics are misleading when used as a basis on which to differentiate benchmark applications.
-The dependent characteristics typically include instructions per cycle (IPC) and miss rates -- cache, branch misprediction and translation look-aside buffer (TLB) -- and are collected from hardware performance counter results, typically PAPI.
-The results generated from them is misleading as they either indicate two benchmark applications are similar if they have similar hardware performance counter results or different, since they have different counter results, and this analysis potentially hides the underlying, inherent program behaviour.
-Additionally, microarchitecture-dependent characteristics are increasingly limited as they are heavily variable between systems, results are machine dependent since CPU architectures significantly differ in pipeline depth and cache size.
-
-Instead Hoste propose a higher level metric framework based on results which do not vary between microarchitecture -- the Microarchitecture-independent workload characterization.
-Features in this metric include instruction mix, Instruction-level parallelism (ILP), Register traffic, Working-set size, Data stream strides and Branch predictability.
-These feature results were collected using the PIN [@luk2005pin] binary instrumentation tool.
-In total 48 measurement characteristics are presented in order to classify an application in a microarchitecture agnostic manner.
-To reduce the variety of measurements presented, the authors use Principal Component Analysis to reduce the number of measurements in this feature-space to 8 dimensions -- those with the largest variance and corresponding impact between applications.
-
-This research is also released as the MICA software and is deployed as a PIN module.
-
-A caveat in the MICA approach is that the results presented are not instruction set architecture independent nor independent from differences in compilers.
-
-###ISA-independent workload characterization{#sec:chapter2-isa-independent}
-
-More recently, Shao and Brooks [@shao2013isa] have extended the generality of workload characterisation to be ISA independent.
-The primary motivation for this work was in evaluating the suitability of benchmark suites when targeted on general purpose accelerator platforms.
-This work was inspired by the MICA framework and collects similar features to those presented in the Hoste and Eeckhout [@hoste2007microarchitecture] paper.
-
-Instead of using PIN events on x86 systems, this technique uses a Just-In-Time (JIT) compiler to trace instrumented features over a compiler intermediate representation (IR) -- in this instance the Low Level Virtual Machine (LLVM) representation.
-The proposed framework briefly evaluates eleven SPEC benchmarks and examines 5 ISA-independent features/metrics.
-Namely, number of opcodes (e.g., add, mul), the value of branch entropy -- a measure of the randomness of branch behavior, the value of memory entropy -- a metric based on the lack of memory locality when examining accesses, the unique number of static instructions, and the unique number of data addresses.
-
-The branch entropy measure presented in the Shao and Brooks paper was initially proposed by Yokota [@yokota2007introducing] and uses Shannon's information entropy to determine a score of Branch History Entropy.
-
-An additional metric, the average linear branch entropy metric , was recently suggested by De Pestel [@DePestel:2017:LBE:3057890.3057908].
-It is unique, in that the floating-point value presented linearly corresponds to the miss-rate flow of program execution; $p=0$ for branches always taken or not-taken but $p=0.5$ for the most unpredictable control flow.
-Thus, it offers a bounded value of $0-0.5$ and it additionally offers an averaging method that is also easily presented.
-
-###Using workload characterization for diversity analysis in the benchmark suites
 
 \todo[inline]{summarise this}https://www.hindawi.com/journals/sp/2015/859491/
 
@@ -472,12 +450,13 @@ The evaluation on the feature-space is critical to the inclusion of particular e
 
 ##Oclgrind: Debugging OpenCL kernels via simulation{#sec:oclgrind}
 
+
 Oclgrind is an OpenCL device simulator developed by Price and McIntosh-Smith [@price:15] capable of performing simulated kernel execution.
-It operates on a restricted LLVM IR known as Standard Portable Intermediate Representation (SPIR) established by the Khronos group consortium [@kessenich2015], thereby simulating OpenCL kernel code in a hardware agnostic manner.
+It operates on a restricted LLVM IR known as Standard Portable Intermediate Representation (SPIR) [@kessenich2015], thereby simulating OpenCL kernel code in a hardware agnostic manner.
 This architecture independence allows the tool to uncover many portability issues when migrating OpenCL code between devices.
-Additionally Oclgrind comes with a set of tools to detect runtime API errors, race conditions and locating invalid memory accesses but also comes with an ability to generate instruction histograms.
-These histograms show the computational composition of a kernel as a series of SPIR instructions with the corresponding count, these results can be used to directly infer the instruction mix similarly to the mechanisms presented in [Section @sec:chapter2-isa-independent].
-Indeed, an important contribution of this thesis is an Oclgrind plugin to perform architecture independent workload characterization is presented in chapter 4.
+Additionally, Oclgrind comes with a set of tools to detect runtime API errors, race conditions and invalid memory accesses, and generate instruction histograms.
+AIWC is added as a tool to Oclgrind and leverages its ability to simulate OpenCL device execution using LLVM IR codes.
+
 
 ##Schedulers and Predicting the most Appropriate Accelerator
 
@@ -498,14 +477,6 @@ In particular, they show that the metrics collected from a program executing on 
 
 Therefore, it is intuitive that the composition of a program collected using a simulator (such as Oclgrind discussed in [Section @sec:oclgrind], which operates on the most common intermediate form for the OpenCL runtime) regardless of accelerator to which it is ultimately mapped, offers a more accurate architecture agnostic set of metrics around an applications workload.
 This, in turn, can be used as a basis for performance prediction on general accelerators.
-
-##Formal measurements{#sec:formal-measurements}
-
-Many studies presented in this thesis use tools developed by others in order to perform the necessary measurements.
-Time measurements have primarily used LibSciBench as the default performance measurement tool.
-It allows high precision timing events to be collected for statistical analysis [@hoefler2015scientific].
-Additionally, it offers a high resolution timer in order to measure short running kernel codes, reported with one cycle resolution and roughly 6 ns of overhead.
-Throughout Chapter 4 LibSciBench was intensively used to record timings in conjunction with hardware events, which it collects via PAPI [@mucci1999papi] counters.
 
 ##Predictions and Modelling
 
