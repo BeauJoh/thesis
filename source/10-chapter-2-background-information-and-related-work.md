@@ -477,7 +477,7 @@ It operates on a restricted LLVM IR known as Standard Portable Intermediate Repr
 This architecture independence allows the tool to uncover many portability issues when migrating OpenCL code between devices.
 Additionally Oclgrind comes with a set of tools to detect runtime API errors, race conditions and locating invalid memory accesses but also comes with an ability to generate instruction histograms.
 These histograms show the computational composition of a kernel as a series of SPIR instructions with the corresponding count, these results can be used to directly infer the instruction mix similarly to the mechanisms presented in [Section @sec:chapter2-isa-independent].
-
+Indeed, an important contribution of this thesis is an Oclgrind plugin to perform architecture independent workload characterization is presented in chapter 4.
 
 ##Schedulers and Predicting the most Appropriate Accelerator
 
