@@ -1,38 +1,25 @@
 #AIWC: OpenCL based Architecture Independent Workload Characterization
 
-Measuring performance-critical characteristics of application workloads is important both for developers, who must understand and optimize the performance of codes, as well as designers and integrators of HPC systems, who must ensure that compute architectures are suitable for the intended workloads.
-However, if these workload characteristics are tied to architectural features that are specific to a particular system, they may not generalize well to alternative or future systems.
-An architecture-independent method ensures an accurate characterization of inherent program behaviour, without bias due to architecture-dependent features that vary widely between different types of accelerators.
-
-This work presents the first architecture-independent workload characterization framework for heterogeneous compute platforms, proposing a set of metrics determining the suitability and performance of an application on any parallel HPC architecture.
-The tool, AIWC, is a plugin for the open-source Oclgrind simulator.
-It supports parallel workloads and is capable of characterizing OpenCL codes currently in use in the supercomputing setting.
-AIWC simulates an OpenCL device by directly interpreting LLVM instructions, and the resulting metrics may be used for performance prediction and developer feedback to guide device-specific optimizations.
-An evaluation of the metrics collected over a subset of the Extended OpenDwarfs Benchmark Suite is also presented.
-
-
-## Introduction
-
-Modern high-performance computing (HPC) systems are typically heterogeneous, with a single node comprising a traditional CPU and an accelerator such as a GPU or many-integrated-core device (MIC).
-High bandwidth, low latency interconnects such as the Cray XC50 *Aries*, Fujitsu Post-K *Tofu* and IBM Power9 *Bluelink*, support tighter integration between compute devices on a node.
-Some interconnects support multiple different kinds of devices on a single node, for example, *Bluelink* features both NVLink support for Nvidia GPUs and CAPI for other emerging accelerators such as DSPs, FPGAs and MICs.
-
-The OpenCL programming framework is well-suited to such heterogeneous computing environments, as a single OpenCL code may be executed on multiple different device types.
-When combined with autotuning, an OpenCL code may exhibit good performance across varied devices. [@spafford2010maestro, @chaimov2014toward, @nugteren2015cltune, @price2017analyzing]
-
 Application codes differ in resource requirements, control structure and available parallelism.
 Similarly, compute devices differ in number and capabilities of execution units, processing model, and available resources.
 Given performance measurements for particular combinations of codes and devices, it is difficult to generalize to novel combinations.
 Hardware designers and HPC integrators would benefit from accurate and systematic performance prediction, for example, in designing an HPC system, to choose a mix of accelerators that are well-suited to the expected workload.
 
-To this end, we present the Architecture Independent Workload Characterization (AIWC) tool.
-AIWC simulates the execution of OpenCL kernels to collect architecture-independent features that characterize each code, which may also be used in performance prediction.
+Measuring performance-critical characteristics of application workloads is important both for developers, who must understand and optimize the performance of codes, as well as designers and integrators of HPC systems, who must ensure that compute architectures are suitable for the intended workloads.
+However, if these workload characteristics are tied to architectural features that are specific to a particular system, they may not generalize well to alternative or future systems.
 
-AIWC is the first workload characterization tool to support multi-threaded or parallel workloads, which it achieves by collecting metrics that indicate both instruction and thread-level parallelism.
+An architecture-independent method ensures an accurate characterization of inherent program behaviour, without bias due to architecture-dependent features that vary widely between different types of accelerators.
+
+This work presents Architecture Independent Workload Characterization (AIWC) tool --  the first architecture-independent workload characterization framework for heterogeneous compute platforms, proposing a set of metrics determining the suitability and performance of an application on any parallel HPC architecture.
+The tool, AIWC, is a plugin for the open-source Oclgrind simulator.
+It supports parallel workloads and is capable of characterizing OpenCL codes currently in use in the supercomputing setting.
+AIWC simulates an OpenCL device by directly interpreting LLVM instructions, and the resulting metrics may be used for performance prediction and developer feedback to guide device-specific optimizations.
+Support for multi-threaded or parallel workloads is achieved by collecting metrics that indicate both instruction and thread-level parallelism.
 Exploitable coarse-grained parallelism is measured by counting the number of work-items and barriers encountered.
 Instructions To Barrier (ITB) and Instructions per Thread (IPT) can be used to indicate workload irregularity or imbalance.
 
-We demonstrate the use of AIWC to characterize a variety of codes in the Extended OpenDwarfs Benchmark Suite [@johnston18opendwarfs].
+We demonstrate the use of AIWC to characterize a variety of codes in the Extended OpenDwarfs Benchmark Suite [@johnston18opendwarfs] -- presented as EOD from chapter 3.
+
 
 ## Metrics
 
