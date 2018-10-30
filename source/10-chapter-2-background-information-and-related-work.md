@@ -57,7 +57,7 @@ Table: Dwarfs and their limits. \label{tbl:dwarf-taxonomy}
 
 
 Implementations of applications that are represented by the Dwarf Taxonomy are discussed in the benchmark evaluations presented in Section \ref{sec:chapter2-benchmark-suites}.
-However, having familiarity with the division of applications and tasks commonly performed on supercomputers positions the use of accelerators for specific Dwarfs.
+Having familiarity with the division of applications and tasks commonly performed on supercomputers positions the use of accelerators for specific Dwarfs.
 
 
 ## Accelerator Architectures in HPC {#sec:chapter2-accelerator-architectures}
@@ -114,7 +114,7 @@ Similarly, the results presented in Figure~\ref{top10-percentage-of-supercompute
 The finer resolution presented in this figure shows that the most recently updated/installed systems have a much higher reliance on accelerators in order to place amongst these top supercomputers.
 By 2013 40\% of these systems used accelerators to secure a spot in the top 10 of the TOP500, this flat-lined till to 2015.
 In 2016 and 2017 the use of accelerators in the top 10 dropped to 30\%; this corresponds to the introduction of the Sunway TaihuLight system -- which buck the trend since they are composed of many conventional cores and follow a classical, non-accelerator, approach.
-However, as of 2018 the use of accelerators in the top 10 has jumped to 60\%.
+As of 2018 the use of accelerators in the top 10 has jumped to 60\%.
 Since the percentages of the use of accelerators in the top 10 is much higher than general, in the remainder of the TOP500, we can conclude that the use of accelerators gives an edge to the ranking of these systems.
 Still, the general trend of increased use of accelerators throughout all of the TOP500 continues to increase and reinforces the importance of accelerators in this space.
 
@@ -227,14 +227,14 @@ Evaluated in the paper were a NVIDIA GTX 280 GPU and an Intel Core 2 Extreme CPU
 The diversity between selected benchmarks was shown by measuring execution times, communications overheads and energy usage of running each benchmark on the target architectures.
 Across the suite: speedups in execution times ranged from 5.5x to 80.8x, communication overheads vary from 2-76% and GPU power consumption overheads range from 38-83 Watts.
 From this, the resulting benchmarks were proven to be useful when illustrating important architectural differences between the CPU and GPU.
-However, all devices presented featured applications typical of select dwarfs which benefit from GPU architectures.
+All devices presented featured applications typical of select dwarfs which benefit from GPU architectures.
 At the time this paper was written the Rodinia Benchmark suite consisted of nine applications; namely, Leukocyte Tracking, Speckle Reducing Anisotropic Diffusion, HotSpot, Back Propagation, Needleman-Wunsch, K-means, Stream Cluster, Breadth-First Search and Similarity Score, but it has since been extended.
 This extension features a subset of the dwarfs, namely, Structured Grid, Unstructured Grid, Dynamic Programming, Dense Linear Algebra, MapReduce, and Graph Traversal.
 Diversity analysis was also performed and took the form of a Micro-Architecture independent analysis study.
 The MICA framework, discussed in [Section @sec:microarchitecture-independent], was used as the basis of the evaluation and the motivation was to justify each applications inclusion in the benchmark suite by showing deviations between applications in the corresponding kiviat diagrams.
 Separate implementations were developed for each application CUDA for the GPU, and OpenMP for the CPU, OpenCL was also included for both architecture types.
 Ultimately several applications from the Rodinia benchmark suite were added to the extended OpenDwarfs benchmark suite -- developed in this thesis.
-However, ultimately, having several implementations caused fragmentation in development, where changes often resulted in the OpenCL version of each benchmark application being neglected; in some instances lacking an implementation of a given application entirely -- or at the least, missing features offered in other implementations.
+Ultimately, having several implementations caused fragmentation in development, where changes often resulted in the OpenCL version of each benchmark application being neglected; in some instances lacking an implementation of a given application entirely -- or at the least, missing features offered in other implementations.
 For this reason, OpenDwarfs was selected as the benchmark suite on which to perform the extension work.
 
 ### SHOC
@@ -245,7 +245,7 @@ SHOC supports multiple programming models including OpenCL, CUDA and OpenACC, wi
 The variety of language implementations for each benchmark application, was one of the original motivators for its construction.
 In this benchmark suite the OpenCL versions of each application have been designed to strongly mirror the CUDA counterparts, unfortunately this results in fixed tuning parameters such as local workgroup size that is well suited to GPU architectures but is not suited to CPU and other accelerator devices.
 
-However, since this suite has not been classified according to the dwarf taxonomy and also if the classification were performed during this these, adding more applications would likely need to occur to fully encompass the dwarf taxonomy; the addition of applications is more expensive in SHOC, since it would require implementations for the same application into at least 3 other languages -- which is not a motivating factor for this thesis.
+Since this suite has not been classified according to the dwarf taxonomy and also if the classification were performed during this these, adding more applications would likely need to occur to fully encompass the dwarf taxonomy; the addition of applications is more expensive in SHOC, since it would require implementations for the same application into at least 3 other languages -- which is not a motivating factor for this thesis.
 By focusing on application kernels written exclusively in OpenCL, our enhanced OpenDwarfs bench-mark suite is able to cover a wider range of application patterns.
 
 
@@ -316,7 +316,7 @@ The approach outlined states that phase-behaviour can be profiled quickly using 
 
 An assumption in the literature is that OpenCL kernels are largely unaffected by program phase-shift.
 Rather, the program as a whole will doubtlessly experience phase-shifts, compiling an OpenCL kernel code which is an active component of all OpenCL programs will heavily utilise the host CPU device, and when a kernel is executed and the host waits for the device to finish, CPU utilisation is low.
-However, the kernel in execution itself will experience very little differences in phases since by their very nature OpenCL kernels are designed small and compartmentalised sections of computation.
+The kernel in execution itself will experience very little differences in phases since by their very nature OpenCL kernels are designed small and compartmentalised sections of computation.
 Such that, if a kernel executed on a particular accelerator device is memory bound, it will consistently be memory bound.
 If the accelerator experiences consistent stalls on repeated branch mispredictions, this is consistent throughout the kernels entire execution.
 
@@ -377,7 +377,7 @@ AIWC relies on the selection of the instruction set architecture (ISA)-independe
 Hoste and Eeckout [@hoste2007microarchitecture] show that although conventional microarchitecture-dependent characteristics are useful in locating performance bottlenecks [@ganesan2008performance,@prakash2008performance], they are misleading when used as a basis on which to differentiate benchmark applications.
 Microarchitecture-independent workload characterization and the associated analysis tool, known as MICA, was proposed to collect metrics to characterize an application independent of particular microarchitectural characteristics.
 Architecture-dependent characteristics typically include instructions per cycle (IPC) and miss rates -- cache, branch misprediction and translation look-aside buffer (TLB) -- and are collected from hardware performance counter results, typically PAPI.
-However, these characteristics fail to distinguish between inherent program behaviour and its mapping to specific hardware features, ignoring critical differences between architectures such as pipeline depth and cache size.
+These characteristics fail to distinguish between inherent program behaviour and its mapping to specific hardware features, ignoring critical differences between architectures such as pipeline depth and cache size.
 The MICA framework collects independent features including instruction mix, instruction-level parallelism (ILP), register traffic, working-set size, data stream strides and branch predictability.
 These feature results are collected using the Pin [@luk2005pin] binary instrumentation tool.
 In total 47 microarchitecture-independent metrics are used to characterize an application code.
@@ -417,7 +417,7 @@ We view these models as capturing a 'principal component' of a more complex perf
 Hoste and Eeckhout [@hoste2007microarchitecture] propose metrics to characterise an application independent to the corresponding microarchitectural characteristics.
 In this work, Hoste and Eeckout show that despite being useful when locating performance bottlenecks [@ganesan2008performance] [@prakash2008performance], the conventional microarchitecture-dependent characteristics are misleading when used as a basis on which to differentiate benchmark applications.
 The dependent characteristics typically include instructions per cycle (IPC) and miss rates -- cache, branch misprediction and translation look-aside buffer (TLB) -- and are collected from hardware performance counter results, typically PAPI.
-However, the results generated from them is misleading as they either indicate two benchmark applications are similar if they have similar hardware performance counter results or different, since they have different counter results, and this analysis potentially hides the underlying, inherent program behaviour.
+The results generated from them is misleading as they either indicate two benchmark applications are similar if they have similar hardware performance counter results or different, since they have different counter results, and this analysis potentially hides the underlying, inherent program behaviour.
 Additionally, microarchitecture-dependent characteristics are increasingly limited as they are heavily variable between systems, results are machine dependent since CPU architectures significantly differ in pipeline depth and cache size.
 
 Instead Hoste propose a higher level metric framework based on results which do not vary between microarchitecture -- the Microarchitecture-independent workload characterization.
@@ -458,7 +458,7 @@ Thus, it offers a bounded value of $0-0.5$ and it additionally offers an averagi
 
 Several benchmarks have performed characterisation of applications in the past, this has been primarily, at least historically motivated, for diversity analysis to justify the inclusion of an application into a benchmark suite.
 Rodinia used MICA as the diversity analysis framework.
-However, the OpenDwarfs benchmark suite have applications which have been manually classified as dwarfs and any characterisation into this taxonomy is based largely intuition.
+The OpenDwarfs benchmark suite have applications which have been manually classified as dwarfs and any characterisation into this taxonomy is based largely intuition.
 Some of the shared applications ported from the Rodinia Benchmark suite cluster microarchitecture-dependent characteristics of applications into dwarfs.
 Alas, the approach has the same limitations as those presented in [Section @sec:microarchitecture-independent].
 
