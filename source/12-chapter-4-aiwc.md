@@ -11,7 +11,7 @@ AIWC simulates an OpenCL device by directly interpreting LLVM instructions, and 
 An evaluation of the metrics collected over a subset of the Extended OpenDwarfs Benchmark Suite is also presented.
 
 
-#Introduction
+## Introduction
 
 Modern high-performance computing (HPC) systems are typically heterogeneous, with a single node comprising a traditional CPU and an accelerator such as a GPU or many-integrated-core device (MIC).
 High bandwidth, low latency interconnects such as the Cray XC50 *Aries*, Fujitsu Post-K *Tofu* and IBM Power9 *Bluelink*, support tighter integration between compute devices on a node.
@@ -34,26 +34,13 @@ Instructions To Barrier (ITB) and Instructions per Thread (IPT) can be used to i
 
 We demonstrate the use of AIWC to characterize a variety of codes in the Extended OpenDwarfs Benchmark Suite [@johnston18opendwarfs].
 
-#Related Work
-
-#Metrics
+## Metrics
 
 For each OpenCL kernel invocation, the Oclgrind simulator **AIWC** tool collects a set of metrics, which are listed in [Table @tbl:aiwc-metrics].
 
 
-\iftoggle{ACM-BUILD}{
 \begin{table*}[t]
 \caption{Metrics collected by the \textbf{AIWC} tool ordered by type. \label{tbl:aiwc-metrics}}
-}{}
-\iftoggle{IEEE-BUILD}{
-\begin{table*}[t]
-\caption{Metrics collected by the \textbf{AIWC} tool ordered by type. \label{tbl:aiwc-metrics}}
-}{}
-\iftoggle{LNCS-BUILD}{
-\begin{table}[tb]
-\caption{Metrics collected by the \textbf{AIWC} tool ordered by type. \label{tbl:aiwc-metrics}}
-\begin{adjustbox}{max width=\textwidth}
-}{}
 
 \centering
 
@@ -96,16 +83,7 @@ average linear branch entropy\\
 \hline
 \end{tabular}
 
-\iftoggle{ACM-BUILD}{
 \end{table*}
-}{}
-\iftoggle{IEEE-BUILD}{
-\end{table*}
-}{}
-\iftoggle{LNCS-BUILD}{
-\end{adjustbox}
-\end{table}
-}{}
 
 
 The **Opcode**, **total memory footprint** and **90% memory footprint** measures are simple counts.
@@ -141,7 +119,7 @@ To present these characteristics the **unique reads**, **unique writes**, **uniq
 The **unique read/write ratio** shows that the workload is balanced, read intensive or write intensive.
 They are computed by storing read and write memory accesses separately and are later combined, to compute the **global memory address entropy** and **local memory address entropy** scores.
 
-#Methodology -- Workload Characterization by tooling Oclgrind
+## Methodology -- Workload Characterization by tooling Oclgrind
 
 AIWC verifies the architecture independent metrics since they are collected on a toolchain and in a language actively executed on a wide range of accelerators -- the OpenCL runtime supports execution on CPU, GPU, DSP, FPGA, MIC and ASIC hardware architectures.
 The intermediate representation of the OpenCL kernel code is a subset of LLVM IR known as SPIR -- Standard Portable Intermediate Representation.
@@ -162,7 +140,7 @@ Oclgrind OpenCL kernel debugging tool is one of the most adopted OpenCL debuggin
 -->
 
 
-#Implementation
+## Implementation
 
 
 AIWC is implemented as a plugin for Oclgrind, which simulates kernel execution on an ideal compute device.
@@ -242,13 +220,7 @@ Finally, \texttt{kernelBegin} initializes the global counters and \texttt{kernel
 The source code is available at the GitHub Repository [@beau_johnston_2017_1134175].
 
 
-#Demonstration
-
-
-
-
-
-
+## Demonstration
 
 We now demonstrate the use of **AIWC** on several scientific application kernels selected from the Extended OpenDwarfs Benchmark Suite [@johnston18opendwarfs].
 These benchmarks were extracted from and are representative of general scientific application codes.
@@ -281,52 +253,28 @@ Barriers per instruction is quite low for most kernels, with the exception of \t
 These kernels each have 0.04 barriers per instruction (i.e. one barrier per 25 instructions), as they follow a highly-synchronized wavefront pattern through the matrix representing matching pairs.
 The performance of this kernel on a particular architecture could be expected to be highly dependent on the cost of synchronization.
 
-
-
-
-
-
-
 \begin{figure*}
 \centering
-\iftoggle{ACM-BUILD}{
-%acm
-\includegraphics[width=2\columnwidth]{./figure/draw_stacked_plots-1.pdf}
-}{}
-\iftoggle{IEEE-BUILD}{
-%ieee
-\includegraphics[width=1.98\columnwidth]{./figure/draw_stacked_plots-1.pdf}
-}{}
-\iftoggle{LNCS-BUILD}{
-%llncs
-\includegraphics[width=0.95\textwidth,height=0.95\textheight,keepaspectratio]{./figure/draw_stacked_plots-1.pdf}
-}{}
+\includegraphics[width=1.98\columnwidth]{./figures/chapter-4/draw_stacked_plots-1.pdf}
 \caption{Selected AIWC metrics from each category over all kernels and 4 problem sizes.}
 \label{fig:stacked_plots} 
 \end{figure*}
 
-
-
-
-
-
 \begin{figure*}
     \centering
-    \newcommand{\plotwidth}{0.66\textwidth}
-    \includegraphics[width=\plotwidth]{./figure/draw_lud_diagonal_internal_all_kiviat-1.pdf}
+    \includegraphics[width=\plotwidth]{./figures/chapter-4/draw_lud_diagonal_internal_all_kiviat-1.pdf}
     \caption{A) and B) show the AIWC features of the \texttt{diagonal} and \texttt{internal} kernels of the LUD application over all problem sizes.}
     \label{fig:kiviat}
 \end{figure*}
 
 \begin{figure*}
     \centering
-    \newcommand{\plotwidth}{0.66\textwidth}
-    \includegraphics[width=\plotwidth]{./figure/draw_lud_diagonal_perimeter_lmae_all_kiviat-1.pdf}
+    \includegraphics[width=\plotwidth]{./figures/chapter-4/draw_lud_diagonal_perimeter_lmae_all_kiviat-1.pdf}
     \caption{A) shows the AIWC features of the \texttt{perimeter} kernel of the LUD application over all problem sizes. B) shows the corresponding Local Memory Address Entropy for the \texttt{perimeter} kernel over the tiny problem size.}
     \label{fig:kiviat2}
 \end{figure*}
 
-##Detailed Analysis of LU Decomposition Benchmark
+## Detailed Analysis of LU Decomposition Benchmark
 
 We now proceed with a more detailed investigation of one of the benchmarks, **lud**, which performs decomposition of a matrix into upper and lower triangular matrices.
 Following Shao and Brooks [@shao2013isa], we present the AIWC metrics for a kernel as a Kiviat or radar diagram, for each of the problem sizes.

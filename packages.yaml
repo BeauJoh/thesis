@@ -14,6 +14,7 @@ header-includes:
     - \usepackage{MnSymbol}
     - \usepackage{adjustbox}
     - \usepackage{etoolbox}
+    - \usepackage{listings}
     - \usepackage[noend,ruled]{algorithm2e}
     - \usepackage[all]{hypcap}
     - \usepackage[T1]{fontenc}
