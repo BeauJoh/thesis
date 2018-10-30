@@ -153,28 +153,27 @@ While it is possible to write application code directly in OpenCL, it may also b
 This technique was shown by Mitra et al., [@mitra2014implementation] where an OpenMP runtime was implemented over an OpenCL framework for Texas Instruments Keystone II DSP architecture.
 Having a common back-end in the form of OpenCL allows a direct comparison of identical code across this diverse range of architectures.
 
-OpenCL programs comprise of a host side and a device side and the program progression is always the same.
-The Host is responsible for querying the suitable platforms, vendor OpenCL runtime drivers, and establishing a context on the selected devices.
+OpenCL programs comprise of a host and a device side, the program progression is always the same.
+The host is responsible for querying the suitable platforms, vendor OpenCL runtime drivers, and establishing a context on the selected devices.
 Next, the host sets up memory buffers, compiles a kernel program for each device -- the final compiled device binaries are generated for each specific device instruction set architecture (ISA).
 
-On the device-side, the developer code is en-queued for execution.
-Device-side code is typically small intensive sub-regions of programs and is known as the kernel.
+On the device side, the developer code is enqueued for execution.
+Device side code is typically small intensive sub-regions of programs and is known as the kernel.
 Kernel code is written in a subset of the C programming language.
-Special functions exist to determine a threads id, this can occur via getting a global index in a given dimension directly, with `get_group_id`, or determined using `get_group_id`, `get_local_size` and `get_local_id` in each dimension.
+Special functions exist to determine a thread's id, this can occur via getting a global index in a given dimension directly, with `get_group_id`, or determined using `get_group_id`, `get_local_size` and `get_local_id` in each dimension.
 
 The host side is then notified once the device has completed execution -- this takes the form of either the host waiting on the `clFinish` command or if the host does not the computed results yet, say for an intermediate result on which a second kernel will operate on the same data, a `clFlush` function call.
 Once all device execution has completed and the host has been notified the results are transferred back to the host from the device.
 Finally, the context established on the device is freed.
 
-The selection of parameters on the host side can have a large impact on performance.
-One primary reason is that different accelerators benefit from different levels of parallelism -- or how many threads are executed concurrently -- for instance, GPU devices usually need a high degree of arithmetic intensive parallelism to offset the (relatively) narrow I/O pipeline, CPUs on the other hand are more general purpose and the switching of threads has a greater penalty on performance.
+The selection of parameters surrounding how work should be partitioned -- such as how many threads to use and how many threads are in a workgroup -- can have a large impact on performance.
+One primary reason is that different accelerators benefit from different levels of parallelism, for instance, GPU devices usually need a high degree of arithmetic intensive parallelism to offset the (relatively) narrow I/O pipeline, while CPUs are general purpose and the switching of threads has a greater penalty on performance.
 The tuning of such parameters can positively impact performance, in the OpenCL setting by primarily influencing the workgroup size.
 In essence, the global work items can be viewed from the data-parallelism perspective.
 Global work indicates the number of threads or instances of a kernel to execute in total.
 Additionally, these work items can be run in teams -- denoted local work groups.
 Each local work group has a given size, and as previously mentioned can be determined on the device side, in the kernel code, with `get_local_id`.
-Incorrectly setting the number of local work groups and therefore also the size of each work group can impact on performance directly.
-Thankfully recent work shows these parameters can be automatically optimised for any accelerator architecture and is discussed in the Autotuning [Section @sec:chapter2-autotuning] further on in this chapter.
+Incorrectly setting the number of local work groups and therefore also the size of each work group can reduce performance however, recent work shows these parameters can be automatically optimised for any accelerator architecture as will be discussed in [Section @sec:chapter2-autotuning].
 
 The OpenCL programming framework is well-suited to such heterogeneous computing environments, as a single OpenCL code may be executed on multiple different device types.
 When combined with autotuning, an OpenCL code may exhibit good performance across varied devices. [@spafford2010maestro, @chaimov2014toward, @nugteren2015cltune, @price2017analyzing]
@@ -185,8 +184,7 @@ These flags are set on the host side during the `clBuildProgram` procedure.
 Pre-processor macros can also be defined on the kernel side which allows various loop level parallelism constructs to be enabled or disabled.
 Mathematical intrinsic options can also be set to disable double floating point precision, and change how denormalised numbers are handled.
 Other optimisations include using the strictest aliasing rules, use of the fast fused multiply and add instruction (with reduced precision), ignoring the signedness of floating point zeros and relaxed, finite or unsafe math operations.
-Thankfully, these can also be corrected using autotuning for both kernel specific and device specific optimisations.
-
+These can also be corrected using autotuning for both kernel specific and device specific optimisations.
 
 
 ## Benchmark Suites{#sec:chapter2-benchmark-suites}
@@ -224,40 +222,38 @@ As it is not always feasible to perform such a detailed performance study of the
 Che et. al [@che2009rodinia] initially proposed a benchmark suite to cover a wide range of parallel communication patterns.
 The benchmarks were selected following the Berkeley Dwarf Taxonomy and are from real world high performance computing applications.
 The diversity between selected benchmarks was shown by measuring execution times, communications overheads and energy usage of running each benchmark on an NVIDIA GTX 280 GPU and an Intel Core 2 Extreme CPU.
-Across the suite: speedups in execution times ranged from 5.5x to 80.8x, communication overheads vary from 2-76% and GPU power consumption overheads range from 38-83 Watts.
-From this, the resulting benchmarks were proven to be useful when illustrating important architectural differences between the CPU and GPU.
-All devices presented featured applications typical of select dwarfs which benefit from GPU architectures.
-At the time this paper was written the Rodinia Benchmark suite consisted of nine applications; namely, Leukocyte Tracking, Speckle Reducing Anisotropic Diffusion, HotSpot, Back Propagation, Needleman-Wunsch, K-means, Stream Cluster, Breadth-First Search and Similarity Score, but it has since been extended.
-This extension features a subset of the dwarfs, namely, Structured Grid, Unstructured Grid, Dynamic Programming, Dense Linear Algebra, MapReduce, and Graph Traversal.
+Across the suite: speedups in execution times ranged from 5.5x to 80.8x, communication overheads varied from 2-76% and GPU power consumption overheads ranged from 38-83 Watts, illustrating important architectural differences between the CPU and GPU.
+At the time this paper was written the Rodinia Benchmark suite consisted of nine applications; namely, Leukocyte Tracking, Speckle Reducing Anisotropic Diffusion, HotSpot, Back Propagation, Needleman-Wunsch, K-means, Stream Cluster, Breadth-First Search and Similarity Score, but it has since been extended. [@che2010characterization]
+This extension features a subset of the dwarfs, namely, Structured Grid, Unstructured Grid, Dynamic Programming, Dense Linear Algebra, MapReduce, and Graph Traversal all of which may be expected to benefit from GPU acceleration.
 Diversity analysis was also performed and took the form of a Micro-Architecture independent analysis study.
 The MICA framework, discussed in [Section @sec:microarchitecture-independent], was used as the basis of the evaluation and the motivation was to justify each applications inclusion in the benchmark suite by showing deviations between applications in the corresponding kiviat diagrams.
-Separate implementations were developed for each application CUDA for the GPU, and OpenMP for the CPU, OpenCL was also included for both architecture types.
-Ultimately several applications from the Rodinia benchmark suite were added to the extended OpenDwarfs benchmark suite -- developed in this thesis.
-Ultimately, having several implementations caused fragmentation in development, where changes often resulted in the OpenCL version of each benchmark application being neglected; in some instances lacking an implementation of a given application entirely -- or at the least, missing features offered in other implementations.
-For this reason, OpenDwarfs was selected as the benchmark suite on which to perform the extension work.
+Three separate implementations were developed for each application using CUDA for the GPU, OpenMP for the CPU and OpenCL for both architecture types.
+Several implementations caused fragmentation in development, which often resulted in the OpenCL version of each benchmark application being neglected; missing features offered in other implementations and in some instances lacking an implementation of a given application entirely.
+For this reason, Rodinia is not a suitable base for an OpenCL benchmark suite, however, we were able to incorporate the dwt2d benchmark into our extended version of the OpenDwarfs  benchmark suite as will be discussed in Chapter 3.
+Many of the benchmarks were added from Rodinia into the original OpenDwarfs suite, in our extended evaluation many of the datasets were generated by analyse the original Rodinia source.
 
 ### SHOC
 
 The Scalable Heterogeneous Computing benchmark suite SHOC, presented by Danalis et. al. [@danalis2010scalable], offer an alternative benchmark suite and unlike OpenDwarfs and Rodinia, supports multiple nodes using MPI for distributed parallelism.
-It also has not been structured into the dwarf taxonomy but rather the benchmarks it encompasses have been categorised according according to two major sets, whether the application performs a stress test role or acts as a performance test.
+It also has not been structured into the dwarf taxonomy but rather the benchmarks it encompasses have been categorised according according to two major sets, whether the application performs a stress test role -- which assess the device capabilities --  or acts as a performance test -- which measure host / system performance usually on synthetic kernels.
 SHOC supports multiple programming models including OpenCL, CUDA and OpenACC, with benchmarks ranging from targeted tests of particular low-level hardware features to a handful of application kernels.
 The variety of language implementations for each benchmark application, was one of the original motivators for its construction.
 In this benchmark suite the OpenCL versions of each application have been designed to strongly mirror the CUDA counterparts, unfortunately this results in fixed tuning parameters such as local workgroup size that is well suited to GPU architectures but is not suited to CPU and other accelerator devices.
 
-Since this suite has not been classified according to the dwarf taxonomy and also if the classification were performed during this these, adding more applications would likely need to occur to fully encompass the dwarf taxonomy; the addition of applications is more expensive in SHOC, since it would require implementations for the same application into at least 3 other languages -- which is not a motivating factor for this thesis.
-By focusing on application kernels written exclusively in OpenCL, our enhanced OpenDwarfs bench-mark suite is able to cover a wider range of application patterns.
+Since this suite has not been classified according to the dwarf taxonomy and also if the classification were performed, adding more applications would likely need to occur to fully encompass the dwarf taxonomy; the addition of applications is more expensive in SHOC, since it would require implementations for the same application into at least three other languages -- which is not a motivating factor for this thesis.
+By focusing on application kernels written exclusively in OpenCL, our enhanced OpenDwarfs benchmark suite is able to cover a wider range of application patterns.
 
 
 ### OpenDwarfs
 
 As with Rodinia, Feng et. al [@feng2012opencl] introduce the OpenDwarfs (OpenCL and the 13 Dwarfs) as an OpenCL implementation of Berkeley’s 13 computational dwarfs of scientific computing.
 In this work, the absolute execution times were collected over 11 benchmarks.
-In this paper 11 applications were evaluated on 1 CPU, an Intel Xeon E5405, and 3 GPUs, a low power AMD HD5450 with 25W TDP, and 2 high-power GPUs AMD HD5870 and an Nvidia GT520, for scale both high-end GPUs had an energy footprint of 228-238W TDP respectively.
+In this paper 11 applications were evaluated on a CPU, an Intel Xeon E5405, and three GPUs, a low power AMD HD5450 with 25W TDP, and two high-power GPUs: AMD HD5870 and an Nvidia GT520 with energy footprints of 228 and 238W TDP respectively.
 A larger range of dwarfs are covered by OpenDwarfs than Rodinia; however, one dwarf, MapReduce, is still not represented by any application.
-Additionally, several dwarfs currently have one representative application which may not expose the entire set of characteristics of that dwarf.
+Additionally, several dwarfs currently have only one representative application which may not expose the entire set of characteristics of that dwarf.
 
-A potential criticism is that no diversity analysis was performed to justify the inclusion of each application -- however since many applications where inherited from the Rodinia code-base these applications have a proven MICA diversity.
-Recently, this work was updated and evaluated on FPGA devices by Krommydas et. al. [@krommydas2016opendwarfs] -- and adds relevancy to the OpenDwarfs benchmark suite.
+A potential criticism is that no diversity analysis was performed to justify the inclusion of each application -- however since many applications were inherited from the Rodinia code-base these applications have a proven MICA diversity.
+Recently, this work was updated and evaluated on FPGA devices by Krommydas et. al. [@krommydas2016opendwarfs].
 Given the focused effort of having all the dwarfs represented, the choice to have one implementation -- and that being OpenCL, and the recent use of the benchmark suite for a new accelerator architecture all result in it being the selected benchmark suite to perform the extension.
 These efforts are discussed in Chapter 3.
 
