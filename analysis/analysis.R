@@ -1,3 +1,8 @@
+# dependencies:
+#sudo Rscript -e "install.packages('devtools',repos = 'http://cran.us.r-project.org');"
+#sudo Rscript -e "devtools::install_github('stefano-meschiari/latex2exp')"
+#sudo Rscript -e "devtools::install_github('tidyverse/ggplot2')"
+
 ## with manual data entry
 #x = read.csv('~/Documents/2018/thesis/analysis/top500-june2018.csv')
 #mean((x$rmax_TFlop_s)/x$power_Kw,na.rm=TRUE)
