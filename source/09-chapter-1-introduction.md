@@ -14,22 +14,20 @@ At an individual node, there is a trend towards specialised hardware -- known as
 The use of accelerators for certain programs offers a shorter time to completion, and less energy expenditure, when compared to a conventional CPU architecture.
 The next generation of these systems has been designed to incorporate a greater number of accelerators, and of varying types per node.
 For instance, the CAPI and NVLINK technologies included in the latest IBM POWER9 processor offers a high-speed interconnect which allows the rapid movement data between processor and accelerator --  where NVIDIA Graphical Processing Unit (GPU) use NVLink, whereas other accelerator devices such as Altera Field-Programmable Gate Array (FPGA), Digital Signal Processors (DSPs), Intel Many-Integrated-Core (MIC) devices, and both Intel and AMD Central Processing Unit (CPU) and AMD GPU devices can utilise the CAPI interconnect.
-The POWER9 is featured in the latest Summit and forthcoming Sierra Supercomputers, and is configured such with two GPUs per CPU.
-High bandwidth, low latency interconnects such as the Cray XC50 *Aries*, Fujitsu Post-K *Tofu* and IBM POWER9 *Bluelink*, support tighter integration between compute devices on a node.
 The support from hardware vendors for a greater mix of heterogeneous devices indicates this is the new direction of supercomputing.
 However, this development is recent, and as such the scheduling of workloads to the most suitable accelerator is a new problem.
-The cost of exascale computing and their corresponding energy efficiency will be prohibitive without significant improvements in effectively using accelerators on current and future HPC systems.
+The cost of exascale computing and their corresponding energy efficiency will be prohibitive without significant improvements in effectively using accelerators on current and future supercomputers.
 
 
-Independently, the characteristics of a scientific code, specifically around computation, memory, branching and parallelism, are independent of any particular device on which they may be finally executed.
+This thesis will argue that the characteristics of a scientific code, specifically around computation, memory, branching and parallelism, are independent of any particular device on which they may be finally executed.
 The metrics used to quantify each of these characteristics can be collected during program execution on a simulator.
 In other words, provided they are collected over a representative workload, a graph traversal program maintains the characteristics of a graph traversal program regardless of problem size or on what platform it is run.
 Moreover, these metrics can be used to accurately predict the execution time on each accelerator in a heterogeneous system.
 
 
-This thesis outlines the methodology required to perform runtime predictions for any given code -- provided the feature metrics are pre-generated -- for any accelerator device.
+This thesis also presents a methodology to perform runtime predictions for any given code -- provided the feature metrics are pre-generated -- for any accelerator device.
 A benchmark suite is extended, a characterisation tool developed, and a model is generated to achieve the task.
-This research is of benefit to the scheduling of codes to the most appropriate device which in turn provides essential information for scheduling, to better utilise the next-generation of supercomputers.
+We believe this research will be of benefit to the scheduling of codes to the most appropriate device to achieve better performance and utilization on the next-generation of supercomputers.
 
 
 <!-- Context -- a brief on how the proposed solution works -->
@@ -40,23 +38,23 @@ This research is of benefit to the scheduling of codes to the most appropriate d
 The Open Compute Language (OpenCL) allows programs to be written once and run anywhere on a range of accelerators.
 A majority of accelerator vendors ship products with an OpenCL supported runtime, many of which will be components on the next-generation of supercomputing nodes.
 Programs in the OpenCL setting are structured into two partitions, the host and the accelerator/device side.
-As such, the developer is manually responsible for allocating and transferring memory between the host and device.
-This requires programs to be restructured with computationally intensive regions of code -- known as kernels -- to be identified and partitioned -- and rewritten in the OpenCL C kernel language.
+The developer is responsible for allocating and transferring memory between the host and device.
+This requires programs to be structured with computationally intensive regions of code -- known as kernels -- to be identified and written in the OpenCL C kernel language.
 Kernels are viewed as indivisible functions and as such the nature of these kernels is fixed for all executions, and as such, a kernel does not suffer from the phase-transitions that are common when looking at larger scientific codes.
-The compositions of all kernels form a full accelerator agnostic implementation for any larger scientific code.
+The composition of all kernels forms a full accelerator agnostic implementation for a larger scientific code.
 
 
 A benefit of the fixed/static nature of OpenCL kernels is that the collection of the characteristics is also constant.
-Such that, instrumentation of a kernel to measure computation, memory, branching and parallelism characteristics of a program are largely unchanged between run and are independent of data set.
+Instrumentation of the execution of a kernel measures computation, memory, branching and parallelism metrics -- these form the characteristics of a program and are largely unchanged between run and are independent of data set.
 To this end, the Architecture Independent Workload Characterisation (AIWC) tool has been developed.
-This tool collects 40+ metrics that indicate computation, memory, branching and parallelism characteristics on a per OpenCL kernel basis.
+This tool collects 40+ metrics that indicate computation, memory, branching and parallelism characteristics on a per kernel basis.
 It simulates an OpenCL device using the Oclgrind tool and the AIWC plugin analyses the program trace, memory locations accessed, and thread-states to generate the metrics.
 Metrics can be collected quickly since it is a multi-threaded simulator.
 AIWC features, are generated for each kernel invocation and can be embedded as a comment into the header of OpenCL kernel codes -- either in plain-text source or in the SPIR format.
 
 
 Separately, additional work in this thesis comprises of the extension of a benchmark suite.
-This was needed since programs that are representative of scientific HPC applications which are capable of execution over a wide range of accelerators are few and far between, specifically with portable performance and reproducible results.
+This was needed since programs that are representative of scientific High Performance Computing (HPC) applications which are capable of execution over a wide range of accelerators are few and far between, specifically with portable performance and reproducible results.
 Additionally, until this work was undertaken, the available OpenCL benchmark suites were not rich enough to adequately characterise performance across the diverse range of applications or accelerator devices of interest.
 Thus this thesis presents an enhanced version of the OpenDwarfs OpenCL benchmark suite -- denoted the Extended OpenDwarfs Benchmark Suite (EOD) -- which was developed with a strong focus placed on the robustness of applications, the curation of additional benchmarks with an increased emphasis on correctness of results and the selection of 4 problem sizes.
 
@@ -76,9 +74,13 @@ The final model performs well and is capable of highly accurate predictions whic
 The model is capable of predicting execution times for specific devices based on the computational characteristics captured by the AIWC tool, which in turn, provides a good prediction of an accelerator devices execution time needed for a real-world scheduler for nodes of future super-computing systems.
 
 <!-- Restatement of the problem -->
-##Problems in heterogeneous supercomputing
+<!-- Problems in heterogeneous supercomputing -->
+## Restatement of the problem
 
 The future of supercomputing comprises several heterogeneous devices at the node level.
+The POWER9 is featured in the latest Summit and forthcoming Sierra Supercomputers, and is configured such with two GPUs per CPU.
+High bandwidth, low latency interconnects such as the Cray XC50 *Aries*, Fujitsu Post-K *Tofu* and IBM POWER9 *Bluelink*, support tighter integration between compute devices on a node.
+This facilitates the usage of a mix of accelerators given the low penalty to move data between them.
 Evaluating the suitability of any given device on a node requires a comprehensive benchmark suite which is capable of efficiently executing on all devices in a hardware agnostic way.
 Unfortunately, current benchmark suites are ill-suited to the task, either consisting of several different implementations per each device or lacking a comprehensive range of scientific applications to fully explore the performance characteristics of the device.
 Further, this suitability can be concerned with energy consumption, which is critical to the proposed exascale systems envisaged in the future, making performance-per-watt a fundamental concern.
