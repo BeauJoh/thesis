@@ -12,18 +12,17 @@ Finally, this section culminates in a discussion of benchmark suites, applicatio
 
 Phil Colella [@colelladefining] identified seven motifs of numerical methods which he thought would be important for the next decade.
 Based on this style of analysis, The Berkeley Dwarf Taxonomy [@dwarfmine_2006] was conceived to present the motifs commonplace in HPC.
-Initially performed by the Asanovic et. al. [@asanovic2006landscape], the Dwarf Taxonomy outlines that many applications in scientific computing share parallel patterns of communication and computation.
+Initially performed by Asanovic et. al. [@asanovic2006landscape], the Dwarf Taxonomy claims that many applications in parallel computing share patterns of communication and computation.
 Applications with similar patterns are defined as being represented by a single Dwarf.
 Dwarfs are removed from specific implementations and optimisations.
 There are 13 Dwarfs in total.
-
-During the Asanovic et. al. [@asanovic2006landscape] paper, a summary of the diverse set of application benchmarks is presented and whilst it is believed that more Dwarfs may be added to this list in the future all currently encountered scientific codes can be classified as belonging to one or more of these Dwarfs.
+During the Asanovic et. al. [@asanovic2006landscape] paper, a summary of the diversity of applications is presented, and whilst it is believed that more Dwarfs may be added to this list in the future, all currently encountered scientific codes can be classified as belonging to one or more of these Dwarfs.
 For each of the 13 Dwarfs the authors indicate the performance limit -- in other words, whether the dwarf is compute bound, memory latency limited or memory bandwidth limited.
 The Dwarfs and their limiting factors are presented in Table \ref{tbl:dwarf-taxonomy}.
 Note, the **?** symbol indicates the unknown performance limit at the time of publication.
 
 
-Table: Dwarfs and their limits. \label{tbl:dwarf-taxonomy}
+Table: The Berkeley Dwarfs and their limiting factors. \label{tbl:dwarf-taxonomy}
 
 +-----------------------------------+-------------------------------+
 |Dwarf                              |Performance Limit              |
