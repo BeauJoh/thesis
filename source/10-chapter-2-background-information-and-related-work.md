@@ -11,7 +11,7 @@ Finally, this section culminates in a discussion of benchmark suites, applicatio
 ## The Dwarf Taxonomy
 
 Phil Colella [@colelladefining] identified seven motifs of numerical methods which he thought would be important for the next decade.
-Based on this style of analysis, The Berkeley Dwarf Taxonomy was conceived to present the motifs commonplace in HPC.
+Based on this style of analysis, The Berkeley Dwarf Taxonomy [@dwarfmine_2006] was conceived to present the motifs commonplace in HPC.
 Initially performed by the Asanovic et. al. [@asanovic2006landscape], the Dwarf Taxonomy outlines that many applications in scientific computing share parallel patterns of communication and computation.
 Applications with similar patterns are defined as being represented by a single Dwarf.
 Dwarfs are removed from specific implementations and optimisations.
