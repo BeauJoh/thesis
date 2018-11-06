@@ -70,7 +70,7 @@ for (y in unique(top500$publication.year)){
     z <- rbind(z,data.frame(year=y,metric="total_accelerators_in_the_top_500",value=nrow(subset(top500,Accelerator.Co.Processor != 'None'& publication.year==y))))
 }
 
-p <- ggplot(z,aes(x=year,y=value)) + geom_line() + labs(title="Accelerator use in the Top500",x="publication year",y="number of nodes with accelerators")
+p <- ggplot(z,aes(x=year,y=value)) + geom_line() + labs(title="Accelerator use in the Top500",x="publication year",y="number of nodes with accelerators") + expand_limits(y = 0)
 pdf("top500_number_of_nodes_with_accelerators.pdf",width=11.7,height=8.3)
 print(p)
 dev.off()
@@ -113,8 +113,8 @@ top500_accelerated$ratio[!is.finite(top500_accelerated$ratio)] <- 0
 #which.max(top500_accelerated$ratio)
 top500_accelerated = top500_accelerated[-c(283),]
 
-p <- ggplot(top500_accelerated,aes(x=publication.year,y=ratio,group=publication.year)) + geom_boxplot() +
-    labs(x="publication year",y="Ratio of (Accelerator Cores / Total Cores) to examine supercomputer reliance on accelerators")#title="Accelerator use in the Top500",
+p <- ggplot(top500_accelerated,aes(x=publication.year,y=ratio,group=publication.year)) + geom_boxplot() + expand_limits(y = 0) + 
+    labs(x="publication year",y="Proportion of (Accelerator Cores / Total Cores) to examine supercomputer reliance on accelerators")#title="Accelerator use in the Top500",
 
 pdf("top500_ratio_of_cpu_vs_accelerator_cores.pdf",width=11.7,height=8.3)
 print(p)
@@ -127,13 +127,13 @@ for (y in unique(top500$publication.year)){
     z <- rbind(z,data.frame(year=y,metric="total_accelerators_in_the_top_500",value=nrow(q)))
 }
 top500_accelerator_use <- z
-p <- ggplot(top500_accelerator_use,aes(x=year,y=value)) + geom_line() + labs(x="publication year",y="# of supercomputers using accelerators")#title="Accelerator use in the Top500",
+p <- ggplot(top500_accelerator_use,aes(x=year,y=value)) + geom_line() + expand_limits(y = 0) + labs(x="publication year",y="# of supercomputers using accelerators")#title="Accelerator use in the Top500",
 pdf("top500_number_of_supercomputers_with_accelerators.pdf",width=11.7,height=8.3)
 print(p)
 dev.off()
 
 # NOTE: % of supercomputers with accelerators
-p <- ggplot(top500_accelerator_use,aes(x=year,y=(value/500)*100)) + geom_line() + labs(x="publication year",y="(%) of supercomputers using accelerators")#title="Accelerator use in the Top500",
+p <- ggplot(top500_accelerator_use,aes(x=year,y=(value/500)*100)) + geom_line() + expand_limits(y = 0) + labs(x="publication year",y="(%) of supercomputers using accelerators")#title="Accelerator use in the Top500",
 pdf("top500_percentage_of_supercomputers_with_accelerators.pdf",width=11.7,height=8.3)
 print(p)
 dev.off()
@@ -145,7 +145,7 @@ for (y in unique(top500$publication.year)){
 }
 top10_accelerator_use <- z
 
-p <- ggplot(top10_accelerator_use,aes(x=year,y=(value/10)*100)) + geom_line() + labs(x="publication year",y="(%) of supercomputers in the using accelerators")#title="Accelerator use in the Top10 of the Top500",
+p <- ggplot(top10_accelerator_use,aes(x=year,y=(value/10)*100)) + geom_line() + expand_limits(y = 0) + labs(x="publication year",y="(%) of supercomputers in the using accelerators")#title="Accelerator use in the Top10 of the Top500",
 pdf("top10_percentage_of_supercomputers_with_accelerators.pdf",width=11.7,height=8.3)
 print(p)
 dev.off()

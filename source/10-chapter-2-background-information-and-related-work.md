@@ -63,29 +63,34 @@ Having familiarity with the division of applications and tasks commonly performe
 
 Accelerators, in this setting, refer to any form of specialised hardware which may accelerate a given application code.
 Fortunately, from The Dwarf Taxonomy previously presented it is envisaged that all applications represented by a dwarf are are better suited to specific types of accelerator.
-Accelerators commonly include CPU, GPU, FPGA, DSP, ASIC and MIC devices.
+Accelerators commonly include GPU, FPGA, DSP, ASIC, MIC and CPU devices.
 
 Central Processing Units (CPU) have additional circuitry for branch control logic, and generally operate at a high frequency, ensuring this architecture is highly suited to sequential tasks or workloads with many divergent logical comparisons -- corresponding to the finite-state machine, combinational logic, dynamic programming and backtrack branch and bound dwarfs of the Berkeley Dwarf Taxonomy.
 
-Graphics Processing Units (GPU) as the name would suggest, accelerate manipulating computer graphics and image processing and is achieved by having circuit designs to apply the same alterations to many portions of memory at once.
+Graphics Processing Units (GPU) as the name would suggest, accelerate manipulating computer graphics and image processing and is achieved by having circuit designs to apply the same alterations to many values at once.
 This highly parallel structure makes them suitable for applications which involve processing large blocks of data.
 
 Many Integrated Core (MIC) architectures are an Intel Corporation specific accelerator.
 It is similar to a GPU, by having many low frequency in-order cores sharing the same bus however the primary difference being each core is based on conventional CPU x86 architectures.
 
 Field-Programmable Gate Arrays (FPGA) are accelerators which allows the physical hardware to be reconfigured for any specific task.
-They are comprised of a high number of logic-gates organised into logic-blocks with fast I/O rates and bi-directional communication between them.
-Despite the diversity of these accelerators, indeed they seem to be suited to the characteristics of many dwarfs, the compilation or configuring the hardware for an application takes many orders of magnitude longer than any of the other examined accelerator architectures.
+They are composed of a high number of logic-gates organised into logic-blocks with fast I/O rates and bi-directional communication between them.
+FPGAs are suitable for workloads where performing simple operations on very large amounts of data with a fast I/O transfer.
+Specifically, they are well suited to accelerating applications from the combinational logic dwarf, which exploit bit-level parallelism to achieve high throughput.
+An example is computing checksums which is commonly required for network processing and ensuring data archive integrity.
+The configurablity of these devices may make them well suited to the characteristics of many dwarfs, however, the compilation or configuring the hardware for an application takes many orders of magnitude longer than any of the other examined accelerator architectures.
+Given the increasing need for high throughput combinational logic FPGA devices will be included in future HPC systems.
 
 Application-Specific Integrated Circuit (ASIC) is an integrated circuit designed for a specific task.
 In this regard, they are akin to FPGAs without the ability to be reconfigured.
-They have been actively used to accelerate the hashing workloads from the Combinational Logic dwarf for bitcoin mining tasks.
+They have been actively used to accelerate the hashing workloads from the combinational logic dwarf for bitcoin mining tasks.
+Google's Tensor Processing Units is another example of an ASIC -- where they perform convolutions for Machine Learning applications, on matrices encapsulated by the dense and sparse linear algebra dwarfs [@gallopoulos2016parallelism], and support the TensorFlow [@abadi2016tensorflow] framework.
 
 Digital Signal Processors (DSP) have their origins in audio processing -- specifically in telephone exchanges and more recently in mobile phones -- where streams of data are constantly arriving and an identical task is needed to be applied.
 Audio compression is one example.
 They operate on a separate clock and have circular memory buffers which allow a host device -- using shared memory -- to provide and remove data for processing without ever interrupting the DSP.
 
-Given the variation between accelerators, they are becoming increasingly used in High-performance computing (HPC) -- where heterogeneity is increased by using a greater number of accelerators within a node.
+HPC systems are making increasing use of varied accelerator devices.
 A major motivation for this is to reduce energy use; indeed, without significant improvements in energy efficiency, the cost of exascale computing will be prohibitive.
 This is best shown in a survey of accelerator usage and energy consumption in the worlds leading supercomputers.
 The complete results from the TOP500 and Green500 lists [@feldman_2017] were examined, over consecutive years from 2013 to 2018.
@@ -98,7 +103,7 @@ Each dataset was taken from the June editions of the yearly listings.
     \label{fig:top500-percentage-of-supercomputers-using-accelerators}
 \end{figure*}
 
-Figure~\ref{top500-percentage-of-supercomputers-using-accelerators} shows steady increase in the use of accelerators in supercomputers.
+Figure \ref{fig:top500-percentage-of-supercomputers-using-accelerators} shows steady increase in the use of accelerators in supercomputers.
 In 2013 11\% of systems in the TOP500 used accelerators, this increased by roughly 2\% per year.
 As of 2018 22\% of the TOP500 use accelerators.
 
@@ -109,7 +114,7 @@ As of 2018 22\% of the TOP500 use accelerators.
     \label{fig:top10-percentage-of-supercomputers-using-accelerators}
 \end{figure*}
 
-Similarly, the results presented in Figure~\ref{top10-percentage-of-supercomputers-using-accelerators} examines the prevalence of accelerator usage in the TOP500 lists, but confined solely to the top 10 most powerful supercomputers of each year.
+Similarly, the results presented in Figure \ref{fig:top10-percentage-of-supercomputers-using-accelerators} examines the prevalence of accelerator usage in the TOP500 lists, but confined solely to the top 10 most powerful supercomputers of each year.
 The finer resolution presented in this figure shows that the most recently updated/installed systems have a much higher reliance on accelerators in order to place amongst these top supercomputers.
 By 2013 40\% of these systems used accelerators to secure a spot in the top 10 of the TOP500, this flat-lined till to 2015.
 In 2016 and 2017 the use of accelerators in the top 10 dropped to 30\%; this corresponds to the introduction of the Sunway TaihuLight system -- which buck the trend since they are composed of many conventional cores and follow a classical, non-accelerator, approach.
@@ -123,7 +128,7 @@ The percentage of cores in each system that is made up of accelerator / co-proce
 \begin{figure*}[t]
     \centering
     \includegraphics[width=\textwidth,keepaspectratio]{analysis/top500_ratio_of_cpu_vs_accelerator_cores.pdf}
-    \caption{The percentage of Accelerator Cores vs Total Cores available in each supercomputer to examine the reliance on accelerators.}
+    \caption{Accelerator cores as a proportion of total cores in the top500 supercomputers.}
     \label{top500-ratio-of-cpu-vs-accelerator-cores}
 \end{figure*}
 
