@@ -64,8 +64,16 @@ Having familiarity with the division of applications and tasks commonly performe
 Accelerators, in this setting, refer to any form of specialised hardware which may accelerate a given application code.
 Fortunately, from The Dwarf Taxonomy previously presented it is envisaged that all applications represented by a dwarf are are better suited to specific types of accelerator.
 Accelerators commonly include GPU, FPGA, DSP, ASIC, MIC and CPU devices.
+We define accelerators to include all compute devices, including CPUs, since their architecture is well suited to accelerate the computation of specific dwarfs.
 
 Central Processing Units (CPU) have additional circuitry for branch control logic, and generally operate at a high frequency, ensuring this architecture is highly suited to sequential tasks or workloads with many divergent logical comparisons -- corresponding to the finite-state machine, combinational logic, dynamic programming and backtrack branch and bound dwarfs of the Berkeley Dwarf Taxonomy.
+Additionally, CPUs are increasingly configured as two separate CPUs but provided on the same System-on-a-Chip (SoC) and strengthens the argument of defining accelerators to include CPUs.
+Comprised of two separate micro-architectures, a high-performance CPU -- faster base clock speed with additional hardware for branching -- to support the irregular control and access behaviour of typical workloads; and a smaller CPU -- commonly with a lower base-clock frequency but with many more cores and support for longer vector instructions -- for the highly parallel workloads/tasks common in scientific computing.
+Examples of treating CPUs as accelerators is demonstrated by the SW26010 and ARM big.LITTLE type processors.
+The SW26010 CPU as seen in the Sunway TaihuLight supercomputer contains a high-performance Management Processing Element (MPE) core and a low-powered Computer Processing Element (CPE) -- composed of an 8x8 mesh of cores, supporting only user mode, a small 16 KB L1 instruction cache and 64 KB scratch memory.
+Both MPE and CPE are both 64-bit Reduced Instruction-Set Computers (RISC) and support 256-bit vector instructions, however, this configuration shows the intent of the architecture, that the smaller CPE need be effectively used to achieve good performance of this supercomputer [@].
+This effectiveness 
+and ARMs big.LITTLE [@].
 
 Graphics Processing Units (GPU) as the name would suggest, accelerate manipulating computer graphics and image processing and is achieved by having circuit designs to apply the same alterations to many values at once.
 This highly parallel structure makes them suitable for applications which involve processing large blocks of data.
