@@ -69,11 +69,16 @@ We define accelerators to include all compute devices, including CPUs, since the
 Central Processing Units (CPU) have additional circuitry for branch control logic, and generally operate at a high frequency, ensuring this architecture is highly suited to sequential tasks or workloads with many divergent logical comparisons -- corresponding to the finite-state machine, combinational logic, dynamic programming and backtrack branch and bound dwarfs of the Berkeley Dwarf Taxonomy.
 Additionally, CPUs are increasingly configured as two separate CPUs but provided on the same System-on-a-Chip (SoC) and strengthens the argument of defining accelerators to include CPUs.
 Comprised of two separate micro-architectures, a high-performance CPU -- faster base clock speed with additional hardware for branching -- to support the irregular control and access behaviour of typical workloads; and a smaller CPU -- commonly with a lower base-clock frequency but with many more cores and support for longer vector instructions -- for the highly parallel workloads/tasks common in scientific computing.
-Examples of treating CPUs as accelerators is demonstrated by the SW26010 and ARM big.LITTLE type processors.
-The SW26010 CPU as seen in the Sunway TaihuLight supercomputer contains a high-performance Management Processing Element (MPE) core and a low-powered Computer Processing Element (CPE) -- composed of an 8x8 mesh of cores, supporting only user mode, a small 16 KB L1 instruction cache and 64 KB scratch memory.
-Both MPE and CPE are both 64-bit Reduced Instruction-Set Computers (RISC) and support 256-bit vector instructions, however, this configuration shows the intent of the architecture, that the smaller CPE need be effectively used to achieve good performance of this supercomputer [@].
-This effectiveness 
-and ARMs big.LITTLE [@].
+
+The SW26010 and ARM big.LITTLE type processors are modern examples of how CPUs are treated as accelerators to achieve performance on modern supercomputers.
+The SW26010 CPU deployed in the Sunway TaihuLight supercomputer, contains a high-performance core known as a Management Processing Element (MPE), and a low-powered processor, the Computer Processing Element (CPE).
+The CPE is composed of an 8x8 mesh of cores, supports only user mode, and sports a small 16 KB L1 instruction cache and 64 KB scratch memory.
+Both MPE and CPE are both 64-bit Reduced Instruction-Set Computers (RISC) and support 256-bit vector instructions.
+However, this configuration shows the intent of the architecture, that the smaller CPE need be used effectively to achieve good performance [@dongarra2016report].
+ARM processors with big.LITTLE and dynamIQ configurations have been proposed to meet the power needs of exascale supercomputers [@padoin2014performance] [@aroca2012towards] [@rajovic2013low] [@keipert2015energy].
+big.LITTLE is an heterogeneous configuration of CPU cores on the same die and memory regions.
+The big cores have higher clock frequencies and are generally more powerful  than the LITTLE cores, which creates a multi-core processor that suites a dynamic workload more than clock scaling.
+Both the SW26010 and big.LITTLE devices, have side cores which need to be carefully handled to achieve high FLOPs, since they accelerate the workloads they are thus defined as accelerators.
 
 Graphics Processing Units (GPU) as the name would suggest, accelerate manipulating computer graphics and image processing and is achieved by having circuit designs to apply the same alterations to many values at once.
 This highly parallel structure makes them suitable for applications which involve processing large blocks of data.
@@ -92,7 +97,8 @@ Given the increasing need for high throughput combinational logic FPGA devices w
 Application-Specific Integrated Circuit (ASIC) is an integrated circuit designed for a specific task.
 In this regard, they are akin to FPGAs without the ability to be reconfigured.
 They have been actively used to accelerate the hashing workloads from the combinational logic dwarf for bitcoin mining tasks.
-Google's Tensor Processing Units is another example of an ASIC -- where they perform convolutions for Machine Learning applications, on matrices encapsulated by the dense and sparse linear algebra dwarfs [@gallopoulos2016parallelism], and support the TensorFlow [@abadi2016tensorflow] framework.
+Google's Tensor Processing Units (TPU) are another example of ASICs, and support the TensorFlow [@abadi2016tensorflow] framework. 
+TPUs perform convolutions for Machine Learning applications, which largly requires matrix operations and are encapsulated by both the dense and sparse linear algebra dwarfs [@gallopoulos2016parallelism].
 
 Digital Signal Processors (DSP) have their origins in audio processing -- specifically in telephone exchanges and more recently in mobile phones -- where streams of data are constantly arriving and an identical task is needed to be applied.
 Audio compression is one example.
@@ -125,7 +131,8 @@ As of 2018 22\% of the TOP500 use accelerators.
 Similarly, the results presented in Figure \ref{fig:top10-percentage-of-supercomputers-using-accelerators} examines the prevalence of accelerator usage in the TOP500 lists, but confined solely to the top 10 most powerful supercomputers of each year.
 The finer resolution presented in this figure shows that the most recently updated/installed systems have a much higher reliance on accelerators in order to place amongst these top supercomputers.
 By 2013 40\% of these systems used accelerators to secure a spot in the top 10 of the TOP500, this flat-lined till to 2015.
-In 2016 and 2017 the use of accelerators in the top 10 dropped to 30\%; this corresponds to the introduction of the Sunway TaihuLight system -- which buck the trend since they are composed of many conventional cores and follow a classical, non-accelerator, approach.
+Note, from 2016 the Sunway TaihuLight system was introduced and falls in the top 10, however due to the relience on the CPE side-core to achieve the FLOPs for its rank, the data was adjusted to be listed as containing an accelerator [@dongarra2016report].
+\todo{update these numbers with sunway as an accelerator}
 As of 2018 the use of accelerators in the top 10 has jumped to 60\%.
 Since the percentages of the use of accelerators in the top 10 is much higher than general, in the remainder of the TOP500, we can conclude that the use of accelerators gives an edge to the ranking of these systems.
 Still, the general trend of increased use of accelerators throughout all of the TOP500 continues to increase and reinforces the importance of accelerators in this space.
