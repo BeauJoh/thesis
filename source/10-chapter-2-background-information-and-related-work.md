@@ -82,6 +82,12 @@ Both the SW26010 and big.LITTLE devices, have side cores which need to be carefu
 
 Graphics Processing Units (GPU) as the name would suggest, accelerate manipulating computer graphics and image processing and is achieved by having circuit designs to apply the same alterations to many values at once.
 This highly parallel structure makes them suitable for applications which involve processing large blocks of data.
+Many of the dwarfs of scientific computation are suited to GPUs for acceleration, these include, dense and sparse linear algebra, N-Body methods.
+These 
+There has been an active effort to migrate applications from less suited dwarfs, such as, spectral methods, structured grids, graph traversal for GPU acceleration.
+Algorithmic efforts such as reordering of operations and the padding of shared memory have been used with various success to avoid bank-conflicts, non-coalesced memory accesses and use of private and shared memory critical to GPU performance on these dwarfs.
+
+\todo[inline]{example of current supercomputers using gpus for acceleration}
 
 Many Integrated Core (MIC) architectures are an Intel Corporation specific accelerator.
 It is similar to a GPU, by having many low frequency in-order cores sharing the same bus however the primary difference being each core is based on conventional CPU x86 architectures.
