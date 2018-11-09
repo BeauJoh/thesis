@@ -82,23 +82,28 @@ Both the SW26010 and big.LITTLE devices, have side cores which need to be carefu
 
 Graphics Processing Units (GPU) as the name would suggest, accelerate manipulating computer graphics and image processing and is achieved by having circuit designs to apply the same alterations to many values at once.
 This highly parallel structure makes them suitable for applications which involve processing large blocks of data.
-Many of the dwarfs of scientific computation are suited to GPUs for acceleration, these include, dense and sparse linear algebra, N-Body methods.
-These 
-There has been an active effort to migrate applications from less suited dwarfs, such as, spectral methods, structured grids, graph traversal for GPU acceleration.
-Algorithmic efforts such as reordering of operations and the padding of shared memory have been used with various success to avoid bank-conflicts, non-coalesced memory accesses and use of private and shared memory critical to GPU performance on these dwarfs.
-
-\todo[inline]{example of current supercomputers using gpus for acceleration}
+Many of the dwarfs of scientific computation are directly suited to GPUs for acceleration, including dense [@volkov2008benchmarking][@tomov2010dense] and sparse linear algebra and N-Body methods.
+There has been an active effort to migrate applications from less suited dwarfs, such as, spectral methods [@komatitsch2010high], structured grids [@nicolescu2015structured] and graph traversal [@merrill2012scalable] for GPU acceleration.
+Efforts are primarily algorithmic, such as reordering of operations and the padding of shared memory, and have been used with various success on GPU architectures [@springer2011berkeley].
+Avoiding bank-conflicts, non-coalesced memory accesses and an increase in the use of private and shared memory are critical to performance of these dwarfs on GPUs.
+They are the most common type of accelerator in supercomputer systems.
+The recent adoption of the NVIDIA Volta GV100 GPU as the primary accelerator into the Summit and Sierra supercomputers [@markidis2018nvidia] is attributed to their performance [@tomov2010towards] and energy efficiency [@abdelfattah2018analysis] on workloads fundamental to scientific computing.
 
 Many Integrated Core (MIC) architectures are an Intel Corporation specific accelerator.
 It is similar to a GPU, by having many low frequency in-order cores sharing the same bus however the primary difference being each core is based on conventional CPU x86 architectures.
+The Xeon Phi is the primary accelerator in the Trinity [@rajantrinity] and Cori [@antypas2014cori] supercomputer systems.
 
 Field-Programmable Gate Arrays (FPGA) are accelerators which allows the physical hardware to be reconfigured for any specific task.
 They are composed of a high number of logic-gates organised into logic-blocks with fast I/O rates and bi-directional communication between them.
-FPGAs are suitable for workloads where performing simple operations on very large amounts of data with a fast I/O transfer.
+FPGAs are suitable for workloads which require simple operations on very large amounts of data with a fast I/O transfer.
 Specifically, they are well suited to accelerating applications from the combinational logic dwarf, which exploit bit-level parallelism to achieve high throughput.
-An example is computing checksums which is commonly required for network processing and ensuring data archive integrity.
+An example of the combinational logic dwarf is in the computing of checksums which is commonly required for network processing and ensuring data archive integrity.
 The configurablity of these devices may make them well suited to the characteristics of many dwarfs, however, the compilation or configuring the hardware for an application takes many orders of magnitude longer than any of the other examined accelerator architectures.
-Given the increasing need for high throughput combinational logic FPGA devices will be included in future HPC systems.
+Akram et. al.[@akram2018fpga] present a prototype FPGA supercomputer comprised of 5 compute nodes, each with an ARM CPU and Xilinx 7 FPGA.
+The benchmark application was over on a Finite Impulse Response Filter -- an application typical to the Spectral Methods Dwarf -- and presents 8.5$\times$ performance over direct computation on the ARM CPU alone.
+Unfortunately, energy efficiency or a comparison between GPU accelerators is not presented.
+Fujita et. al. [@fujita2018accelerating] present a comparison between a P100 GPU and BittWare A10PL4 FPGA over a Authentic Radiation Transfer scientific application and show that the performance is comparable, however an energy efficiency comparison between these two accelerators is not presented.
+Given the increasing need for high throughput combinational logic and other dwarfs, FPGA devices are likely to be included in future HPC systems.
 
 Application-Specific Integrated Circuit (ASIC) is an integrated circuit designed for a specific task.
 In this regard, they are akin to FPGAs without the ability to be reconfigured.
