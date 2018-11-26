@@ -284,8 +284,8 @@ Comparing between problem sizes (moving across the page), the large problem size
 
 The visual representation provided from the Kiviat diagrams allows the characteristics of OpenCL kernels to be readily assessed and compared.
 
-Finally, we examine the linear memory access entropy (LMAE) presented in the Kiviat diagrams in greater detail.
-[Figure @fig:kiviat2] B) presents a sample of the linear memory access entropy, in this instance of the LUD Perimeter kernel collected over the tiny problem size.
+Finally, we examine the local memory access entropy (LMAE) presented in the Kiviat diagrams in greater detail.
+[Figure @fig:kiviat2] B) presents a sample of the local memory access entropy, in this instance of the LUD Perimeter kernel collected over the tiny problem size.
 The kernel is launched 4 separate times during a run of the tiny problem size, this is application specific and in this instance, each successive invocation operates on a smaller data set per iteration.
 Note there is a steady decrease in starting entropy, and each successive invocation of the LU Decomposition Perimeter kernel the lowers the starting entropy.
 However, the descent in entropy -- which corresponds to more bits being skipped, or bigger the strides or the more localized the memory access -- shows that the memory access patterns are the same regardless of actual problem size.

@@ -8,7 +8,8 @@ This is the Latex-heavy title page.
         \vspace*{2.5cm}
 
         \huge
-        Automatic program analysis and scheduling of scientific workloads for heterogeneous supercomputers
+        Characterizing and Predicting Scientific Workloads for heterogeneous supercomputers
+        %Automatic program analysis and scheduling of scientific workloads for heterogeneous supercomputers
 
         \vspace{1.5cm}
 

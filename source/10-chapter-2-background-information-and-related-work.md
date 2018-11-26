@@ -74,7 +74,8 @@ The SW26010 and ARM big.LITTLE type processors are modern examples of how CPUs a
 The SW26010 CPU deployed in the Sunway TaihuLight supercomputer, contains a high-performance core known as a Management Processing Element (MPE), and a low-powered processor, the Computer Processing Element (CPE).
 The CPE is composed of an 8x8 mesh of cores, supports only user mode, and sports a small 16 KB L1 instruction cache and 64 KB scratch memory.
 Both MPE and CPE are both 64-bit Reduced Instruction-Set Computers (RISC) and support 256-bit vector instructions.
-However, this configuration shows the intent of the architecture, that the smaller CPE need be used effectively to achieve good performance [@dongarra2016report].
+This configuration shows the intent of the architecture, that the smaller CPE need be used effectively to achieve good performance [@dongarra2016report], in other words, the host or primary core contributes only a small part of the maximum theoretical FLOPs on modern heterogeneous supercomputers.
+.
 ARM processors with big.LITTLE and dynamIQ configurations have been proposed to meet the power needs of exascale supercomputers [@padoin2014performance] [@aroca2012towards] [@rajovic2013low] [@keipert2015energy].
 big.LITTLE is an heterogeneous configuration of CPU cores on the same die and memory regions.
 The big cores have higher clock frequencies and are generally more powerful  than the LITTLE cores, which creates a multi-core processor that suites a dynamic workload more than clock scaling.
@@ -90,20 +91,25 @@ They are the most common type of accelerator in supercomputer systems.
 The recent adoption of the NVIDIA Volta GV100 GPU as the primary accelerator into the Summit and Sierra supercomputers [@markidis2018nvidia] is attributed to their performance [@tomov2010towards] and energy efficiency [@abdelfattah2018analysis] on workloads fundamental to scientific computing.
 
 Many Integrated Core (MIC) architectures are an Intel Corporation specific accelerator.
+Xeon Phi formerly known as Knights Landing (KNL) is the last series of the MIC accelerators, and was discontinued in July 2018.
 It is similar to a GPU, by having many low frequency in-order cores sharing the same bus however the primary difference being each core is based on conventional CPU x86 architectures.
-The Xeon Phi is the primary accelerator in the Trinity [@rajantrinity] and Cori [@antypas2014cori] supercomputer systems.
+There are 72 cores with a layout based on a 2D mesh topology -- comprised of 38 tiles, each tile features two CPU cores, and each core contains two Vector Processing Units (VPU). [@sodani2016knights].
+A 2D cache-coherent interconnect between tiles is included provide high-bandwidth pathways to match the memory access patterns on the core and mesh layout -- cores on the same tile have a shared 1 MB L2 cache.
+Each core supports a 512-bit vector instruction to utilize a large amount of SIMD parallelism.
+Dwarfs such as dense and sparse linear algebra are high-intensity and throughput-oriented workloads suited to the Xeon Phi accelerator [@dongarra2015hpc].
+The Xeon Phi is the primary accelerator in the Trinity [@rajantrinity] and Cori [@antypas2014cori] supercomputer systems -- currently in the top 10 of the Top500.
 
 Field-Programmable Gate Arrays (FPGA) are accelerators which allows the physical hardware to be reconfigured for any specific task.
 They are composed of a high number of logic-gates organised into logic-blocks with fast I/O rates and bi-directional communication between them.
 FPGAs are suitable for workloads which require simple operations on very large amounts of data with a fast I/O transfer.
-Specifically, they are well suited to accelerating applications from the combinational logic dwarf, which exploit bit-level parallelism to achieve high throughput.
+Specifically, they are well suited to accelerating applications from spectral methods dwarf, specifically stream/filter processing on temporal data, and the combinational logic dwarf, which exploit bit-level parallelism to achieve high throughput.
 An example of the combinational logic dwarf is in the computing of checksums which is commonly required for network processing and ensuring data archive integrity.
 The configurablity of these devices may make them well suited to the characteristics of many dwarfs, however, the compilation or configuring the hardware for an application takes many orders of magnitude longer than any of the other examined accelerator architectures.
 Akram et. al.[@akram2018fpga] present a prototype FPGA supercomputer comprised of 5 compute nodes, each with an ARM CPU and Xilinx 7 FPGA.
 The benchmark application was over on a Finite Impulse Response Filter -- an application typical to the Spectral Methods Dwarf -- and presents 8.5$\times$ performance over direct computation on the ARM CPU alone.
 Unfortunately, energy efficiency or a comparison between GPU accelerators is not presented.
 Fujita et. al. [@fujita2018accelerating] present a comparison between a P100 GPU and BittWare A10PL4 FPGA over a Authentic Radiation Transfer scientific application and show that the performance is comparable, however an energy efficiency comparison between these two accelerators is not presented.
-Given the increasing need for high throughput combinational logic and other dwarfs, FPGA devices are likely to be included in future HPC systems.
+Given the increasing need for high-throughput devices from applications in combinational logic and other dwarfs, FPGA devices are likely to be included in future HPC systems.
 
 Application-Specific Integrated Circuit (ASIC) is an integrated circuit designed for a specific task.
 In this regard, they are akin to FPGAs without the ability to be reconfigured.
@@ -112,15 +118,24 @@ Google's Tensor Processing Units (TPU) are another example of ASICs, and support
 TPUs perform convolutions for Machine Learning applications, which largly requires matrix operations and are encapsulated by both the dense and sparse linear algebra dwarfs [@gallopoulos2016parallelism].
 
 Digital Signal Processors (DSP) have their origins in audio processing -- specifically in telephone exchanges and more recently in mobile phones -- where streams of data are constantly arriving and an identical task is needed to be applied.
-Audio compression is one example.
-They operate on a separate clock and have circular memory buffers which allow a host device -- using shared memory -- to provide and remove data for processing without ever interrupting the DSP.
+Audio compression and temporal filtering are examples of the Spectral Methods dwarf and are best suited to the DSP architecture.
+DSP cores operate on a separate clock to the host CPU and have circular memory buffers which allow a host device -- using shared memory -- to provide and remove data for processing without ever interrupting the DSP.
+Furthermore, Mitra et al. [@mitra2018development] evaluate prototype a nCore Brown-Dwarf system where each node contains an ARM Cortex-A15 host CPU, a single Texas Instruments Keystone II DSP and two Keystone I DSPs.
+They compare the performance and energy-efficiency of Level-3 BLAS matrix multiplications and a real-world scientific code for biostructure based drug design against comparisons on conventional x86 based HPC systems with attached accelerators.
+They show a Brown-Dwarf node is competitive with contemporary systems for memory-bound computations and show the C66x multi-core DSP is capable of running floating-point intensive HPC application codes.
 
-HPC systems are making increasing use of varied accelerator devices.
-A major motivation for this is to reduce energy use; indeed, without significant improvements in energy efficiency, the cost of exascale computing will be prohibitive.
-This is best shown in a survey of accelerator usage and energy consumption in the worlds leading supercomputers.
+Research around examining the suitability of ARM CPUs in conjunction with unconventional accelerators such as DSPs is highly active  [@maqbool2015evaluating][@rajovic2014tibidabo1][@jarus2013performance].
+Isambard[@feldman_2017_isambard] and Astra[@lacy2018building] systems use the Cavium ThunderX2 CPU accelerator, where each ThunderX2 accelerator consists of 32 high-end ARM cores operating at 2.1 GHz [@mcintoshcomparative].
+Separately, Fujitsu's Post-K [@morgan_2016_postk] .
+However, currently, only 25 of the Top500 systems are based on ARM technologies.
+
+In general, supercomputer systems are increasing using varied accelerator devices.
+A major motivation for this is to reduce energy use; indeed, without significant improvements in energy efficiency, the cost of exascale computing will be prohibitive [@villa2014scaling].
+The diversity of accelerators in this space is best shown in a survey of accelerator usage and energy consumption in the worlds leading supercomputers.
 The complete results from the TOP500 and Green500 lists [@feldman_2017] were examined, over consecutive years from 2013 to 2018.
 Each dataset was taken from the June editions of the yearly listings.
 
+\todo[inline]{add energy usage to plot -- maybe superimposed over the percentage of top500 using accelerators}
 \begin{figure*}[t]
     \centering
     \includegraphics[width=\textwidth,keepaspectratio]{analysis/top500_percentage_of_supercomputers_with_accelerators.pdf}
@@ -157,8 +172,6 @@ The percentage of cores in each system that is made up of accelerator / co-proce
     \caption{Accelerator cores as a proportion of total cores in the top500 supercomputers.}
     \label{top500-ratio-of-cpu-vs-accelerator-cores}
 \end{figure*}
-
-
 
 \todo[inline]{reliance on CPU vs accelerator cores}
 
@@ -207,6 +220,8 @@ Incorrectly setting the number of local work groups and therefore also the size 
 
 The OpenCL programming framework is well-suited to such heterogeneous computing environments, as a single OpenCL code may be executed on multiple different device types.
 When combined with autotuning, an OpenCL code may exhibit good performance across varied devices. [@spafford2010maestro, @chaimov2014toward, @nugteren2015cltune, @price2017analyzing]
+OpenCL has been used for DSP programming since 2012 [@li2012enabling].
+Furthermore, Mitra et al. [@mitra2018development] propose a hybrid programming environment that combines OpenMP, OpenCL and MPI to utilize a nCore Brown-Dwarf system where each node contains an ARM Cortex-A15 host CPU, a single Texas Instruments Keystone II DSP and two Keystone I DSPs.
 OpenCL codes can be written to be easily linked with auto-tuners -- such as allowing the local work group size being set from the command line or as a macro in the pre-processor, these are set during execution and during compilation respectively.
 
 Kernel compilation flags are an additional tuning argument which affects runtime performance of accelerator specific OpenCL kernel codes.
