@@ -545,26 +545,34 @@ This model depends on the collection of GPU performance counters over a range of
 The model predicts application behavior with a 91% accuracy and when coupled with a larger database of collections can be used to predict their likely performance bottlenecks of unknown applications based on similarities with those previously collected.
 A caveat of this approach is that collecting performance counters as a basis for a model is microarchitecture specific -- where counters collected from a system can range wildly between generation of processor and is not portable between vendors.
 
-[@lee2017performance] 
+A GPU power-estimation model was developed by Wu et al. [@wu2015gpgpu] which also uses hardware performance counter values to train a machine learning model.
+Values for a new application are provided to a neural network at runtime to predict a scaling curve and corresponding estimates around performance and power of the application under different GPU configurations.
+OpenCL kernels are examined over different AMD GPUs throughout this investigation and the major factors contributing to the scaling curve was determined to be performance counters collected over varying core frequencies, memory bandwidths, and compute unit (CU) counts.
+The models performance was accurate to within 15% compared to real hardware and power estimates to within 10%.
+These models are based on AMD vendor specific counters which limits the scope of this work, however, the hardware configurations should be considered in estimating accelerator performance and power usage.
 
-<!--
-can't find a thesis for this -- also results aren't very impressive http://inf-server.inf.uth.gr/~mispyrou/files/Spyrou_Michalis_presentation.pdf
--->
-
-Shetty [@shetty2017x] proposes the X-MAP tool to achieve performance prediction when porting applications to accelerators.
+The X-MAP tool is proposed by Shetty [@shetty2017x] to achieve performance prediction when porting applications to accelerators.
 A Machine Learning based inference model is presented to predict the performance of a application on accelerator and programming language -- either CUDA or OpenCL.
 Hardware counters are collected and are used as inputs into a Random Forest Classification Model.
 Most of the efforts of this tool is on locating bottlenecks in applications and committing the developer to target a specific implementation and device vendor.
 However, this misses the point of having heterogeneous systems and equally portable OpenCL codes, for instance, if the optimal device is unavailable being committed to just using one device means that work is unable to proceed until the resource is free -- and would be undesirable when scheduling work to devices over many nodes.
 
-http://users.ece.utexas.edu/~derek/Papers/HPCA2015_GPUPowerModel.pdf
+<!--
+can't find a thesis for this -- also results aren't very impressive http://inf-server.inf.uth.gr/~mispyrou/files/Spyrou_Michalis_presentation.pdf
+-->
 
-https://dl.acm.org/citation.cfm?id=2812722
+\todo[inline]{finish these last 2 summaries}
+Che and Skadron [@che2014benchfriend]
 
-http://www.cs.virginia.edu/~skadron/Papers/benchfriend_author_version.pdf
-
-http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.298.3365&rep=rep1&type=pdf
+A GPU performance modeling framework is proposed by Boyer, Meng and Kumaran [@boyer2013improving] which predicts both kernel execution time and data transfer time of a CUDA kernels performance potential before it is optimized.
+This work shows that the inclusion of transfer time is significant when improving a predictive models accuracy for accelerators over a conventional slow interconnect.
 
 We propose an alternative model which allows accurate execution time predictions of OpenCL kernels on a wide range of architecturally-diverse accelerators.
 This methodology discussed in detail in Chapter 5 and uses features from AIWC -- from Chapter 4 -- to form a basis for a predictive model bound to run-times -- from Chapter 3.
+
+Lee and Wu [@lee2017performance] directly tackle the problem of scheduling OpenCL applications to the most suitable accelerator device.
+They propose HeteroPDP -- a scalable performance degradation predictor -- to dynamically balance the execution time slowdown when co-locating multiple applications in the same heterogeneous system.
+The device selection decision is based on individual kernel metrics such as the degree of parallelism and divergence in an application and by the amount of data movement overhead between the host system and the selected accelerator.
+They conclude that designing a scheduler which considers the effect of memory interference between processes provides improvements in the final scheduler.
+A major focus is on final schedulers and orchestrating these workloads -- we believe the accuracy of our predictive framework based on AIWC metrics is complimentary to this work and would only improve the accuracy of their scheduler, however this is left as future work.
 
