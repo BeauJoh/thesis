@@ -561,11 +561,11 @@ However, this misses the point of having heterogeneous systems and equally porta
 can't find a thesis for this -- also results aren't very impressive http://inf-server.inf.uth.gr/~mispyrou/files/Spyrou_Michalis_presentation.pdf
 -->
 
-\todo[inline]{finish these last 2 summaries}
-Che and Skadron [@che2014benchfriend]
-
-A GPU performance modeling framework is proposed by Boyer, Meng and Kumaran [@boyer2013improving] which predicts both kernel execution time and data transfer time of a CUDA kernels performance potential before it is optimized.
-This work shows that the inclusion of transfer time is significant when improving a predictive models accuracy for accelerators over a conventional slow interconnect.
+Che and Skadron [@che2014benchfriend] propose a set of first-order metrics that most influence GPU performance and scalability that are separate from those bound to CPUs.
+Hardware counters are used to collect and generate these metrics, which are then used in a performance prediction model.
+Similarly, a GPU performance modeling framework is proposed by Boyer, Meng and Kumaran [@boyer2013improving] which predicts both kernel execution time and data transfer time.
+The main motivation of this work is to examine a CUDA kernels potential, in terms of performance, before it is optimized.
+This work shows that the inclusion of transfer time is significant when improving a predictive models accuracy and is especially useful for predicting speed-up on accelerators located over slower interconnect, such as PCIe -- including the data transfer time in the model improved prediction error from 255% to 9%.
 
 We propose an alternative model which allows accurate execution time predictions of OpenCL kernels on a wide range of architecturally-diverse accelerators.
 This methodology discussed in detail in Chapter 5 and uses features from AIWC -- from Chapter 4 -- to form a basis for a predictive model bound to run-times -- from Chapter 3.
