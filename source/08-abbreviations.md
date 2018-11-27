@@ -10,6 +10,7 @@
 \textbf{ASIC} \= \textbf{A}pplication-\textbf{S}pecific \textbf{I}ntegrated \textbf{C}ircuit\\
 \textbf{MIC} \= \textbf{M}any \textbf{I}ntegrated \textbf{C}ore\\
 \textbf{KNL} \= \textbf{K}nights \textbf{L}anding\\
+\textbf{SMaC} \= \textbf{S}calable \textbf{M}any \textbf{C}ore\\
 \textbf{VPU} \= \textbf{V}ector \textbf{P}rocessing \textbf{U}nit\\
 \textbf{OpenCL} \= \textbf{O}pen \textbf{C}omputing \textbf{L}anguage\\
 \textbf{SoC} \= \textbf{S}ystem-\textbf{o}n-a-\textbf{C}hip\\
