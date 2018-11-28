@@ -354,7 +354,7 @@ As such the impact of increasing the clock frequency is having (and will continu
 
 ### Core count
 
-A good indication of a successful implementation of a parallel algorithm is by assessing performance scalability in response to core availability. [@johnston2017embedded][@baker2012scaling][@abraham2015gromacs]
+A good indication of a successful implementation of a parallel algorithm is by assessing performance scalability in response to core availability. [@johnston2017embedded][@johnston2017parallel][@baker2012scaling][@abraham2015gromacs]
 However, the trend of achieving good performance scaling by increasing the number of homogeneous cores on a system will cease, primarily, due to the power limitations of having arrived at the utilisation wall. [@venkatesh2010conservation][@esmaeilzadeh2011dark]
 
 Taylor [@taylor2012dark] surveys the transition of typical homogeneous cores to a potentially dark silicone.
@@ -599,5 +599,5 @@ Lee and Wu [@lee2017performance] directly tackle the problem of scheduling OpenC
 They propose HeteroPDP -- a scalable performance degradation predictor -- to dynamically balance the execution time slowdown when co-locating multiple applications in the same heterogeneous system.
 The device selection decision is based on individual kernel metrics such as the degree of parallelism and divergence in an application and by the amount of data movement overhead between the host system and the selected accelerator.
 They conclude that designing a scheduler which considers the effect of memory interference between processes provides improvements in the final scheduler.
-A major focus is on final schedulers and orchestrating these workloads -- we believe the accuracy of our predictive framework based on AIWC metrics is complimentary to this work and would only improve the accuracy of their scheduler, however this is left as future work.
+A major focus is on final schedulers and orchestrating these workloads -- we believe the accuracy of our predictive framework [@johnston2018opencl] based on AIWC metrics is complimentary to this work and would only improve the accuracy of their scheduler, however this is left as future work.
 
