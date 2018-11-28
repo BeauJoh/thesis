@@ -78,7 +78,7 @@ The model is capable of predicting execution times for specific devices based on
 ## Restatement of the problem
 
 The future of supercomputing comprises several heterogeneous devices at the node level.
-The POWER9 is featured in the latest Summit and forthcoming Sierra Supercomputers, and is configured such with two GPUs per CPU.
+The POWER9 is featured in the latest Summit and forthcoming Sierra supercomputers, and is configured such with two GPUs per CPU.
 High bandwidth, low latency interconnects such as the Cray XC50 *Aries*, Fujitsu Post-K *Tofu* and IBM POWER9 *Bluelink*, support tighter integration between compute devices on a node.
 This facilitates the usage of a mix of accelerators given the low penalty to move data between them.
 Evaluating the suitability of any given device on a node requires a comprehensive benchmark suite which is capable of efficiently executing on all devices in a hardware agnostic way.
@@ -116,5 +116,5 @@ Chapter 2 canvasses the existing literature and current techniques used to sched
 Chapter 3 discusses the extensions added to the OpenDwarfs Benchmarking Suite in EOD.
 Chapter 4 highlights the construction, design decisions made and usage of the AIWC tool.
 Chapter 5 develops the prediction model and examines the accuracy of the final predictions.
-Chapter 6 discusses conclusions of this thesis and the future work required for the predictive model to be incorporated into scheduling on future Supercomputing systems.
+Chapter 6 discusses conclusions of this thesis and the future work required for the predictive model to be incorporated into scheduling on future supercomputing systems.
 
