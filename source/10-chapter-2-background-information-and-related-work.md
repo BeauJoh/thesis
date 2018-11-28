@@ -136,18 +136,24 @@ The diversity of accelerators in this space is best shown in a survey of acceler
 The complete results from the TOP500 and Green500 lists [@feldman_2017] were examined, over consecutive years from 2013 to 2018.
 Each dataset was taken from the June editions of the yearly listings.
 
-\todo[inline]{add energy usage to plot -- maybe superimposed over the percentage of top500 using accelerators}
 \begin{figure*}[t]
     \centering
     \includegraphics[width=\textwidth,keepaspectratio]{analysis/top500_percentage_of_supercomputers_with_accelerators.pdf}
-    \caption{The percentage of accelerators in use in the Top500 supercomputers over time.}
+    \caption{The percentage of accelerators in use and the contributions of cores found on accelerators in the Top500 supercomputers over time.}
     \label{fig:top500-percentage-of-supercomputers-using-accelerators}
 \end{figure*}
 
-Figure \ref{fig:top500-percentage-of-supercomputers-using-accelerators} shows steady increase in the use of accelerators in supercomputers.
+Figure \ref{fig:top500-percentage-of-supercomputers-using-accelerators} shows steady increase in the use of accelerators in supercomputers depicted as the red line.
+This is presented as a percentage of the number of systems using accelerators in the TOP500 divided by 500 -- the total number of systems listed in the TOP500 every year.
 In 2013 11\% of systems in the TOP500 used accelerators, this increased by roughly 2\% per year.
 As of 2018 22\% of the TOP500 use accelerators.
+Note, from 2016 the Sunway TaihuLight system was introduced and is in the top 10, however due to the relience on the CPE side-core to achieve the FLOPs for its rank, the data was adjusted to be listed as containing an accelerator [@dongarra2016report].
+Also shown in Figure \ref{fig:top500-percentage-of-supercomputers-using-accelerators} is the average percentage of cores in the TOP500 every year dedicated to accelerators, presented as the blue line.
+This measure indicates how much of the TOP500 compute is dependent on the accelerator -- for systems that contain accelerators.
+Unsurprisingly, every year from 2013 to 2018, we see that a greater contribution of system resources -- cores -- are dedicated for accelerator devices and fewer resources for systems with accelerators are provided for the host -- conventional x86 CPU architectures.
+In 2013 76% of supercomputer cores were found on the accelerator, this increased on average by 1.5% per year to 85% of compute cores being accelerator based in 2018.
 
+<!--
 \begin{figure*}[t]
     \centering
     \includegraphics[width=\textwidth,keepaspectratio]{analysis/top10_percentage_of_supercomputers_with_accelerators.pdf}
@@ -158,12 +164,14 @@ As of 2018 22\% of the TOP500 use accelerators.
 Similarly, the results presented in Figure \ref{fig:top10-percentage-of-supercomputers-using-accelerators} examines the prevalence of accelerator usage in the TOP500 lists, but confined solely to the top 10 most powerful supercomputers of each year.
 The finer resolution presented in this figure shows that the most recently updated/installed systems have a much higher reliance on accelerators in order to place amongst these top supercomputers.
 By 2013 40\% of these systems used accelerators to secure a spot in the top 10 of the TOP500, this flat-lined till to 2015.
-Note, from 2016 the Sunway TaihuLight system was introduced and falls in the top 10, however due to the relience on the CPE side-core to achieve the FLOPs for its rank, the data was adjusted to be listed as containing an accelerator [@dongarra2016report].
-\todo{update these numbers with sunway as an accelerator}
-As of 2018 the use of accelerators in the top 10 has jumped to 60\%.
-Since the percentages of the use of accelerators in the top 10 is much higher than general, in the remainder of the TOP500, we can conclude that the use of accelerators gives an edge to the ranking of these systems.
-Still, the general trend of increased use of accelerators throughout all of the TOP500 continues to increase and reinforces the importance of accelerators in this space.
+-->
 
+A closer inspection of the top 10 of the TOP500 systems over the same time period shows a greater dependence on accelerators and a corresponding increase in heterogeneity.
+From 2013 to 2017 the use of accelerators in these systems was consistently at 40% however in 2018 it jumped to 70%.
+Since the percentages of the use of accelerators in the top 10 is much higher than general than in the rest of the TOP500, we can conclude that the use of accelerators gives an edge to the ranking of these systems.
+The general trend of increased use of accelerators throughout all of the TOP500 continues to increase and reinforces the importance of accelerators in this space.
+
+<!--
 To further investigate this conclusion a further analysis is presented, the emphasis if placed on the reliance of accelerators to secure the place of the list for these accelerator systems.
 The percentage of cores in each system that is made up of accelerator / co-processor cores relative to the total number of cores, and is presented in Figures~\ref{top500-ratio-of-cpu-vs-accelerator-cores} and \ref{top10-ratio-of-cpu-vs-accelerator-cores}.
 
@@ -174,10 +182,27 @@ The percentage of cores in each system that is made up of accelerator / co-proce
     \label{top500-ratio-of-cpu-vs-accelerator-cores}
 \end{figure*}
 
-\todo[inline]{reliance on CPU vs accelerator cores}
-
 \todo[inline]{accelerators for energy efficiency}
+-->
 
+Another benefit from the increasing dependence on a heterogeneous mix of accelerator devices is improved energy efficiency on these systems.
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{analysis/top500_GFlops_per_Watt_of_supercomputers_with_and_without_accelerators.pdf}
+    \caption{Power efficiency (GFlops/Watt) of using accelerators in the Top500 supercomputers over time.}
+    \label{fig:top500-gflops-per-watt-with-and-without-accelerators-in-supercomputers}
+\end{figure*}
+
+Figure \ref{fig:top500-gflops-per-watt-with-and-without-accelerators-in-supercomputers} presents a comparison of the energy efficiency -- the rate of computation that can be delivered by a computer for every watt of power consumed -- in terms of billions of floating point operations per second per watt, of supercomputers which use accelerators, presented as the red line, and systems which do not use accelerators -- shown in blue line.
+Generally, we see that the mean energy efficiency of all systems improves over time.
+However, it is apparent that the use of accelerators in supercomputers has always offered better energy efficiency than using conventional x86 architectures as the primary means of computation.
+Systems without accelerators had a mean energy efficiency of 750 MFlops/Watt in 2013 and have increased on average by 200 MFlops/Watt every year, in 2018 these systems achieved 2 GFlops/Watt.
+These results are modest when compared to the gains in efficiency when using accelerators in supercomputing systems.
+In 2013 the mean energy efficiency of supercomputers with accelerators was 1.3 GFlops/Watt and reached 5.9 GFlops/Watt in 2018, growing non-linearly by 750 MFlops/Watt per year.
+The efficiency of systems using accelerators are improving faster than supercomputer which rely on homogeneous CPU architectures.
+
+Similar efficiencies have also been shown in the most energy efficient supercomputing list -- the Green500.
 From June 2016 to June 2017, the average energy efficiency of the top 10 of the Green500 supercomputers rose by 2.3x, from 4.8 to 11.1 gigaflops per watt [@feldman_2017].
 For many systems, this was made possible by highly energy-efficient Nvidia Tesla P100 GPUs.
 In addition to GPUs, future HPC architectures are also likely to include nodes with FPGA, DSP, ASIC and MIC components.
