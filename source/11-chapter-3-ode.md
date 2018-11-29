@@ -77,7 +77,7 @@ Through PAPI modules such as Intel's Running Average Power Limit (RAPL) and Nvid
 \end{table*}
 
 The experiments were conducted on a varied set of 15 hardware platforms: three Intel CPU architectures, five Nvidia GPUs, six AMD GPUs, and one MIC (Intel Knights Landing Xeon Phi).
-Key characteristics of the test platforms are presented in Table~\ref{tab:hardware}.
+Key characteristics of the test platforms are presented in Table~\ref{tbl:hardware}.
 The L1 cache size should be read as having both an instruction size cache and a data cache size of equal values as those displayed. 
 For Nvidia GPUs, the L2 cache size reported is the size L2 cache per SM multiplied by the number of SMs.
 For the Intel CPUs, hyper-threading was enabled and the frequency governor was set to `performance`.

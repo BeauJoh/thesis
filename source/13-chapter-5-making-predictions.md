@@ -28,43 +28,10 @@ AIWC -- from Chapter 4 -- was used to characterize a variety of codes in the Ope
 The metrics were generated over 4 problem sizes for each of the 11 applications -- and 37 computationally regions known as kernels in the OpenCL setting.
 Response variables were collected following the same methodology outlined in [@johnston17opendwarfs] -- where the details for each of the applications is also presented.
 Execution times were measured for at least 50 iterations and a total runtime of at least two seconds for each combination of device and benchmark.
-Each application was run over 15 different accelerator devices, and are presented in Table \ref{tab:hardware}.
+Each application was run over 15 different accelerator devices, and are presented in Table \ref{tbl:hardware}.
 The L1 cache size should be read as having both an instruction cache and a data cache of the stated size. 
 For Nvidia GPUs, the L2 cache size reported is the size L2 cache per SM multiplied by the number of SMs.
 For the Intel CPUs, Hyper-threading was enabled and the frequency governor was set to `performance`.
-
-\begin{table*}[t]
-\caption{Experimental hardware for generating runtime response data}
-\centering
-\begin{threeparttable}
-    \centering
-    \begin{tabular}{l|c|c|c|r|c|c|r|c}
-        Name         & Vendor   & Type  & Series    & \multicolumn{1}{m{1cm}|}{\centering Core Count} & \multicolumn{1}{m{2.5cm}|}{\centering Clock Frequency (\si{\mega\hertz}) (min/max/turbo)}  &\multicolumn{1}{m{2.1cm}|}{\centering Cache (\SI{}{\kibi\byte}) (L1/L2/L3)} & \multicolumn{1}{m{.8cm}|}{\centering TDP (\SI{}{\watt})} &  \multicolumn{1}{m{1cm}}{\centering Launch  Date} \\ \hline
-        Xeon E5-2697 v2  & Intel    & CPU   &Ivy Bridge & 24$\ast$ &1200/2700/3500 & 32/256/30720 & 130 & Q3 2013\\
-        i7-6700K & Intel    & CPU   &Skylake & 8$\ast$ & 800/4000/4300 & 32/256/8192& 91 & Q3 2015\\
-        i5-3550  & Intel    & CPU   & Ivy Bridge & 4$\ast$ & 1600/3380/3700 & 32/256/6144& 77 & Q2 2012\\
-        Titan X & Nvidia & GPU & Pascal & 3584\textdagger & 1417/1531/-- & 48/2048/-- & 250 & Q3 2016\\
-        GTX 1080 & Nvidia & GPU & Pascal & 2560\textdagger & 1607/1733/-- & 48/2048/-- & 180 & Q2 2016\\
-        GTX 1080 Ti & Nvidia & GPU & Pascal & 3584\textdagger & 1480/1582/-- & 48/2048/-- & 250 & Q1 2017\\
-        K20m & Nvidia & GPU & Kepler & 2496\textdagger & 706/--/-- & 64/1536/-- & 225 & Q4 2012\\
-        K40m & Nvidia & GPU & Kepler & 2880\textdagger & 745/875/-- & 64/1536/-- & 235 & Q4 2013\\
-        FirePro S9150 & AMD & GPU & Hawaii & 2816$\|$ & 900/--/-- & 16/1024/-- & 235 & Q3 2014\\
-        HD 7970       & AMD & GPU & Tahiti & 2048$\|$ & 925/1010/-- & 16/768/-- & 250 & Q4 2011\\
-        R9 290X       & AMD & GPU & Hawaii & 2816$\|$ & 1000/--/-- & 16/1024/--& 250 & Q3 2014\\
-        R9 295x2      & AMD & GPU & Hawaii & 5632$\|$ & 1018/--/-- & 16/1024/--& 500 & Q2 2014\\
-        R9 Fury X     & AMD & GPU & Fuji   & 4096$\|$ & 1050/--/-- & 16/2048/--& 273 & Q2 2015\\
-        RX 480        & AMD & GPU & Polaris& 4096$\|$ & 1120/1266/-- & 16/2048/-- & 150 & Q2 2016\\
-        Xeon Phi 7210 & Intel & MIC & KNL & 256\textdaggerdbl & 1300/1500/-- & 32/1024/-- & 215 & Q2 2016\\
-    \end{tabular}
-    \begin{tablenotes}
-    \item [$\ast$] HyperThreaded cores
-    \item [\textdagger] CUDA cores
-    \item [$\|$] Stream processors
-    \item [\textdaggerdbl] Each physical core has 4 hardware threads per core, thus 64 cores
-    \end{tablenotes}
-\end{threeparttable}
-\label{tab:hardware}
-\end{table*}
 
 
 ### Constructing the Performance Model
