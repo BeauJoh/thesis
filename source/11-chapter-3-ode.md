@@ -1,4 +1,4 @@
-# Dwarfs on Accelerators {#sec:chapter-3-ode}
+# Extending The OpenDwarfs Benchmark Suite {#sec:chapter-3-ode}
 
 This chapter presents an extended and enhanced version of the OpenDwarfs OpenCL benchmark suite (EOD) to provide a test platform of representative codes.
 It will be later used for workload characterization, performance prediction and ultimately scheduling, but these sophisticated studies first need simple empirical data.

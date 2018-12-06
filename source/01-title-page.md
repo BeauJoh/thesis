@@ -8,7 +8,8 @@ This is the Latex-heavy title page.
         \vspace*{2.5cm}
 
         \huge
-        Characterizing and Predicting Scientific Workloads for Heterogeneous Supercomputers
+        Characterizing and Predicting Scientific Workloads for Heterogeneous Computing Systems
+        %Characterizing and Predicting Scientific Workloads for Heterogeneous Supercomputers
         %Automatic program analysis and scheduling of scientific workloads for heterogeneous supercomputers
 
         \vspace{1.5cm}
@@ -17,12 +18,11 @@ This is the Latex-heavy title page.
         Beau Johnston
         
         \vspace{1.5cm}
-        July 2018
+        January 2019
         \vspace{1.5cm}
 
         \normalsize
-        A thesis submitted for the degree of Doctor of Philosophy\\
-        The Australian National University
+        A thesis submitted for the degree of Doctor of Philosophy of The Australian National University.
 
         \vfill
 
@@ -31,7 +31,11 @@ This is the Latex-heavy title page.
         % Uncomment the following line
         % to add a centered university logo
         \includegraphics[width=0.4\textwidth]{style/anu-logo-colour.png}
-        
+
+        \vspace{0.8cm}
+
+        \textcopyright\ Copyright by Beau Johnston 2019\\
+        All Rights Reserved
     \end{center}
 \end{titlepage}
 

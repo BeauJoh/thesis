@@ -1,4 +1,4 @@
-#Application-Accelerator Performance Prediction {#sec:chapter-5-accelerator-predictions}
+# Making Performance Predictions for Scheduling {#sec:chapter-5-accelerator-predictions}
 
 The OpenCL programming framework is well-suited heterogeneous computing environments, as a single OpenCL code may be executed on multiple different device types including most CPU, GPU and FPGA devices.
 Predicting the performance of a particular application on a given device is challenging due to complex interactions between the computational requirements of the code and the capabilities of the target device.
@@ -266,7 +266,7 @@ Under-predictions typically occur on four kernels over the medium and large prob
 However, these outliers are visually over-represented in this figure as the final mean absolute error is low, at ~0.1.
 
 
-## Making Predictions
+### Making Predictions
 
 In this section, we examine differences in accuracy of predicted execution times between different kernels, which is of importance if the predictions are to be used in a scheduling setting.
 
@@ -298,7 +298,7 @@ However, this kernel is only run once per application run -- it is used in the i
 However this could be systematic of the i5 processor having the lowest clock speed, as such the model misprediction is the same but the execution results are magnified.
 -->
 
-## The benefits of this approach
+### The benefits of this approach
 
 
 

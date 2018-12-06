@@ -1,5 +1,7 @@
 #AIWC: OpenCL based Architecture Independent Workload Characterization
 
+\todo[inline]{Apply the same camera ready paper changes to this chapter}
+
 Application codes differ in resource requirements, control structure and available parallelism.
 Similarly, compute devices differ in number and capabilities of execution units, processing model, and available resources.
 Given performance measurements for particular combinations of codes and devices, it is difficult to generalize to novel combinations.
