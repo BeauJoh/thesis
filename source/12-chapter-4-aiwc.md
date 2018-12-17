@@ -244,21 +244,21 @@ The performance of this kernel on a particular architecture could be expected to
 
 \begin{figure*}
 \centering
-\includegraphics[width=1.98\columnwidth]{./figures/chapter-4/draw_stacked_plots-1.pdf}
+\includegraphics[width=\linewidth,keepaspectratio]{./figures/chapter-4/draw_stacked_plots-1.pdf}
 \caption{Selected AIWC metrics from each category over all kernels and 4 problem sizes.}
 \label{fig:stacked_plots} 
 \end{figure*}
 
 \begin{figure*}
     \centering
-    \includegraphics[width=\plotwidth]{./figures/chapter-4/draw_lud_diagonal_internal_all_kiviat-1.pdf}
+    \includegraphics[width=\linewidth,keepaspectratio]{./figures/chapter-4/draw_lud_diagonal_internal_all_kiviat-1.pdf}
     \caption{A) and B) show the AIWC features of the \texttt{diagonal} and \texttt{internal} kernels of the LUD application over all problem sizes.}
     \label{fig:kiviat}
 \end{figure*}
 
 \begin{figure*}
     \centering
-    \includegraphics[width=\plotwidth]{./figures/chapter-4/draw_lud_diagonal_perimeter_lmae_all_kiviat-1.pdf}
+    \includegraphics[width=\linewidth,keepaspectratio]{./figures/chapter-4/draw_lud_diagonal_perimeter_lmae_all_kiviat-1.pdf}
     \caption{A) shows the AIWC features of the \texttt{perimeter} kernel of the LUD application over all problem sizes. B) shows the corresponding Local Memory Address Entropy for the \texttt{perimeter} kernel over the tiny problem size.}
     \label{fig:kiviat2}
 \end{figure*}

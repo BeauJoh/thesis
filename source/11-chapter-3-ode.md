@@ -22,7 +22,7 @@ The OpenDwarfs benchmark suite comprises a variety of OpenCL codes, classified a
 The original suite focused on collecting representative benchmarks for scientific applications, with a thorough diversity analysis to justify the addition of each benchmark to the corresponding suite.
 We aim to extend these efforts to achieve a full representation of each dwarf, both by integrating other benchmark suites and adding custom kernels.
 
-Marjanović et al. [@marjanovic2016hpc] argue that the selection of problem size for HPC benchmarking critically affects which hardware properties are relevant.
+@marjanovic2016hpc argue that the selection of problem size for HPC benchmarking critically affects which hardware properties are relevant.
 We have observed this to be true across a wide range of accelerators, therefore we have enhanced the OpenDwarfs benchmark suite to support running different problem sizes for each benchmark.
 To improve reproducibility of results, we also modified each benchmark to execute in a loop for a minimum of two seconds, to ensure that sampling of execution time and performance counters was not significantly affected by operating system noise.
 
@@ -310,11 +310,9 @@ This underscores the importance of allowing a choice of problem size in a benchm
 
 We first present execution time measurements for each benchmark, starting with the Cyclic Redundancy Check \texttt{crc} benchmark which represents the Combinational Logic dwarf.
 
-\newcommand{\plotwidth}{0.24\textwidth}
-
 \begin{figure*}[t]
 	\centering
-	\includegraphics[width=\textwidth,keepaspectratio]{figures/chapter-3/generate_crc_row_bandwplot}
+	\includegraphics[width=\textwidth,keepaspectratio]{figures/chapter-3/crc}
 	\caption{Kernel execution times for the {\bf crc} benchmark on different hardware platforms}
 	\label{fig:time-crc}
 \end{figure*}
@@ -326,52 +324,63 @@ Execution times for \texttt{crc} are lowest on CPU-type architectures, probably 
 Excluding \texttt{crc}, all the other benchmarks perform best on GPU type accelerators; furthermore, the performance on the KNL is poor due to the lack of support for wide vector registers in Intel's OpenCL SDK.
 We therefore omit results for KNL for the remaining benchmarks.
 
-Figures \ref{fig:time} and \ref{fig:time2} shows the distribution of kernel execution times for the remaining benchmarks.
+Figures \ref{fig:kmeans}, \ref{fig:lud}, \ref{fig:csr},\ref{fig:dwt},\ref{fig:fft} \ref{fig:srad} and \ref{fig:nw} shows the distribution of kernel execution times for the remaining benchmarks.
 Some benchmarks execute more than one kernel on the accelerator device; the reported iteration time is the sum of all compute time spent on the accelerator for all kernels.
 Each benchmark corresponds to a particular dwarf: 
-Figure \ref{fig:time}a (\texttt{kmeans}) represents the MapReduce dwarf,
-Figure \ref{fig:time}b (\texttt{lud}) represents the Dense Linear Algebra dwarf,
-Figure \ref{fig:time}c (\texttt{csr}) represents Sparse Linear Algebra, 
-Figure \ref{fig:time}d (\texttt{dwt}) and Figure \ref{fig:time}e (\texttt{fft}) represent Spectral Methods,
-Figure \ref{fig:time2}a (\texttt{srad}) represents the Structured Grid dwarf and Figure \ref{fig:time2}b (\texttt{nw}) represents Dynamic Programming.
+Figure \ref{fig:kmeans} (\texttt{kmeans}) represents the MapReduce dwarf,
+Figure \ref{fig:lud} (\texttt{lud}) represents the Dense Linear Algebra dwarf,
+Figure \ref{fig:csr} (\texttt{csr}) represents Sparse Linear Algebra, 
+Figure \ref{fig:dwt} (\texttt{dwt}) and Figure \ref{fig:fft} (\texttt{fft}) represent Spectral Methods,
+Figure \ref{fig:srad} (\texttt{srad}) represents the Structured Grid dwarf and Figure \ref{fig:nw}b (\texttt{nw}) represents Dynamic Programming.
 
-Finally, Figure \ref{fig:time3} presents results for the three applications with restricted problem sizes and only one problem size is shown.
+Finally, Figure \ref{fig:time3} presents results for the four applications with restricted problem sizes and only one problem size is shown.
 The N-body Methods dwarf is represented by (\texttt{gem}) and the results are shown in Figure \ref{fig:time3}a, the Backtrack \& Branch and Bound dwarf is represented by the (\texttt{nqueens}) application in Figure \ref{fig:time3}b and (\texttt{hmm}) results in Figure \ref{fig:time3}c represent the Graphical Models dwarf.
 
 
 \begin{figure*}
     \centering
-    \includegraphics[width=.9\textwidth,keepaspectratio]{figures/chapter-3/generate_main_4x5_bandwplot}
-    \caption{Benchmark kernel execution times on different hardware platforms}
-    \label{fig:time}
-\end{figure*}
-
-\begin{figure*}[t]
-    \centering
-    \includegraphics[width=\textwidth,keepaspectratio]{figures/chapter-3/generate_main_4x2_bandwplot}
-    \caption{Benchmark kernel execution times on different hardware platforms (continued)}
-    \label{fig:time2}
+    \includegraphics[width=\textwidth,keepaspectratio]{figures/chapter-3/tiny_and_small_times_for_kmeans_lud_csr_dwt}
+\caption{Benchmark kernel execution times for \texttt{tiny} on different hardware platforms}
+    \label{fig:tiny-and-small-time}
 \end{figure*}
 
 \begin{figure*}
     \centering
-    \includegraphics[width=\textwidth,keepaspectratio]{figures/chapter-3/generate_main_2x3_bandwplot}
+    \includegraphics[width=\textwidth,keepaspectratio]{figures/chapter-3/medium_and_large_times_for_kmeans_lud_csr_dwt}
+    \caption{Benchmark kernel execution times on different hardware platforms}
+    \label{fig:medium-and-large-time}
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{figures/chapter-3/tiny_and_small_times_for_fft_srad_nw}
+    \caption{Benchmark kernel execution times on different hardware platforms (continued)}
+    \label{fig:tiny-and-small-time2}
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{figures/chapter-3/medium_and_large_times_for_fft_srad_nw}
+    \caption{Benchmark kernel execution times on different hardware platforms (continued)}
+    \label{fig:tiny-and-small-time2}
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{figures/chapter-3/gem_nqueens_hmm_and_swat}
     \caption{Single problem sized benchmarks of kernel execution times on different hardware platforms}
     \label{fig:time3}
 \end{figure*}
 
 
-Examining the transition from tiny to large problem sizes (from left to right) in Figure \ref{fig:time2}a shows the performance gap between CPU and GPU architectures widening for \texttt{srad} -- indicating codes representative of structured grid dwarfs are well suited to GPUs.
+Examining the transition from tiny to large problem sizes in Figure \ref{fig:time2}a shows the performance gap between CPU and GPU architectures widening for \texttt{srad} -- indicating codes representative of structured grid dwarfs are well suited to GPUs.
 
-In contrast, Figure \ref{fig:time2}b shows Dynamic Programming problems have performance results tied to micro-architecture or OpenCL runtime support and can not be explained solely by considering accelerator type.
-For instance, the Intel CPUs and NVIDIA GPUs perform comparably over all problem sizes, whereas all AMD GPUs exhibit worse performance as size increases.
+In contrast, Figure \ref{fig:nw}b \texttt{nw} shows that the Intel CPUs and NVIDIA GPUs perform comparably for all problem sizes, whereas all AMD GPUs exhibit worse performance as size increases. This suggests that performance for this Dynamic Programming problem cannot be explained solely by considering accelerator type and may be tied to micro-architecture or OpenCL runtime support.
 
-For most benchmarks, the coefficient of variation in execution times is much greater for devices with a lower clock frequency, regardless of accelerator type.
-While execution time increases with problem size for all benchmarks and platforms, the modern GPUs (Titan X, GTX1080, GTX1080Ti, R9 Fury X and RX 480) performed relatively better for large problem sizes, possibly due to their greater second-level cache size compared to the other platforms.
-A notable exception is \texttt{k-means} for which CPU execution times were comparable to GPU, which reflects the relatively low ratio of floating-point to memory operations in the benchmark.
+For most benchmarks, the variability in execution times is greater for devices with a lower clock frequency, regardless of accelerator type. While execution time increases with problem size for all benchmarks and platforms, the modern GPUs (Titan X, GTX1080, GTX1080Ti, R9 Fury X and RX 480) performed relatively better for large problem sizes, possibly due to their greater second-level cache size compared to the other platforms. A notable exception is \texttt{kmeans} for which CPU execution times were comparable to GPU, which reflects the relatively low ratio of floating-point to memory operations in the benchmark.
 
 Generally, the HPC GPUs are older and were designed to alleviate global memory limitations amongst consumer GPUs of the time.
-(Global memory size is not listed in Table \ref{tab:hardware}.)
+(Global memory size is not listed in Table \ref{tbl:hardware}.)
 Despite their larger memory sizes, the clock speed of all HPC GPUs is slower than all evaluated consumer GPUs.
 While the HPC GPUs (devices 7-9, in yellow) outperformed consumer GPUs of the same generation (devices 10-13, in green) for most benchmarks and problem sizes, they were always beaten by more modern GPUs.
 This is no surprise since all selected problem sizes fit within the global memory of all devices.
@@ -408,20 +417,18 @@ From the time results presented in [Section @sec:chapter-3-results-time] we see 
 Thus we expect that the **large** problem size will also show the largest difference in energy.
 
 \begin{figure*}[htb]
-\centering
-\newcommand{\thisplotwidth}{0.48\textwidth}
-\includegraphics[width=\thisplotwidth]{figures/chapter-3/energy_charts.pdf}
-\includegraphics[width=\thisplotwidth]{figures/chapter-3/energy_charts_log10.pdf}
-\caption{Benchmark kernel execution energy presented on a linear and logarithmic scale from left to right respectively, on the ({\bf large} problem size) on Core i7-6700K and Nvidia GTX1080}
-\label{fig:energy}
-\label{fig:energy-log}
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{figures/chapter-3/energy_combined}
+\caption{Execution energy required to perform EOD benchmarks, presented on a linear (a) and logarithmic scale (b) from left to right respectively, on the ({\bf large} problem size) on the Intel i7-6700K and Nvidia GTX1080}
+    \label{fig:energy}
+    \label{fig:energy-log}
 \end{figure*}
 
 
-Figures \ref{fig:energy} and \ref{fig:energy-log} show the kernel execution energy for several benchmarks for the **large** size.
+Figures \ref{fig:energy}\ (a) and \ (b) show the kernel execution energy for several benchmarks for the **large** size.
 All results are presented in joules.
-The box plots are coloured according to device: red for the Intel Skylake i7-6700k CPU and blue for the Nvidia GTX1080 GPU.
-The logarithmic transformation has been applied to Figure \ref{fig:energy-log} to emphasise the variation at smaller energy scales ($<$ \SI{1}{\joule}), which was necessary due to small execution times for some benchmarks.
+The box plots are coloured according to device: purple for the Intel Skylake i7-6700k CPU and yellow for the Nvidia GTX1080 GPU.
+The logarithmic transformation has been applied to Figure \ref{fig:energy-log}\ (b) to emphasise the variation at smaller energy scales ($<$ \SI{1}{\joule}), which was necessary due to small execution times for some benchmarks.
 In future this will be addressed by balancing the amount of computation required for each benchmark, to standardize the magnitude of results.
 
 All the benchmarks use more energy on the CPU, with the exception of `crc` which as previously mentioned has low floating-point intensity and so is not able to make use of the GPU's greater floating-point capability. 

@@ -1,5 +1,8 @@
 
-all: survey thesis.pdf #thesis-map.pdf
+all: thesis.pdf #chapter-3-figures survey thesis-map.pdf
+
+chapter-3-figures: chapter-3-analysis/bar_charts.R chapter-3-analysis/energy_charts.R
+	cd chapter-3-analysis; Rscript energy_charts.R; Rscript bar_charts.R; cd ..;
 
 survey: analysis/analysis.R
 	cd analysis; Rscript analysis.R; cd ..;
@@ -23,6 +26,16 @@ thesis-map.pdf: thesis-map.md
 		--variable sectionsDepth=-1 \
 		./packages.yaml \
 		-o output/thesis-map.pdf thesis-map.md
+
+chapter-3.txt: source/11-chapter-3-ode.md
+	pandoc source/11-chapter-3-ode.md \
+		-o output/chapter-3.txt \
+		--wrap=preserve \
+		--filter pandoc-crossref \
+		--filter pandoc-citeproc \
+		--filter=./pandoc-tools/table-filter.py \
+		--bibliography=source/bibliography.bib \
+		./packages.yaml \
 
 introduction.pdf: source/09-chapter-1-introduction.md
 	pandoc source/09-chapter-1-introduction.md \
