@@ -11,6 +11,7 @@ Other improvements focus on adding additional benchmarks to better represent eac
 The rationale for the latter is to survey the range of applications over a diverse set of HPC accelerators across increasing amounts of work, which allows for a deeper analysis of the memory subsystem on each of these devices.
 Having a common back-end in the form of OpenCL allows a direct comparison of identical code across diverse architectures.
 Results and analysis are reported for eight benchmark codes on a diverse set of architectures -- three Intel CPUs, five Nvidia GPUs, six AMD GPUs and a Xeon Phi.
+This Chapter is based off our publication in the Proceedings of the 47th International Conference on Parallel Processing Companion, ICPP 2018 [@johnston18opendwarfs].
 
 <!-- The corresponding analysis directly addresses the sub-question around: *Does problem size affect the optimality of a dwarf and its suitability for an accelerator type?* -->
 
@@ -439,14 +440,21 @@ All the benchmarks use more energy on the CPU, with the exception of `crc` which
 Variance with respect to energy usage is larger on the CPU, which is consistent with the execution time results.
 
 
-## Summary
+## Discussion
 
-The work presented in this chapter does not address the optimality of the OpenCL programming language for accelerator devices, nor does it need to, instead, it presents the culmination of ground work and the associated considerations required to evaluate the performance of heterogenous devices and introduces a final benchmarking suite  -- EOD -- which serves this purpose.
+The work presented in this chapter does not address the optimality of the OpenCL programming language for accelerator devices, nor does it need to, instead, it presents the culmination of ground work and the associated considerations required to evaluate the performance of heterogeneous devices from a shared language -- OpenCL.
+The introduced benchmarking suite  -- EOD -- and the corresponding execution times on the full range of accelerators are used in the remainder of this thesis.
+Working on EOD led to the consideration of developing a tool to examine the limitations and characteristics of these codes in a device-independent, and more generally, architecture-independent, way.
+Comparing the runtimes of all kernels and examining the architectural effects on so 15 systems encouraged the development of AIWC -- presented in the next Chapter.
+While performance on a kernel-by-kernel basis could be manually performed over EOD -- collecting results on an abstract OpenCL device via simulation of these kernel codes has enabled a largely automated approach to compare feature-spaces and their suitability / mapping to accelerators.
+
+Additionally, the recorded EOD runtimes from this chapter are used as a test-bed for the predictive model presented in Chapter 5.
 It serves as a platform which is essential to perform workload scheduling of scientific workloads on accelerator devices which will be common to next-generation scientific HPC nodes.
 
-Separately, three major points become apparent when examining the results presented in this chapter.
-Generally, energy is correlated to execution time for most applications.
+In general, the results of this chapter identify a few major points.
+Firstly, energy is correlated to execution time for most applications.
 Secondly, particular accelerator types do not perform best under all applications encompassing a dwarf.
 Finally, all dwarfs are not suited to one type of accelerator -- for instance GPU type accelerators are unsuited to the combinational-logic dwarf.
 
-These last two points reinforce the assumption that there is a most appropriate accelerator for any particular OpenCL code, this in turn raises an interesting research question, "can the automatic classification of a program binary allow the efficient scheduling of work to the most appropriate accelerator", the automatic classification tool is introduced in the next chapter whilst the broader question is addressed in [Chapter @sec:chapter-5-accelerator-predictions].
+These last two points reinforce the assumption that there is a most appropriate accelerator for any particular OpenCL code, this in turn raises an interesting research question, "can the automatic characterization of a kernel allow the efficient scheduling of work to the most appropriate accelerator", the workload characterization tool -- AIWC -- is introduced in the next Chapter whilst the broader question is addressed in [Chapter @sec:chapter-5-accelerator-predictions].
+

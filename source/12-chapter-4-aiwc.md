@@ -1,7 +1,5 @@
 #AIWC: OpenCL based Architecture Independent Workload Characterization
 
-\todo[inline]{Apply the same camera ready paper changes to this chapter}
-
 Application codes differ in resource requirements, control structure and available parallelism.
 Similarly, compute devices differ in number and capabilities of execution units, processing model, and available resources.
 Given performance measurements for particular combinations of codes and devices, it is difficult to generalize to novel combinations.
@@ -12,16 +10,16 @@ However, if these workload characteristics are tied to architectural features th
 
 An architecture-independent method ensures an accurate characterization of inherent program behaviour, without bias due to architecture-dependent features that vary widely between different types of accelerators.
 
-This work presents Architecture Independent Workload Characterization (AIWC) tool --  the first architecture-independent workload characterization framework for heterogeneous compute platforms, proposing a set of metrics determining the suitability and performance of an application on any parallel HPC architecture.
-The tool, AIWC, is a plugin for the open-source Oclgrind simulator.
-It supports parallel workloads and is capable of characterizing OpenCL codes currently in use in the supercomputing setting.
-AIWC simulates an OpenCL device by directly interpreting LLVM instructions, and the resulting metrics may be used for performance prediction and developer feedback to guide device-specific optimizations.
-Support for multi-threaded or parallel workloads is achieved by collecting metrics that indicate both instruction and thread-level parallelism.
+To this end, we present the Architecture Independent Workload Characterization (AIWC) tool.
+AIWC simulates the execution of OpenCL kernels to collect architecture-independent features that characterize each code, which may also be used in performance prediction.
+
+AIWC is the first workload characterization tool to support multi-threaded or parallel workloads, which it achieves by collecting metrics that indicate both instruction and thread-level parallelism.
 Exploitable coarse-grained parallelism is measured by counting the number of work-items and barriers encountered.
 Instructions To Barrier (ITB) and Instructions per Thread (IPT) can be used to indicate workload irregularity or imbalance.
 
-We demonstrate the use of AIWC to characterize a variety of codes in the Extended OpenDwarfs Benchmark Suite [@johnston18opendwarfs] -- presented as EOD from chapter 3.
-
+We demonstrate the use of AIWC to characterize a variety of codes in the Extended OpenDwarfs Benchmark Suite [@johnston18opendwarfs] -- presented in chapter 3.
+A majority of this Chapter was published in the LLVM-HPC workshop proceedings as part of the 30th International Conference for High Performance Computing, Networking, Storage, and Analysis (SC18) 2018 [@aiwc2018].
+Additionally, work from [Section @sec:case-study-bio] has been submitted as as Special Issue paper in the International Journal of High Performance Computing Applications (IJHPCA) and is currently under review.
 
 ## Metrics
 
@@ -32,7 +30,7 @@ For each OpenCL kernel invocation, the Oclgrind simulator **AIWC** tool collects
 \caption{Metrics collected by the \textbf{AIWC} tool ordered by type. \label{tbl:aiwc-metrics}}
 
 \centering
-
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{@{}cll@{}}
 \toprule
 
@@ -71,7 +69,7 @@ Control & Average Linear Branch Entropy & branch history entropy score using the
 average linear branch entropy\\
 \hline
 \end{tabular}
-
+}
 \end{table*}
 
 
@@ -160,7 +158,7 @@ The `m_state` variable is shared between all work-items in a work-group and thes
 
 The branch metrics are then computed by evaluating the full history of combined branch's taken and not-taken.
 
-\begin{lstlisting}[float=*t,language=C++, caption={The Instruction Executed callback function collects specific program metrics and adds them to a history trace for later analysis.},label={lst:instructionExecuted}]
+\begin{lstlisting}[float=tp,language=C++, caption={The Instruction Executed callback function collects specific program metrics and adds them to a history trace for later analysis.},label={lst:instructionExecuted},linewidth=\columnwidth,numbers=left, numberstyle=\small, numbersep=8pt, frame = single, breaklines=true]
 void WorkloadCharacterisation::instructionExecuted(...,  const llvm::Instruction *instruction, ...){
     unsigned opcode = instruction->getOpcode();
     std::string opcode_name = llvm::Instruction::getOpcodeName(opcode);
@@ -244,21 +242,22 @@ The performance of this kernel on a particular architecture could be expected to
 
 \begin{figure*}
 \centering
-\includegraphics[width=\linewidth,keepaspectratio]{./figures/chapter-4/draw_stacked_plots-1.pdf}
+\hspace*{-0.3cm}
+\includegraphics[width=1.04\linewidth,keepaspectratio]{./figures/chapter-4/draw_stacked_plots-1.pdf}
 \caption{Selected AIWC metrics from each category over all kernels and 4 problem sizes.}
 \label{fig:stacked_plots} 
 \end{figure*}
 
 \begin{figure*}
     \centering
-    \includegraphics[width=\linewidth,keepaspectratio]{./figures/chapter-4/draw_lud_diagonal_internal_all_kiviat-1.pdf}
+    \includegraphics[width=.72\columnwidth,keepaspectratio]{./figures/chapter-4/draw_lud_diagonal_internal_all_kiviat-1.pdf}
     \caption{A) and B) show the AIWC features of the \texttt{diagonal} and \texttt{internal} kernels of the LUD application over all problem sizes.}
     \label{fig:kiviat}
 \end{figure*}
 
 \begin{figure*}
     \centering
-    \includegraphics[width=\linewidth,keepaspectratio]{./figures/chapter-4/draw_lud_diagonal_perimeter_lmae_all_kiviat-1.pdf}
+    \includegraphics[width=.7\columnwidth,keepaspectratio]{./figures/chapter-4/draw_lud_diagonal_perimeter_lmae_all_kiviat-1.pdf}
     \caption{A) shows the AIWC features of the \texttt{perimeter} kernel of the LUD application over all problem sizes. B) shows the corresponding Local Memory Address Entropy for the \texttt{perimeter} kernel over the tiny problem size.}
     \label{fig:kiviat2}
 \end{figure*}
@@ -294,11 +293,80 @@ However, the descent in entropy -- which corresponds to more bits being skipped,
 In general, for cache-sensitive workloads -- such as LU-Decomposition -- a steeper descent between increasing LMAE distances indicates more localized memory accesses, and this corresponds to better cache utilisation when these applications are run on physical OpenCL devices.
 It is unsurprising that applications with a smaller working memory footprint would exhibit more cache reuse with highly predictable memory access patterns.
 
+## Use Case: AIWC analysis on bioinformatics{#sec:case-study-bio}
+
+A further study of the AIWC feature-space is now performed on bioinformatics type computations to show the benefits of performing AIWC analysis and a sample methodology to examine the change in AIWC metrics over a range of kernels.
+The bioinformatics subset of applications from the extended OpenDwarfs benchmark suite includes computations used in sequence analysis, biophysics, gene expression/similarity and pattern identification.
+`nw` and `swat` applications from the Dynamic-Programming dwarf are both directly used in sequence analysis, `gem` from the N-Body-Methods dwarf to cover biophysics computations, `hmm` from the Graphical-Models dwarf considers both sequence analysis and gene expression.
+Finally, the MapReduce dwarf features the `kmeans` benchmark, which can be used directly in both pattern identification and gene similarity comparisons.
+Figures\ \ref{fig:aiwc} and \ref{fig:aiwc-hmm} present radar/Kiviat diagrams of architecture-independent characteristics collected for each of the bioinformatics benchmarks.
+All results are presented over a single **small** problem size, and show the multiple kernels required to compute each benchmark application as superimposed plots in the same diagram.
+
+\begin{figure*}
+    \centering
+    \subfloat[\texttt{nw}\label{fig:aiwc-nw}]{%
+        \hspace*{0.08cm}
+        \includegraphics[width=0.5\textwidth]{figures/chapter-4/nw}
+    }
+    \subfloat[\texttt{swat}\label{fig:aiwc-swat}]{%
+        \hspace*{-1.18cm}
+        \includegraphics[width=0.58\textwidth]{figures/chapter-4/sw-without-setZero}
+    }
+    \hfill
+    \subfloat[\texttt{gem}\label{fig:aiwc-gem}]{%
+        \includegraphics[width=0.5\textwidth]{figures/chapter-4/gem}
+    }
+    \hspace*{-0.5cm}\subfloat[\texttt{kmeans}\label{fig:aiwc-kmeans}]{%
+        \includegraphics[width=0.5\textwidth]{figures/chapter-4/kmeans}
+    }
+    %\hfill
+    %\vspace*{-1.5cm}\subfloat[\texttt{hmm}\label{fig:aiwc-hmm}]{%
+    %    \hspace*{-1cm}\includegraphics[width=0.7\textwidth]{figures/chapter-4/hmm}
+    %}
+    \caption{Architecture-Independent Workload Characterization features for selected bioinformatics benchmarks}
+    \label{fig:aiwc}
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\textwidth]{figures/chapter-4/hmm}
+    \caption{Architecture-Independent Workload Characterization features for the \texttt{hmm} bioinformatics benchmark}\label{fig:aiwc-hmm}
+\end{figure*}
+
+Figure\ \ref{fig:aiwc-nw} shows that the `nw` benchmark is characterized by high available thread parallelism (low values for granularity and imbalance) and a very high level of barrier synchronization.
+This explains its superior performance on Nvidia GPUs compared to CPUs.
+The Nvidia devices examined are roughly two years newer than the AMD GPUs, we expect modern AMD GPUs to form a better comparison.
+
+Figure\ \ref{fig:aiwc-swat} shows that the `swat` benchmark also has a high level of available thread parallelism, however, it has many fewer barriers and a much higher branch entropy.
+Given this, we expect to see relatively better performance on CPU architectures -- the i7600k CPU is two years older than the optimal Nvidia GPUs presented -- it would be interesting to repeat this evaluation on a CPU of comparable vintage.
+
+Figure\ \ref{fig:aiwc-gem} shows that the `gem` benchmark is characterized by very high available thread parallelism, and low branch and memory entropies.
+This makes it ideal for GPU architectures, which is reflected in the superior performance for the modern NVidia GPUs in Figures\ \ref{fig:time3} (a).
+
+The `kmeans` benchmark (Figure\ \ref{fig:aiwc-kmeans}) also has a high level of available parallelism and low branch and memory entropies; as expected, the measurements in (a) -- from Figures\ \ref{fig:tiny-and-small-time} and \ref{fig:medium-and-large-time} -- and show that both modern GPUs and older HPC GPUs perform significantly better than CPUs for this benchmark.
+
+The `hmm` benchmark (Figure\ \ref{fig:aiwc-hmm}) is composed of a large number of kernels, which differ significantly in granularity.
+Most kernels have very little available parallelism, suggesting that this benchmark would perform best on CPU architectures with a small number of powerful cores; this is borne out by the measurements in Figure\ \ref{fig:time3} (c) which show the smallest benchmark time was recorded on the powerful i7-6700k CPU.
+
+None of the bioinformatics benchmarks is vectorized (instructions per operand = 1), and therefore fail to take advantage of the floating point capabilities available on CPU and MIC architectures.
+
 ## Summary
+
+We have presented the Architecture-Independent Workload Characterization tool (AIWC), which supports the collection of architecture-independent features of OpenCL application kernels.
+It is the first workload characterization tool to support multi-threaded or parallel workloads.
+These features can be used to predict the most suitable device for a particular kernel, or to determine the limiting factors for performance on a particular device, allowing OpenCL developers to try alternative implementations of a program for the available accelerators -- for instance, by reorganizing branches, eliminating intermediate variables et cetera.
+In addition, the architecture independent characteristics of a scientific workload will inform designers and integrators of HPC systems, who must ensure that compute architectures are suitable for the intended workloads.
+
+To identify which AIWC characteristics are the best indicators of opportunities for optimization, we are currently looking at how individual characteristics change for a particular code through the application of best-practice optimizations for CPUs and GPUs (as recommended in vendor optimization guides).
+
+AIWC was also used to evaluate the performance bottle-necks of bioinformatics codes from the EOD suite.
+When also coupled with the runtime performance results of Chapter 3, it is interesting to note that optimal accelerators are typically GPU based, given the high available thread parallelism and high barrier synchronization counts of many sequencing analysis applications.
+However, the bioinformatics applications examined contain few kernels with higher branch and memory access entropies, interspersed with the GPU suited workloads, which suggests that CPUs are critical to achieving good performance on these systems.
+Indeed, partitioning applications by scheduling kernel to their optimal accelerator may generally provide better performance for HPC bioinformatics applications.
 
 <!-- OpenCL Performance Prediction using Architecture-Independent Features HPCS-DRSN -->
 Recently, AIWC has been used for predictive modelling on a set of 15 compute devices including CPUs, GPUs and MIC.
-The AIWC metrics generated from the full set of Extended OpenDwarfs kernels were used as input variables in a regression model to predict kernel execution time on each device. [@johnston18predicting]
+The AIWC metrics generated from the full set of Extended OpenDwarfs kernels were used as input variables in a regression model to predict kernel execution time on each device [@johnston2018opencl].
 The model predictions differed from the measured experimental results by an average of 1.1%, which corresponds to actual execution time mispredictions of 8 $\mu$s to 1 second according to problem size.
 From the accuracy of these predictions, we can conclude that while our choice of AIWC metrics is not necessarily optimal, they are sufficient to characterize the behaviour of OpenCL kernel codes and identify the optimal execution device for a particular kernel.
 This is discussed in detail in the next chapter.

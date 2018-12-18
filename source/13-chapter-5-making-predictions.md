@@ -4,6 +4,7 @@ The OpenCL programming framework is well-suited heterogeneous computing environm
 Predicting the performance of a particular application on a given device is challenging due to complex interactions between the computational requirements of the code and the capabilities of the target device.
 Certain classes of application are better suited to a certain type of accelerator [@che2008accelerating], and choosing the wrong device results in slower and more energy-intensive computation [@yildirim2012single].
 Thus accurate performance prediction is critical to making optimal scheduling decisions in a heterogeneous supercomputing environment.
+This work was published in 16th International Conference on High Performance Computing & Simulation, HPCS 2018 [@johnston2018opencl].
 
 ## Methodology
 
@@ -66,7 +67,7 @@ It allows for an approximate global minimum to be detected with significantly fe
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.9\columnwidth]{./figures/chapter-5/full-variation-in-min-node-size-1.pdf}
+\includegraphics[width=0.75\columnwidth,keepaspectratio]{./figures/chapter-5/full-variation-in-min-node-size-1.pdf}
 \caption{\label{fig:variation-in-min-node-size}Full coverage of min.node.size with fixed tuning parameters: num.trees = 300 and mtry = 30.}
 \end{figure}
 
@@ -136,15 +137,14 @@ These parameters were used for all further model training.
 
 
 
-\begin{table}[t]
-\caption{Optimal tuning parameters from the same starting location for all models omitting each individual kernel.\label{tab:optimal-tuning-parameters}}
+\begin{table}[htpb]
 
 \centering
-
-\begin{tabularx}{\columnwidth}{@{}cccc@{}}
+\caption{Optimal tuning parameters from the same starting location for all models omitting each individual kernel.\label{tab:optimal-tuning-parameters}}
+\begin{tabular}{@{}cccc@{}}
 \toprule
 
-{Kernel omitted} & {num.trees} & {mtry} & \multicolumn{1}{m{1cm}}{\centering prediction error (\%)}\\\hline
+{Kernel omitted} & {num.trees} & {mtry} & \multicolumn{1}{m{2cm}}{\centering prediction error (\%)}\\\hline
 
 invert\_mapping & 521 & 31 & 4.3\\
 kmeansPoint & 511 & 30 & 4.1\\
@@ -186,7 +186,7 @@ crc32\_slice8 & 511 & 29 & 4.3\\
 
 \hline
 
-\end{tabularx}
+\end{tabular}
 
 \end{table}
 
@@ -235,7 +235,7 @@ The parameters to the random forest model were fixed at num.trees = 505, mtry = 
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.9\columnwidth]{./figures/chapter-5/rmse_vs_kernel_count-1.pdf}
+\includegraphics[width=0.6\columnwidth,keepaspectratio]{./figures/chapter-5/rmse_vs_kernel_count-1.pdf}
 \caption{\label{fig:rmse-vs-kernel-count}Prediction error across all benchmarks for models trained with varying numbers of kernels.}
 \end{figure}
 
@@ -255,7 +255,7 @@ However, the model proposed is a proof of concept and suggests that a general pu
 \begin{figure}[htbp]
 \centering
 %acm
-\includegraphics[width=0.9\columnwidth]{./figures/chapter-5/actual-vs-predicted-size-plot-1.pdf}
+\includegraphics[width=0.6\columnwidth]{./figures/chapter-5/actual-vs-predicted-size-plot-1.pdf}
 \caption{\label{fig:selected-model-actual-vs-predicted-times}Predicted vs. measured execution time for all kernels}
 \end{figure}
 
@@ -277,7 +277,7 @@ In this section, we examine differences in accuracy of predicted execution times
 
 \begin{figure*}
 \centering
-\includegraphics[width=0.95\linewidth]{./figures/chapter-5/predictive-heatmap-percentage-1.pdf}
+\includegraphics[width=\linewidth]{./figures/chapter-5/predictive-heatmap-percentage-1.pdf}
 \caption{\label{fig:predictive-heatmap-percentage}Error in predicted execution time for each kernel invocation over four problem sizes}
 \end{figure*}
 

@@ -37,6 +37,16 @@ chapter-3.txt: source/11-chapter-3-ode.md
 		--bibliography=source/bibliography.bib \
 		./packages.yaml \
 
+chapter-4.txt: source/12-chapter-4-aiwc.md
+	pandoc source/12-chapter-4-aiwc.md \
+		-o output/chapter-4.txt \
+		--wrap=preserve \
+		--filter pandoc-crossref \
+		--filter pandoc-citeproc \
+		--filter=./pandoc-tools/table-filter.py \
+		--bibliography=source/bibliography.bib \
+		./packages.yaml \
+
 introduction.pdf: source/09-chapter-1-introduction.md
 	pandoc source/09-chapter-1-introduction.md \
 		-o output/introduction.pdf \
