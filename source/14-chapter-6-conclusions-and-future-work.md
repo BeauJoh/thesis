@@ -1,9 +1,25 @@
 
-#Conclusions and Future Work
+#Conclusions and Future Directions
 
-\todo{is this list summarised in this section? Can we think of additional contributions?}
+This thesis aims to show that a diverse mix of accelerators offer equally diverse performance, and the collection of architecture-independent features is sufficient to characterize codes, which in turn, can be used to predict performance which can be used to schedule the optimal device.
+It proposes an extended benchmark suite, which supports many heterogeneous accelerators, and demonstrates the performance of these devices over a large number of codes / kernels.
+Next, the Architecture-Independent Workload Characterization Tool (AIWC) was proposed to examine the structural characteristics of these kernels can be reduced to a small set of fundamental statistics.
+These statistics can explain the degree of optimization, structural constraints of the implementation, and be examined to offer an understanding of the algorithm without having to consider the hardware.
+Finally, we use these metrics to suggest the suitability of device, or more generally, type of accelerator, in a predictive regression model.
 
-* extension of Dwarfs
+The use of accelerators is pervasive in HPC and it is in our view that will become more so in the future.
+We showed that AIWC and the predictive model outline a methodology to achieve better performance on HPC systems composed of heterogeneous accelerators.
+Fine grained scheduling decisions could be supported with the high accuracy of predictions.
+This is the obvious next step for the work presented in this thesis and will hopefully become a significant addition to the emerging problem of scheduler selection in HPC workload scheduling.
+The contents of this thesis fall into the areas of benchmarking, workload characterization, high-performance computing, predictive modelling, software engineering and performance evaluation.
+<!-- Its main goal, is however, improving the performance of large HPC systems by providing scientific applications to  I hope this work will modestly contribute to  -->
+
+1) EOD -- the extension of a accelerator portable benchmark suite, future work includes synthesizing applications using the clgen tool to further enhance the coverage of applications.
+
+2) AIWC -- 
+
+
+
 * development of AIWC analysis tool
 * addition of new metrics
 * feature space analysis of all dwarfs and potential clustering of application types

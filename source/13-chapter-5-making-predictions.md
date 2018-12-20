@@ -326,3 +326,13 @@ For all other device pairs, the relative order for the `kmeansPoint` kernel is c
 Additionally, the `lud_diagonal` kernel suffers from systematic under-prediction of execution times on AMD GPU devices, however the relative ordering is still correct.
 As such, the proposed model provides sufficiently accurate execution time predictions to be useful for scheduling to heterogeneous compute devices on supercomputers.
 
+##Discussion
+
+If the predictive model were used in a real-world setting -- say on a HPC node -- the final metrics collected by AIWC could be embedded as a comment at the beginning of each kernel code.
+This would follow the use-case for AIWC as a plugin to the OpenCL debugger Oclgrind.
+The developer would first use Oclgrind to debug, optimize and confirm functionality of a kernel, then, enable the AIWC plugin to generate the metrics for the final kernel code.
+This approach would allow the high accuracy of the predictive model without any significant overhead -- metrics are only generated and embedded once per kernel and is done largely automatically, with the guidance of the developer.
+Separately, the training of the model would only need to occur when the HPC system is updated, such that, a new accelerator device is added, or the drivers, or compiler updated.
+The extent of model training is also largely automatic following the methodology presented in this thesis.
+EOD is run over updated devices and the performance runtimes provided into a newly trained regression model -- by following the approach outlined in this Chapter.
+
