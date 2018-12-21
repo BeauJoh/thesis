@@ -6,5 +6,11 @@ Thank you to our colleagues at The University of Bristol's High Performance Comp
 
 I would also like to thank Oracle and the ANU VC Travel Grants Office for providing additional funding, this was invaluable for conference attendance.
 
+<!-- Thank you to my supervisors Josh, Greg and Alistair.
+You've all exercised 
+
+I would also like to thank my lab mates over the many years 
+-->
+
 \newpage
 

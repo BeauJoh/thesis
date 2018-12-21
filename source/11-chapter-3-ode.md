@@ -27,6 +27,11 @@ We aim to extend these efforts to achieve a full representation of each dwarf, b
 We have observed this to be true across a wide range of accelerators, therefore we have enhanced the OpenDwarfs benchmark suite to support running different problem sizes for each benchmark.
 To improve reproducibility of results, we also modified each benchmark to execute in a loop for a minimum of two seconds, to ensure that sampling of execution time and performance counters was not significantly affected by operating system noise.
 
+Our philosophy for the benchmark suite is that firstly, it "must" run on all devices, and secondly, it "should" run well on them.
+To this end, we removed hardware specific optimizations from codes that would either diminish performance, or crash the application entirely when executed on other devices.
+Instead, we added autotuning support to achieve a comparable performance whilst retaining the general purpose nature which is critical to a benchmark suite.
+Configuration parameters for the benchmarks, such as local workgroup size, were incorporated into EOD using the OpenTuner[@ansel:pact:2014] auto-tuning library.
+
 For the Spectral Methods dwarf, the original OpenDwarfs version of the FFT benchmark was complex, with several code paths that were not executed for the default problem size, and returned incorrect results or failures on some combinations of platforms and problem sizes we tested.
 We replaced it with a simpler high-performance FFT benchmark created by Eric Bainville [@bainville2010fft], which worked correctly in all our tests.
 We have also added a 2-D discrete wavelet transform from the Rodinia suite [@che2009rodinia] -- with modifications to improve portability.
