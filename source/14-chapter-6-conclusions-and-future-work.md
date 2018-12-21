@@ -45,7 +45,7 @@ Instead, we added autotuning support to achieve a comparable performance whilst 
 
 We improved coverage of spectral methods by adding a new Discrete Wavelet Transform benchmark, and replacing the previous inadequate `fft` benchmark.
 All benchmarks were enhanced to allow multiple problem sizes; in Chapter 3 we report results for four different problem sizes, selected according to the memory hierarchy of CPU systems as motivated by Marjanović's findings [@marjanovic2016hpc].
-These can now be easily adjusted for next generation accelerator systems using the methodology outlined in Section~\ref{ssec:setting_sizes}.
+These can now be easily adjusted for next generation accelerator systems using the methodology outlined in Section~\ref{sec:setting_sizes}.
 
 We ran many of the benchmarks presented in the original OpenDwarfs [@krommydas2016opendwarfs] paper on current hardware.
 This was done for two reasons, firstly to investigate the original findings to the state-of-the-art systems and secondly to extend the usefulness of the benchmark suite.

@@ -112,7 +112,7 @@ LibSciBench version 0.2.2 was used for all performance measurements.
 
 We measured execution time and energy for individual OpenCL kernels within each benchmark.
 Each benchmark run executed the application in a loop until at least two seconds had elapsed, and the mean execution time for each kernel was recorded.
-Each benchmark was run 50 times for each problem size (see \S\ref{ssec:setting_sizes}) for both execution time and energy measurements.
+Each benchmark was run 50 times for each problem size (see \S\ref{sec:setting_sizes}) for both execution time and energy measurements.
 A sample size of 50 per group -- for each combination of benchmark and problem size -- was used to ensure that sufficient statistical power $\beta = 0.8$ would be available to detect a significant difference in means on the scale of half standard deviation of separation.
 This sample size was computed using the t-test power calculation over a normal distribution.
 
@@ -128,7 +128,7 @@ For each benchmark we also measured memory transfer times between host and devic
 
 Energy measurements were taken on Intel platforms using the RAPL PAPI module, and on Nvidia GPUs using the NVML PAPI module.
 
-### Setting Sizes
+### Setting Sizes{#sec:setting_sizes}
 
 For each benchmark, four different problem sizes were selected, namely **tiny**, **small**, **medium** and **large**.
 These problem sizes are based on the memory hierarchy of the Skylake CPU.
