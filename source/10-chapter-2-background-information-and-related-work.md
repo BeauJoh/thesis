@@ -12,11 +12,11 @@ Finally, this section culminates in a discussion of benchmark suites, applicatio
 
 Phil Colella [@colelladefining] identified seven motifs of numerical methods which he thought would be important for the next decade.
 Based on this style of analysis, The Berkeley Dwarf Taxonomy [@dwarfmine_2006] was conceived to present the motifs commonplace in HPC.
-Initially performed by Asanovic et. al. [@asanovic2006landscape], the Dwarf Taxonomy claims that many applications in parallel computing share patterns of communication and computation.
+Initially performed by Asanovic et al. [@asanovic2006landscape], the Dwarf Taxonomy claims that many applications in parallel computing share patterns of communication and computation.
 Applications with similar patterns are defined as being represented by a single Dwarf.
 Dwarfs are removed from specific implementations and optimisations.
 There are 13 Dwarfs in total.
-During the Asanovic et. al. [@asanovic2006landscape] paper, a summary of the diversity of applications is presented, and whilst it is believed that more Dwarfs may be added to this list in the future, all currently encountered scientific codes can be classified as belonging to one or more of these Dwarfs.
+During the Asanovic et al. [@asanovic2006landscape] paper, a summary of the diversity of applications is presented, and whilst it is believed that more Dwarfs may be added to this list in the future, all currently encountered scientific codes can be classified as belonging to one or more of these Dwarfs.
 For each of the 13 Dwarfs the authors indicate the performance limit -- in other words, whether the dwarf is compute bound, memory latency limited or memory bandwidth limited.
 The Dwarfs and their limiting factors are presented in Table \ref{tbl:dwarf-taxonomy}.
 Note, the **?** symbol indicates the unknown performance limit at the time of publication.
@@ -105,10 +105,10 @@ FPGAs are suitable for workloads which require simple operations on very large a
 Specifically, they are well suited to accelerating applications from spectral methods dwarf, specifically stream/filter processing on temporal data, and the combinational logic dwarf, which exploit bit-level parallelism to achieve high throughput.
 An example of the combinational logic dwarf is in the computing of checksums which is commonly required for network processing and ensuring data archive integrity.
 The configurablity of these devices may make them well suited to the characteristics of many dwarfs, however, the compilation or configuring the hardware for an application takes many orders of magnitude longer than any of the other examined accelerator architectures.
-Akram et. al.[@akram2018fpga] present a prototype FPGA supercomputer comprised of 5 compute nodes, each with an ARM CPU and Xilinx 7 FPGA.
+Akram et al.[@akram2018fpga] present a prototype FPGA supercomputer comprised of 5 compute nodes, each with an ARM CPU and Xilinx 7 FPGA.
 The benchmark application was over on a Finite Impulse Response Filter -- an application typical to the Spectral Methods Dwarf -- and presents 8.5$\times$ performance over direct computation on the ARM CPU alone.
 Unfortunately, energy efficiency or a comparison between GPU accelerators is not presented.
-Fujita et. al. [@fujita2018accelerating] present a comparison between a P100 GPU and BittWare A10PL4 FPGA over a Authentic Radiation Transfer scientific application and show that the performance is comparable, however an energy efficiency comparison between these two accelerators is not presented.
+Fujita et al. [@fujita2018accelerating] present a comparison between a P100 GPU and BittWare A10PL4 FPGA over a Authentic Radiation Transfer scientific application and show that the performance is comparable, however an energy efficiency comparison between these two accelerators is not presented.
 Given the increasing need for high-throughput devices from applications in combinational logic and other dwarfs, FPGA devices are likely to be included in future HPC systems.
 
 Application-Specific Integrated Circuit (ASIC) is an integrated circuit designed for a specific task.
@@ -295,7 +295,7 @@ Since accelerators are not considered in this work -- and as such, all applicati
 ### Rodinia {#sssec:rodinia}
 
 
-Che et. al [@che2009rodinia] initially proposed a benchmark suite to cover a wide range of parallel communication patterns.
+Che et al. [@che2009rodinia] initially proposed a benchmark suite to cover a wide range of parallel communication patterns.
 The benchmarks were selected following the Berkeley Dwarf Taxonomy and are from real world high performance computing applications.
 The diversity between selected benchmarks was shown by measuring execution times, communications overheads and energy usage of running each benchmark on an NVIDIA GTX 280 GPU and an Intel Core 2 Extreme CPU.
 Across the suite: speedups in execution times ranged from 5.5x to 80.8x, communication overheads varied from 2-76% and GPU power consumption overheads ranged from 38-83 Watts, illustrating important architectural differences between the CPU and GPU.
@@ -310,7 +310,7 @@ Many of the benchmarks were added from Rodinia into the original OpenDwarfs suit
 
 ### SHOC
 
-The Scalable Heterogeneous Computing benchmark suite SHOC, presented by Danalis et. al. [@danalis2010scalable], offer an alternative benchmark suite and unlike OpenDwarfs and Rodinia, supports multiple nodes using MPI for distributed parallelism.
+The Scalable Heterogeneous Computing benchmark suite SHOC, presented by Danalis et al. [@danalis2010scalable], offer an alternative benchmark suite and unlike OpenDwarfs and Rodinia, supports multiple nodes using MPI for distributed parallelism.
 It also has not been structured into the dwarf taxonomy but rather the benchmarks it encompasses have been categorised according according to two major sets, whether the application performs a stress test role -- which assess the device capabilities --  or acts as a performance test -- which measure host / system performance usually on synthetic kernels.
 SHOC supports multiple programming models including OpenCL, CUDA and OpenACC, with benchmarks ranging from targeted tests of particular low-level hardware features to a handful of application kernels.
 The variety of language implementations for each benchmark application, was one of the original motivators for its construction.
@@ -322,14 +322,14 @@ By focusing on application kernels written exclusively in OpenCL, our enhanced O
 
 ### OpenDwarfs
 
-As with Rodinia, Feng et. al [@feng2012opencl] introduce the OpenDwarfs (OpenCL and the 13 Dwarfs) as an OpenCL implementation of Berkeley’s 13 computational dwarfs of scientific computing.
+As with Rodinia, Feng et al. [@feng2012opencl] introduce the OpenDwarfs (OpenCL and the 13 Dwarfs) as an OpenCL implementation of Berkeley’s 13 computational dwarfs of scientific computing.
 In this work, the absolute execution times were collected over 11 benchmarks.
 In this paper 11 applications were evaluated on a CPU, an Intel Xeon E5405, and three GPUs, a low power AMD HD5450 with 25W TDP, and two high-power GPUs: AMD HD5870 and an Nvidia GT520 with energy footprints of 228 and 238W TDP respectively.
 A larger range of dwarfs are covered by OpenDwarfs than Rodinia; however, one dwarf, MapReduce, is still not represented by any application.
 Additionally, several dwarfs currently have only one representative application which may not expose the entire set of characteristics of that dwarf.
 
 A potential criticism is that no diversity analysis was performed to justify the inclusion of each application -- however since many applications were inherited from the Rodinia code-base these applications have a proven MICA diversity.
-Recently, this work was updated and evaluated on FPGA devices by Krommydas et. al. [@krommydas2016opendwarfs].
+Recently, this work was updated and evaluated on FPGA devices by Krommydas et al. [@krommydas2016opendwarfs].
 Given the focused effort of having all the dwarfs represented, the choice to have one implementation -- and that being OpenCL, and the recent use of the benchmark suite for a new accelerator architecture all result in it being the selected benchmark suite to perform the extension.
 These efforts are discussed in Chapter 3.
 
@@ -353,7 +353,7 @@ In 2014, this was validated for hardware used in HPC provided it supports a slee
 Albers and Antoniadis [@Albers:2014:RIN:2578852.2556953] present a framework to accurately approximate the energy cost of speed scaling with a sleep state.
 In this study, the authors show that the active state of a CPU is comparable to the dynamic energy needed for processing.
 
-Meanwhile, Agarwal et. al. [@Agarwal:2000:CRV:339647.339691] show that wire latencies (which correspond to memory movement and chip-to-chip communication) have not matched the increase in the range of clock-frequency.
+Meanwhile, Agarwal et al. [@Agarwal:2000:CRV:339647.339691] show that wire latencies (which correspond to memory movement and chip-to-chip communication) have not matched the increase in the range of clock-frequency.
 The bottle-neck on many of these workloads is also moving from being compute-bound to memory or communication bound, since the imbalance of hardware improvements shift application requirements to wait on communication and memory transfers.
 As such the impact of increasing the clock frequency is having (and will continue to have) less of an impact on computational efficiency.
 
@@ -371,7 +371,7 @@ Where mechanisms need be developed to direct codes to the most appropriate accel
 
 ### Time and Energy -- a non-linear relationship
 
-There exist applications where the coupling between execution time and energy consumption is non-linear [@lively2011energy] and goes back to Agarwal et. al. [@Agarwal:2000:CRV:339647.339691] results which show that wire latencies have not matched the increase in the range of clock-frequency.
+There exist applications where the coupling between execution time and energy consumption is non-linear [@lively2011energy] and goes back to Agarwal et al. [@Agarwal:2000:CRV:339647.339691] results which show that wire latencies have not matched the increase in the range of clock-frequency.
 As such, the impact of increasing the clock frequency on applications that are compute-bound will benefit proportionally to having a higher clock-frequency, however, there are applications and potentially even dwarfs that are memory or communication bound, where increasing the frequency of a core does not also increase the speed of the memory bus and thus will experience little to no benefit.
 Indeed, the base-power demand of the system will increase at the expense of negligible difference in require execution time, applications within this dwarf will need be carefully and potentially scheduled on a accelerator with a memory clock which matches the core clock.
 
@@ -417,7 +417,7 @@ Auto-tuning frameworks could be readily used with the Extended OpenDwarfs Benchm
 
 Phase is defined as a set of intervals (or slices in time) within a programs execution that has similar behaviour.
 Therefore, the term phase-shifting refers to change of the execution of a program with temporal adjacency such that the program experiences time-varying effects.
-Sherwood  et. al. [@sherwood2003discovering] observe that common system design and optimisation focus heavily on the assume average system behaviour.
+Sherwood  et al. [@sherwood2003discovering] observe that common system design and optimisation focus heavily on the assume average system behaviour.
 They propose however instead programs should be modelled and optimised for phase-based program behaviour.
 The approach outlined states that phase-behaviour can be profiled quickly using block vector [@sherwood2002automatically] profiles (a vector of per element counts, where each element is the number of times a code block has been entered over a given interval) and off-line classification.
 
@@ -444,7 +444,7 @@ Additionally, since SPIR is hardware agnostic/ISA-independent the patterns of co
 Therefore, analysis such as the classification of which dwarf a new code can be identified, can be performed before any actual device execution is performed.
 Additionally, these classification and other analysis metrics can be embedded into the SPIR code as a comment in the header, which in turn can be used by a scheduler to determine which device the kernel should be executed.
 
-Closely related to the work performed in this thesis was independently performed by Muralidharan et. al. [@muralidharan2015semi].
+Closely related to the work performed in this thesis was independently performed by Muralidharan et al. [@muralidharan2015semi].
 Wherein, they use offline ahead-of-time analysis with Oclgrind to collect an instruction histogram of each OpenCL kernel execution in order to generate an estimate of the roofline model analysis for each given accelerator.
 The resultant tool-flow methodology is used to analyse and track the performance over 3 distinct heterogeneous platforms, and results in a metric to characterise performance.
 The basis of our work on AIWC is built on offline ahead-of-time analysis techniques and is presented in Chapter 4.
@@ -542,9 +542,9 @@ This contribution focuses on developing a scheduler to delegate the most appropr
 This was achieved by developing a partitioning tool to separate computationally intensive OpenMP regions from C, extracting to and building a predictive model based on past history of the programs executing on the accelerators.
 We broaden this analysis by claiming that all benchmarks encompassing a dwarf will perform optimally on one accelerator type, but identify that one type of accelerator is non-optimal for all dwarfs.
 
-Hoste et. al. [@hoste2006performance] show that the prediction of performance can be based on inherent program similarity.
+Hoste et al. [@hoste2006performance] show that the prediction of performance can be based on inherent program similarity.
 In particular, they show that the metrics collected from a program executing on a particular instruction set architecture (ISA) with a specific compiler offers a relatively accurate characterization of workload for the same application on a totally different micro-architecture.
-[Che et. al. @che2009rodinia] broadens this finding with an assumption that performing analysis on a single threaded CPU version of a benchmark application maintains the underlying set of instructions and the composition of the application.
+[Che et al. @che2009rodinia] broadens this finding with an assumption that performing analysis on a single threaded CPU version of a benchmark application maintains the underlying set of instructions and the composition of the application.
 
 Therefore, it is intuitive that the composition of a program collected using a simulator (such as Oclgrind discussed in [Section @sec:oclgrind], which operates on the most common intermediate form for the OpenCL runtime) regardless of accelerator to which it is ultimately mapped, offers a more accurate architecture agnostic set of metrics around an applications workload.
 This, in turn, can be used as a basis for performance prediction on general accelerators.
