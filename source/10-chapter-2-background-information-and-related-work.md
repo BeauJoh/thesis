@@ -280,12 +280,16 @@ Rodinia and the original OpenDwarfs benchmark suite focused on collecting a repr
 The Scalable Heterogeneous Computing benchmark suite (SHOC)[@lopez2015examining], unlike OpenDwarfs and Rodinia, supports multiple nodes using MPI for distributed parallelism.
 SHOC supports multiple programming models including OpenCL, CUDA and OpenACC, with benchmarks ranging from targeted tests of particular low-level hardware features to a handful of application kernels.
 
-Sun et al.[@sun2016] propose Hetero-Mark, a Benchmark Suite for CPU-GPU Collaborative Computing, which has five benchmark applications each implemented in the Heterogeneous Compute Compiler (HCC) -- which compiles to OpenCL and HIP which converts CUDA codes to the AMD Radeon Open Compute back-end.
+@sun2016 propose Hetero-Mark, a Benchmark Suite for CPU-GPU Collaborative Computing, which has five benchmark applications each implemented in the Heterogeneous Compute Compiler (HCC) -- which compiles to OpenCL and HIP which converts CUDA codes to the AMD Radeon Open Compute back-end.
 Meanwhile, Chai by Gómez-Luna et al.[@gomez2017chai], offers 15 applications in 7 different implementations with the focus on supporting integrated architectures.
 
 Barnes et al.[@barnes2016evaluating] collected a representative set of applications from the current NERSC workload to guide optimization for Knights Landing in the Cori supercomputer.
 As it is not always feasible to perform such a detailed performance study of the capabilities of different computational devices for particular applications, the benchmarks described in this paper may give a rough understanding of device performance and limitations.
 
+The Princeton Application Repository for Shared-Memory Computers (PARSEC) is a benchmark suite proposed by @Bienia2008.
+It curates a set of real-world benchmarks from recognition, mining, synthesis and systems applications which mimic large-scale multithreaded commercial programs instead of the conventional types of HPC benchmark applications that achieve a high-performance.
+Its primary focus is to have a general purpose suite that assesses performance of multiprocessor CPUs over realistic application domains.
+Since accelerators are not considered in this work -- and as such, all applications are written in C -- it is not included in our evaluation, however, the fundamental principals of having a general purpose and portable set of applications that assess real-world workloads, forms the basis of our extensions and are presented in Chapter 3.
 
 ### Rodinia {#sssec:rodinia}
 
@@ -594,6 +598,16 @@ This work shows that the inclusion of transfer time is significant when improvin
 
 We propose an alternative model which allows accurate execution time predictions of OpenCL kernels on a wide range of architecturally-diverse accelerators.
 This methodology discussed in detail in Chapter 5 and uses features from AIWC -- from Chapter 4 -- to form a basis for a predictive model bound to run-times -- from Chapter 3.
+
+@Shelepov2009 propose the Heterogeneity-Aware Signature-Supported (HASS) scheduler -- a scheduling algorithm that matching threads to the most appropriate CPU cores.
+The architectural properties of an application are presented as signatures -- a compact summary of the applications memory-boundedness, available ILP, sensitivity to variations in clock speed.
+These are generated offline and can be embedded into the program binary.
+The scheduler then matches these signatures to the most appropriate core.
+HASS is targeted on heterogeneous CPU cores and is evaluated over two big.LITTLE type, asymmetric single-ISA, configurations -- an Intel Xeon X5365 and AMD Opteron 8356.
+CPU systems were treated as heterogeneous by changing the clock frequencies of individual cores.
+The evaluation examines the performance of automatic mapping of memory-bound threads to slow / smaller cores leaving threads that are capable of fully utilizing the faster cores.
+A caveat of this approach is that other accelerators are not considered and as such the signatures are not architecture-independent
+However, this the proposed methodology is the most similar and is the predecessor to our work.
 
 Lee and Wu [@lee2017performance] directly tackle the problem of scheduling OpenCL applications to the most suitable accelerator device.
 They propose HeteroPDP -- a scalable performance degradation predictor -- to dynamically balance the execution time slowdown when co-locating multiple applications in the same heterogeneous system.
