@@ -3,7 +3,7 @@
 
 The chapter presents background information, terminology and the related work drawn upon in the rest of this thesis.
 It provides a background for readers who might not be familiar with workload characterisation of programs, the associated performance metrics or composition of current HPC systems and how their performance is evaluated.
-It begins with an introduction of the Dwarf Taxonomy.
+The types of devices considered in this thesis and the benchmark suites examined can be broadly classified according to the Dwarf Taxonomy, as such, this Chapter begins with an introduction to the Dwarf Taxonomy.
 Next, we define accelerators and a provide brief survey regarding their use in supercomputing.
 The hardware agnostic programming framework OpenCL is presented.
 Finally, this section culminates in a discussion of benchmark suites, applications and where they are incorporated into the dwarf taxonomy.
@@ -15,11 +15,10 @@ Based on this style of analysis, The Berkeley Dwarf Taxonomy [@dwarfmine_2006] w
 Initially performed by Asanovic et al. [@asanovic2006landscape], the Dwarf Taxonomy claims that many applications in parallel computing share patterns of communication and computation.
 Applications with similar patterns are defined as being represented by a single Dwarf.
 Dwarfs are removed from specific implementations and optimisations.
-There are 13 Dwarfs in total.
-During the Asanovic et al. [@asanovic2006landscape] paper, a summary of the diversity of applications is presented, and whilst it is believed that more Dwarfs may be added to this list in the future, all currently encountered scientific codes can be classified as belonging to one or more of these Dwarfs.
+Asanovic et al. [@asanovic2006landscape] present a total of 13 Dwarfs, and whilst it is believed that more Dwarfs may be added to this list in the future, all currently encountered scientific codes can be classified as belonging to one or more of these Dwarfs.
 For each of the 13 Dwarfs the authors indicate the performance limit -- in other words, whether the dwarf is compute bound, memory latency limited or memory bandwidth limited.
 The Dwarfs and their limiting factors are presented in Table \ref{tbl:dwarf-taxonomy}.
-Note, the **?** symbol indicates the unknown performance limit at the time of publication.
+Note, the **?** symbol indicates the unknown performance limit at the time of publication -- none of these have been resolved since.
 
 
 Table: The Berkeley Dwarfs and their limiting factors. \label{tbl:dwarf-taxonomy}
@@ -56,102 +55,114 @@ Table: The Berkeley Dwarfs and their limiting factors. \label{tbl:dwarf-taxonomy
 
 
 Implementations of applications that are represented by the Dwarf Taxonomy are discussed in the benchmark evaluations presented in Section \ref{sec:chapter2-benchmark-suites}.
-Having familiarity with the division of applications and tasks commonly performed on supercomputers positions the use of accelerators for specific Dwarfs.
+Having familiarity with the division of applications and which of the Dwarfs they lie within assists in motivating the variety of accelerators used in HPC and is discussed in the next Section.
 
 
 ## Accelerator Architectures in HPC {#sec:chapter2-accelerator-architectures}
 
-Accelerators, in this setting, refer to any form of specialised hardware which may accelerate a given application code.
-Fortunately, from The Dwarf Taxonomy previously presented it is envisaged that all applications represented by a dwarf are are better suited to specific types of accelerator.
-Accelerators commonly include GPU, FPGA, DSP, ASIC, MIC and CPU devices.
-We define accelerators to include all compute devices, including CPUs, since their architecture is well suited to accelerate the computation of specific dwarfs.
+Accelerators, in this setting, refer to any form of hardware specialized to a particular pattern of computation; Thus, specialized hardware may accelerate a given application code according to that codes characteristics.
+From The Dwarf Taxonomy previously presented, it is envisaged that all applications represented by a dwarf are are better suited to specific types of accelerator.
+Accelerators commonly include GPU, FPGA, DSP, ASIC and MIC devices.
+We define accelerators to include all compute devices, including CPUs, since their architecture is well suited to accelerate the computation of specific dwarfs; Additionally, the heterogeneous configuration of side cores on modern CPUs presents a similar set of work-scheduling problems, that occur on other accelerators, primarily, these cores need to be given the appropriate work to ensure good system performance.
+The remainder of this section will present and describe each type of accelerator, its history and its uses.
 
 Central Processing Units (CPU) have additional circuitry for branch control logic, and generally operate at a high frequency, ensuring this architecture is highly suited to sequential tasks or workloads with many divergent logical comparisons -- corresponding to the finite-state machine, combinational logic, dynamic programming and backtrack branch and bound dwarfs of the Berkeley Dwarf Taxonomy.
 Additionally, CPUs are increasingly configured as two separate CPUs but provided on the same System-on-a-Chip (SoC) and strengthens the argument of defining accelerators to include CPUs.
 Comprised of two separate micro-architectures, a high-performance CPU -- faster base clock speed with additional hardware for branching -- to support the irregular control and access behaviour of typical workloads; and a smaller CPU -- commonly with a lower base-clock frequency but with many more cores and support for longer vector instructions -- for the highly parallel workloads/tasks common in scientific computing.
 
-The SW26010 and ARM big.LITTLE type processors are modern examples of how CPUs are treated as accelerators to achieve performance on modern supercomputers.
-The SW26010 CPU deployed in the Sunway TaihuLight supercomputer, contains a high-performance core known as a Management Processing Element (MPE), and a low-powered processor, the Computer Processing Element (CPE).
-The CPE is composed of an 8x8 mesh of cores, supports only user mode, and sports a small 16 KB L1 instruction cache and 64 KB scratch memory.
-Both MPE and CPE are both 64-bit Reduced Instruction-Set Computers (RISC) and support 256-bit vector instructions.
-This configuration shows the intent of the architecture, that the smaller CPE need be used effectively to achieve good performance [@dongarra2016report], in other words, the host or primary core contributes only a small part of the maximum theoretical FLOPs on modern heterogeneous supercomputers.
-.
-ARM processors with big.LITTLE and dynamIQ configurations have been proposed to meet the power needs of exascale supercomputers [@padoin2014performance] [@aroca2012towards] [@rajovic2013low] [@keipert2015energy].
+The SW26010 and ARM big.LITTLE type processors are current examples of how CPUs are treated as accelerators to achieve performance on modern supercomputers.
+The SW26010 CPU deployed in the Sunway TaihuLight supercomputer, contains high-performance cores known as Management Processing Elements (MPE), and low-powered Computer Processing Elements (CPE).
+The CPE are arranged in an 8x8 mesh of cores, supports only user mode, and each core sports a small 16 KB L1 instruction cache and 64 KB scratch memory.
+Both MPE and CPE are of 64-bit Reduced Instruction-Set Computers (RISC) and support 256-bit vector instructions.
+This configuration shows the intent of the architecture, that the smaller CPEs need be used effectively to achieve good performance [@dongarra2016report].
+In other words, the host or primary core contributes only a small part of the maximum theoretical FLOPs on modern heterogeneous supercomputers.
+
+ARM processors with big.LITTLE and dynamIQ configurations have been proposed to meet the power needs of exascale supercomputers <!--\cite{padoin2014performance, aroca2012towards, rajovic2013low, keipert2015energy}-->[@padoin2014performance; @aroca2012towards; @rajovic2013low; @keipert2015energy].
 big.LITTLE is an heterogeneous configuration of CPU cores on the same die and memory regions.
 The big cores have higher clock frequencies and are generally more powerful  than the LITTLE cores, which creates a multi-core processor that suites a dynamic workload more than clock scaling.
-Both the SW26010 and big.LITTLE devices, have side cores which need to be carefully handled to achieve high FLOPs, since they accelerate the workloads they are thus defined as accelerators.
+Tasks can migrate to the most appropriate core, and unused cores can be powered down.
+CPUs can be considered accelerators since many heterogenous configurations including the SW26010 and big.LITTLE devices, have side cores, which, with careful work scheduling, can accelerate workloads and achieve high FLOPs.
 
-Graphics Processing Units (GPU) as the name would suggest, accelerate manipulating computer graphics and image processing and is achieved by having circuit designs to apply the same alterations to many values at once.
+Graphics Processing Units (GPU) were originally designed to accelerate manipulating computer graphics and image processing, which is achieved by having circuit designs to apply the same operation to many values at once.
 This highly parallel structure makes them suitable for applications which involve processing large blocks of data.
 Many of the dwarfs of scientific computation are directly suited to GPUs for acceleration, including dense [@volkov2008benchmarking][@tomov2010dense] and sparse linear algebra and N-Body methods.
-There has been an active effort to migrate applications from less suited dwarfs, such as, spectral methods [@komatitsch2010high], structured grids [@nicolescu2015structured] and graph traversal [@merrill2012scalable] for GPU acceleration.
+There has been an active effort to migrate applications from less suited dwarfs, such as spectral methods [@komatitsch2010high], structured grids [@nicolescu2015structured] and graph traversal [@merrill2012scalable] for GPU acceleration.
 Efforts are primarily algorithmic, such as reordering of operations and the padding of shared memory, and have been used with various success on GPU architectures [@springer2011berkeley].
-Avoiding bank-conflicts, non-coalesced memory accesses and an increase in the use of private and shared memory are critical to performance of these dwarfs on GPUs.
+Avoiding bank-conflicts and non-coalesced memory accesses thus increasing the use of private and shared memory are critical to performance of these dwarfs on GPUs.
 They are the most common type of accelerator in supercomputer systems.
-The recent adoption of the NVIDIA Volta GV100 GPU as the primary accelerator into the Summit and Sierra supercomputers [@markidis2018nvidia] is attributed to their performance [@tomov2010towards] and energy efficiency [@abdelfattah2018analysis] on workloads fundamental to scientific computing.
+The recent adoption of the NVIDIA Volta GV100 GPU as the primary accelerator into the Summit and Sierra supercomputers [@markidis2018nvidia] is attributed to its performance [@tomov2010towards] and energy efficiency [@abdelfattah2018analysis] on workloads fundamental to scientific computing.
 
 Many Integrated Core (MIC) architectures are an Intel Corporation specific accelerator.
 Xeon Phi formerly known as Knights Landing (KNL) is the last series of the MIC accelerators, and was discontinued in July 2018.
-It is similar to a GPU, by having many low frequency in-order cores sharing the same bus however the primary difference being each core is based on conventional CPU x86 architectures.
-There are 72 cores with a layout based on a 2D mesh topology -- comprised of 38 tiles, each tile features two CPU cores, and each core contains two Vector Processing Units (VPU). [@sodani2016knights].
+It is significantly different to a GPU, it relies heavily on Single Instruction Multiple Data (SIMD) parallelism as opposed to the Single Instruction Multiple Thread (SIMT) needed for GPUs.
+It has many low frequency in-order cores sharing the same bus and each core is based on conventional CPU x86 architectures.
+There are 72 cores with a layout based on a 2D mesh topology -- comprised of 38 tiles, each tile features two CPU cores, and each core contains two Vector Processing Units (VPU). [@sodani2016knights]; four cores are reserved for host-side system control and orchestration of work to the other cores.
 A 2D cache-coherent interconnect between tiles is included provide high-bandwidth pathways to match the memory access patterns on the core and mesh layout -- cores on the same tile have a shared 1 MB L2 cache.
 Each core supports a 512-bit vector instruction to utilize a large amount of SIMD parallelism.
-Dwarfs such as dense and sparse linear algebra are high-intensity and throughput-oriented workloads suited to the Xeon Phi accelerator [@dongarra2015hpc].
+Dwarfs such as Dense and Sparse Linear Algebra are high-intensity and throughput-oriented workloads suited to the Xeon Phi accelerator [@dongarra2015hpc].
 The Xeon Phi is the primary accelerator in the Trinity [@rajantrinity] and Cori [@antypas2014cori] supercomputer systems -- currently in the top 10 of the Top500.
 
-Field-Programmable Gate Arrays (FPGA) are accelerators which allows the physical hardware to be reconfigured for any specific task.
+Field-Programmable Gate Arrays (FPGA) are accelerators which allow the physical hardware to be reconfigured for any specific task.
 They are composed of a high number of logic-gates organised into logic-blocks with fast I/O rates and bi-directional communication between them.
 FPGAs are suitable for workloads which require simple operations on very large amounts of data with a fast I/O transfer.
 Specifically, they are well suited to accelerating applications from spectral methods dwarf, specifically stream/filter processing on temporal data, and the combinational logic dwarf, which exploit bit-level parallelism to achieve high throughput.
 An example of the combinational logic dwarf is in the computing of checksums which is commonly required for network processing and ensuring data archive integrity.
 The configurablity of these devices may make them well suited to the characteristics of many dwarfs, however, the compilation or configuring the hardware for an application takes many orders of magnitude longer than any of the other examined accelerator architectures.
 Akram et al.[@akram2018fpga] present a prototype FPGA supercomputer comprised of 5 compute nodes, each with an ARM CPU and Xilinx 7 FPGA.
-The benchmark application was over on a Finite Impulse Response Filter -- an application typical to the Spectral Methods Dwarf -- and presents 8.5$\times$ performance over direct computation on the ARM CPU alone.
+The benchmark application was of a Finite Impulse Response Filter -- an application typical of the Spectral Methods Dwarf -- and presents 8.5$\times$ performance improvement over direct computation on the ARM CPU alone.
 Unfortunately, energy efficiency or a comparison between GPU accelerators is not presented.
 Fujita et al. [@fujita2018accelerating] present a comparison between a P100 GPU and BittWare A10PL4 FPGA over a Authentic Radiation Transfer scientific application and show that the performance is comparable, however an energy efficiency comparison between these two accelerators is not presented.
 Given the increasing need for high-throughput devices from applications in combinational logic and other dwarfs, FPGA devices are likely to be included in future HPC systems.
 
-Application-Specific Integrated Circuit (ASIC) is an integrated circuit designed for a specific task.
+An integrated circuit designed solely for a specific task is known as an Application-Specific Integrated Circuit (ASIC).
 In this regard, they are akin to FPGAs without the ability to be reconfigured.
-They have been actively used to accelerate the hashing workloads from the combinational logic dwarf for bitcoin mining tasks.
+They have been used to accelerate the hashing workloads from the combinational logic dwarf for bitcoin mining tasks.
 Google's Tensor Processing Units (TPU) are another example of ASICs, and support the TensorFlow [@abadi2016tensorflow] framework. 
-TPUs perform convolutions for Machine Learning applications, which largly requires matrix operations and are encapsulated by both the dense and sparse linear algebra dwarfs [@gallopoulos2016parallelism].
+TPUs perform convolutions for Machine Learning applications, which require many large matrix operations and are encapsulated by both the dense and sparse linear algebra dwarfs [@gallopoulos2016parallelism].
 
-Digital Signal Processors (DSP) have their origins in audio processing -- specifically in telephone exchanges and more recently in mobile phones -- where streams of data are constantly arriving and an identical task is needed to be applied.
+Digital Signal Processors (DSP) have their origins in audio processing -- specifically in telephone exchanges and more recently in mobile phones -- where streams of data are constantly arriving and an identical operation must be applied to each element.
 Audio compression and temporal filtering are examples of the Spectral Methods dwarf and are best suited to the DSP architecture.
 DSP cores operate on a separate clock to the host CPU and have circular memory buffers which allow a host device -- using shared memory -- to provide and remove data for processing without ever interrupting the DSP.
-Furthermore, Mitra et al. [@mitra2018development] evaluate prototype a nCore Brown-Dwarf system where each node contains an ARM Cortex-A15 host CPU, a single Texas Instruments Keystone II DSP and two Keystone I DSPs.
-They compare the performance and energy-efficiency of Level-3 BLAS matrix multiplications and a real-world scientific code for biostructure based drug design against comparisons on conventional x86 based HPC systems with attached accelerators.
+Mitra et al. [@mitra2018development] evaluate a prototype nCore Brown-Dwarf system where each node contains an ARM Cortex-A15 host CPU, a single Texas Instruments Keystone II DSP and two Keystone I DSPs.
+They compare the performance and energy-efficiency of dense matrix multiplication and a real-world scientific code for biostructure based drug design against conventional x86 based HPC systems with attached accelerators.
 They show a Brown-Dwarf node is competitive with contemporary systems for memory-bound computations and show the C66x multi-core DSP is capable of running floating-point intensive HPC application codes.
 
-Research around examining the suitability of ARM CPUs in conjunction with unconventional accelerators such as DSPs is highly active  [@maqbool2015evaluating][@rajovic2014tibidabo1][@jarus2013performance].
+Research around the suitability of ARM CPUs for HPC systems is highly active, with comparisons against the conventional Intel and AMD CPUs being made and the potential strengths of ARM systems when striving for energy efficiency  [@maqbool2015evaluating][@rajovic2014tibidabo1][@jarus2013performance].
 Isambard[@feldman_2017_isambard] and Astra[@lacy2018building] systems use the Cavium ThunderX2 CPU accelerator, where each ThunderX2 accelerator consists of 32 high-end ARM cores operating at 2.1 GHz [@mcintoshcomparative].
 Separately, Fujitsu propose using ARMv8-A cores for the Post-K supercomputer [@morgan_2016_postk].
 In a similar layout to the ThunderX2 the FX100 is a Scalable Many Core (SMaC) with the memory model -- Core Memory Group -- and core configuration -- Compute Engine -- also in a grid-layout.
-Currently, only 25 of the Top500 systems are based on ARM technologies, but these experimental systems may indicate the way forward for exascale supercomputing.
 
-In general, supercomputer systems are increasing using varied accelerator devices.
-A major motivation for this is to reduce energy use; indeed, without significant improvements in energy efficiency, the cost of exascale computing will be prohibitive [@villa2014scaling].
+Currently, only 25 of the Top500 systems are based on ARM technologies, but these experimental systems may indicate the way forward for exascale supercomputing.
+The most compelling reason for this transition to ARM is improved energy efficiency.
+ARM processors were originally targeted for embedded and mobile computing markets, where energy efficiency is a major constraint, and may explain that while time-to-completion times are higher on these systems verses conventional x86 architectures, the energy usage is much lower.
+@simula2018real evaluate ARM processors against conventional x86 processors on real-time cortical simulations and consider the energy and interconnect scaling over distributed systems.
+They show joules per synaptic event on a network of ARM based Jetson systems use 3$\times$ less energy than the Intel solution, whilst being 5$\times$ slower.
+The benchmark identifies an interesting bottleneck on current HPC x86 based systems: as the problem sizes grow larger more nodes and a larger network is required, thus, it is the lack of a low-latency, energy-efficient interconnect that is the primary concern.
+However, since ARM based HPC systems can be populated more densely and offer a lower baseline energy profile, it is an architecture better suited to bio-inspired artificial intelligence applications and scientific investigations of the cognitive functions of the brain.
+
+A major motivation for the increasing use of heterogeneous architectures is to reduce energy use; indeed, without significant improvements in energy efficiency, the cost of exascale computing will be prohibitive [@villa2014scaling].
 The diversity of accelerators in this space is best shown in a survey of accelerator usage and energy consumption in the worlds leading supercomputers.
-The complete results from the TOP500 and Green500 lists [@feldman_2017] were examined, over consecutive years from 2013 to 2018.
+The complete results from the TOP500 and Green500 lists [@feldman_2017] were examined, over consecutive years from 2012 to 2018.
+2012 was selected as the starting year since it was the first occurrence in the TOP500 spreadsheets to provide both accelerator name and accelerator core count information.
 Each dataset was taken from the June editions of the yearly listings.
 
 \begin{figure*}[t]
     \centering
     \includegraphics[width=\textwidth,keepaspectratio]{analysis/top500_percentage_of_supercomputers_with_accelerators.pdf}
-    \caption{The percentage of accelerators in use and the contributions of cores found on accelerators in the Top500 supercomputers over time.}
+    \caption{The percentage of accelerators in use and the contributions of cores found on systems with accelerators in the Top500 supercomputers over time.}
     \label{fig:top500-percentage-of-supercomputers-using-accelerators}
 \end{figure*}
 
-Figure \ref{fig:top500-percentage-of-supercomputers-using-accelerators} shows steady increase in the use of accelerators in supercomputers depicted as the red line.
+Figure \ref{fig:top500-percentage-of-supercomputers-using-accelerators} shows steady increase in the use of accelerators in supercomputers depicted as the purple line.
 This is presented as a percentage of the number of systems using accelerators in the TOP500 divided by 500 -- the total number of systems listed in the TOP500 every year.
-In 2013 11\% of systems in the TOP500 used accelerators, this increased by roughly 2\% per year.
+In 2012 and 2013 11\% of systems in the TOP500 used accelerators, this increased by roughly 2\% per year.
 As of 2018 22\% of the TOP500 use accelerators.
-Note, from 2016 the Sunway TaihuLight system was introduced and is in the top 10, however due to the relience on the CPE side-core to achieve the FLOPs for its rank, the data was adjusted to be listed as containing an accelerator [@dongarra2016report].
-Also shown in Figure \ref{fig:top500-percentage-of-supercomputers-using-accelerators} is the average percentage of cores in the TOP500 every year dedicated to accelerators, presented as the blue line.
+Note, from 2016 the Sunway TaihuLight system was introduced and is in the top 10, however due to the reliance on the CPE side-core to achieve the FLOPs for its rank, the data was adjusted to be listed as containing an accelerator [@dongarra2016report].
+Also shown in Figure \ref{fig:top500-percentage-of-supercomputers-using-accelerators} is the average percentage of cores in the TOP500 every year dedicated to accelerators, presented as the teal line.
 This measure indicates how much of the TOP500 compute is dependent on the accelerator -- for systems that contain accelerators.
-Unsurprisingly, every year from 2013 to 2018, we see that a greater contribution of system resources -- cores -- are dedicated for accelerator devices and fewer resources for systems with accelerators are provided for the host -- conventional x86 CPU architectures.
-In 2013 76% of supercomputer cores were found on the accelerator, this increased on average by 1.5% per year to 85% of compute cores being accelerator based in 2018.
+The rationale for this metric is that systems in the TOP500 which use accelerators are not only accelerator based systems -- they contain conventional x86 CPU architectures as a host-side device which mirror the non-accelerator HPC systems, the teal line indicates what percentage of compute resources are attributed to the accelerator.
+Unsurprisingly, every year from 2012 to 2018, we see that a greater contribution of system resources -- cores -- are dedicated for accelerator devices and fewer resources for systems with accelerators are provided for the host. 
+In 2012 63% of supercomputer cores were located on the accelerator, by 2013 it jumped to 76%, this increased on average by 1.5% per year to 85% of compute cores being accelerator based in 2018.
 
 <!--
 \begin{figure*}[t]
@@ -160,15 +171,12 @@ In 2013 76% of supercomputer cores were found on the accelerator, this increased
     \caption{The percentage of accelerators in use in the top 10 ranked of the Top500 supercomputers.}
     \label{fig:top10-percentage-of-supercomputers-using-accelerators}
 \end{figure*}
+--> 
 
-Similarly, the results presented in Figure \ref{fig:top10-percentage-of-supercomputers-using-accelerators} examines the prevalence of accelerator usage in the TOP500 lists, but confined solely to the top 10 most powerful supercomputers of each year.
-The finer resolution presented in this figure shows that the most recently updated/installed systems have a much higher reliance on accelerators in order to place amongst these top supercomputers.
-By 2013 40\% of these systems used accelerators to secure a spot in the top 10 of the TOP500, this flat-lined till to 2015.
--->
-
-A closer inspection of the top 10 of the TOP500 systems over the same time period shows a greater dependence on accelerators and a corresponding increase in heterogeneity.
+A closer inspection of the top 10 of the TOP500 systems over the same time period is presented as the yellow line in Figure\ \ref{fig:top500-percentage-of-supercomputers-using-accelerators} and shows a greater dependence on accelerators and a corresponding increase in heterogeneity.
+In 2012 3 out of the top 10 supercomputers used accelerators to secure a position.
 From 2013 to 2017 the use of accelerators in these systems was consistently at 40% however in 2018 it jumped to 70%.
-Since the percentages of the use of accelerators in the top 10 is much higher than general than in the rest of the TOP500, we can conclude that the use of accelerators gives an edge to the ranking of these systems.
+Since the use of accelerators in the top 10 is much higher than in the rest of the TOP500 (purple line), we can conclude that the use of accelerators gives an edge to the ranking of these systems.
 The general trend of increased use of accelerators throughout all of the TOP500 continues to increase and reinforces the importance of accelerators in this space.
 
 <!--
@@ -194,13 +202,13 @@ Another benefit from the increasing dependence on a heterogeneous mix of acceler
     \label{fig:top500-gflops-per-watt-with-and-without-accelerators-in-supercomputers}
 \end{figure*}
 
-Figure \ref{fig:top500-gflops-per-watt-with-and-without-accelerators-in-supercomputers} presents a comparison of the energy efficiency -- the rate of computation that can be delivered by a computer for every watt of power consumed -- in terms of billions of floating point operations per second per watt, of supercomputers which use accelerators, presented as the red line, and systems which do not use accelerators -- shown in blue line.
+Figure \ref{fig:top500-gflops-per-watt-with-and-without-accelerators-in-supercomputers} presents a comparison of the energy efficiency -- the rate of computation that can be delivered by a computer for every watt of power consumed -- in terms of billions of floating point operations per second per watt, of supercomputers which use accelerators, presented as the purple line, and systems which do not use accelerators -- shown as the yellow line.
 Generally, we see that the mean energy efficiency of all systems improves over time.
 However, it is apparent that the use of accelerators in supercomputers has always offered better energy efficiency than using conventional x86 architectures as the primary means of computation.
-Systems without accelerators had a mean energy efficiency of 750 MFlops/Watt in 2013 and have increased on average by 200 MFlops/Watt every year, in 2018 these systems achieved 2 GFlops/Watt.
+Systems without accelerators had a mean energy efficiency of 500 MFlops/Watt in 2012 and have increased on average by 200 MFlops/Watt every year, in 2018 these systems achieved 2 GFlops/Watt.
 These results are modest when compared to the gains in efficiency when using accelerators in supercomputing systems.
-In 2013 the mean energy efficiency of supercomputers with accelerators was 1.3 GFlops/Watt and reached 5.9 GFlops/Watt in 2018, growing non-linearly by 750 MFlops/Watt per year.
-The efficiency of systems using accelerators are improving faster than supercomputer which rely on homogeneous CPU architectures.
+In contrast, in 2012 the mean energy efficiency of supercomputers with accelerators was 900 MFlops/Watt and reached 5.9 GFlops/Watt in 2018, growing non-linearly by 750 MFlops/Watt per year.
+The efficiency of systems using accelerators is improving faster than supercomputers which rely on homogeneous CPU architectures.
 
 Similar efficiencies have also been shown in the most energy efficient supercomputing list -- the Green500.
 From June 2016 to June 2017, the average energy efficiency of the top 10 of the Green500 supercomputers rose by 2.3x, from 4.8 to 11.1 gigaflops per watt [@feldman_2017].
@@ -214,15 +222,15 @@ Both architectures use ARM cores alongside other conventional accelerators, with
 The Tianhe-2A uses a Matrix2000 DSP accelerator [@morgan_2017_tianhe]; so will the future system, the Tianhe-3, which is due to be operational in 2020 and will use ARM CPU cores as the primary compute hardware [@feldman_2018].
 
 
-## The Open Compute Language Setting
+## The Open Compute Language (OpenCL)
 
-OpenCL (Open Compute Language) is a standard that allows computationally intensive codes to be written once and run efficiently on any compliant accelerator device.
+OpenCL is a standard that allows computationally intensive codes to be written once and run efficiently on any compliant accelerator device.
 OpenCL is supported on a wide range of systems including CPU, GPU, FPGA, DSP and MIC devices.
 While it is possible to write application code directly in OpenCL, it may also be used as a base to implement higher-level programming models.
 This technique was shown by Mitra et al., [@mitra2014implementation] where an OpenMP runtime was implemented over an OpenCL framework for Texas Instruments Keystone II DSP architecture.
 Having a common back-end in the form of OpenCL allows a direct comparison of identical code across this diverse range of architectures.
 
-OpenCL programs comprise of a host and a device side, the program progression is always the same.
+OpenCL programs consist of a host and a device side, which cooperate to perform a computation using a standard sequence of steps.
 The host is responsible for querying the suitable platforms, vendor OpenCL runtime drivers, and establishing a context on the selected devices.
 Next, the host sets up memory buffers, compiles a kernel program for each device -- the final compiled device binaries are generated for each specific device instruction set architecture (ISA).
 
@@ -244,17 +252,17 @@ Additionally, these work items can be run in teams -- denoted local work groups.
 Each local work group has a given size, and as previously mentioned can be determined on the device side, in the kernel code, with `get_local_id`.
 Incorrectly setting the number of local work groups and therefore also the size of each work group can reduce performance however, recent work shows these parameters can be automatically optimised for any accelerator architecture as will be discussed in [Section @sec:chapter2-autotuning].
 
-The OpenCL programming framework is well-suited to such heterogeneous computing environments, as a single OpenCL code may be executed on multiple different device types.
+The OpenCL programming framework is well-suited to heterogeneous computing environments, as a single OpenCL code may be executed on multiple different device types.
 When combined with autotuning, an OpenCL code may exhibit good performance across varied devices. [@spafford2010maestro, @chaimov2014toward, @nugteren2015cltune, @price2017analyzing]
 OpenCL has been used for DSP programming since 2012 [@li2012enabling].
 Furthermore, Mitra et al. [@mitra2018development] propose a hybrid programming environment that combines OpenMP, OpenCL and MPI to utilize a nCore Brown-Dwarf system where each node contains an ARM Cortex-A15 host CPU, a single Texas Instruments Keystone II DSP and two Keystone I DSPs.
-OpenCL codes can be written to be easily linked with auto-tuners -- such as allowing the local work group size being set from the command line or as a macro in the pre-processor, these are set during execution and during compilation respectively.
+OpenCL codes can be written to be easily linked with auto-tuners, by allowing the local work group size to be set from the command line or as a macro in the pre-processor at execution and during compilation respectively.
 
 Kernel compilation flags are an additional tuning argument which affects runtime performance of accelerator specific OpenCL kernel codes.
 These flags are set on the host side during the `clBuildProgram` procedure.
 Pre-processor macros can also be defined on the kernel side which allows various loop level parallelism constructs to be enabled or disabled.
 Mathematical intrinsic options can also be set to disable double floating point precision, and change how denormalised numbers are handled.
-Other optimisations include using the strictest aliasing rules, use of the fast fused multiply and add instruction (with reduced precision), ignoring the signedness of floating point zeros and relaxed, finite or unsafe math operations.
+Other optimisations for less critical codes can include using the strictest aliasing rules, use of the fast fused-multiply-and-add instruction (with reduced precision), ignoring the signedness of floating point zeros and relaxed, finite or unsafe math operations.
 These can also be corrected using autotuning for both kernel specific and device specific optimisations.
 
 

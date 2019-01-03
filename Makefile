@@ -75,7 +75,6 @@ thesis.pdf:
 		--top-level-division=chapter \
 		./packages.yaml \
 
-
 thesis.tex: 
 	pandoc source/*.md \
 		-o output/thesis.tex \
