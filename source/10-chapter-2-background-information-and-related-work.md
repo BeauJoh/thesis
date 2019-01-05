@@ -13,11 +13,11 @@ Finally, this section culminates in a discussion of benchmark suites, applicatio
 Phil Colella [@colelladefining] identified seven motifs of numerical methods which he thought would be important for the next decade.
 Based on this style of analysis, The Berkeley Dwarf Taxonomy [@dwarfmine_2006] was conceived to present the motifs commonplace in HPC.
 Initially performed by Asanovic et al. [@asanovic2006landscape], the Dwarf Taxonomy claims that many applications in parallel computing share patterns of communication and computation.
-Applications with similar patterns are defined as being represented by a single Dwarf.
+Applications with similar patterns are defined as being represented by a single dwarf.
 Dwarfs are removed from specific implementations and optimisations.
-Asanovic et al. [@asanovic2006landscape] present a total of 13 Dwarfs, and whilst it is believed that more Dwarfs may be added to this list in the future, all currently encountered scientific codes can be classified as belonging to one or more of these Dwarfs.
-For each of the 13 Dwarfs the authors indicate the performance limit -- in other words, whether the dwarf is compute bound, memory latency limited or memory bandwidth limited.
-The Dwarfs and their limiting factors are presented in Table \ref{tbl:dwarf-taxonomy}.
+Asanovic et al. [@asanovic2006landscape] present a total of 13 dwarfs, and whilst it is believed that more dwarfs may be added to this list in the future, all currently encountered scientific codes can be classified as belonging to one or more of these dwarfs.
+For each of the 13 dwarfs the authors indicate the performance limit -- in other words, whether the dwarf is compute bound, memory latency limited or memory bandwidth limited.
+The dwarfs and their limiting factors are presented in Table \ref{tbl:dwarf-taxonomy}.
 Note, the **?** symbol indicates the unknown performance limit at the time of publication -- none of these have been resolved since.
 
 
@@ -55,7 +55,7 @@ Table: The Berkeley Dwarfs and their limiting factors. \label{tbl:dwarf-taxonomy
 
 
 Implementations of applications that are represented by the Dwarf Taxonomy are discussed in the benchmark evaluations presented in Section \ref{sec:chapter2-benchmark-suites}.
-Having familiarity with the division of applications and which of the Dwarfs they lie within assists in motivating the variety of accelerators used in HPC and is discussed in the next Section.
+Having familiarity with the division of applications and which of the dwarfs they lie within assists in motivating the variety of accelerators used in HPC and is discussed in the next Section.
 
 
 ## Accelerator Architectures in HPC {#sec:chapter2-accelerator-architectures}
@@ -109,7 +109,7 @@ Specifically, they are well suited to accelerating applications from spectral me
 An example of the combinational logic dwarf is in the computing of checksums which is commonly required for network processing and ensuring data archive integrity.
 The configurablity of these devices may make them well suited to the characteristics of many dwarfs, however, the compilation or configuring the hardware for an application takes many orders of magnitude longer than any of the other examined accelerator architectures.
 Akram et al.[@akram2018fpga] present a prototype FPGA supercomputer comprised of 5 compute nodes, each with an ARM CPU and Xilinx 7 FPGA.
-The benchmark application was of a Finite Impulse Response Filter -- an application typical of the Spectral Methods Dwarf -- and presents 8.5$\times$ performance improvement over direct computation on the ARM CPU alone.
+The benchmark application was of a Finite Impulse Response Filter -- an application typical of the Spectral Methods dwarf -- and presents 8.5$\times$ performance improvement over direct computation on the ARM CPU alone.
 Unfortunately, energy efficiency or a comparison between GPU accelerators is not presented.
 Fujita et al. [@fujita2018accelerating] present a comparison between a P100 GPU and BittWare A10PL4 FPGA over a Authentic Radiation Transfer scientific application and show that the performance is comparable, however an energy efficiency comparison between these two accelerators is not presented.
 Given the increasing need for high-throughput devices from applications in combinational logic and other dwarfs, FPGA devices are likely to be included in future HPC systems.
@@ -272,7 +272,7 @@ Benchmarking forms the basis on which comparisons between languages and environm
 Benchmark suites are large sets of benchmark codes used to reliably compare and measure realistic problems under realistic settings.
 Our work focuses on benchmarking for device specific performance limitations, for example, by examining the problem sizes where these limitations occur -- this is largely ignored by benchmarking suites with fixed problem sizes.
 For these reasons, we introduce the Extended OpenDwarfs benchmark suite in [Chapter @sec:chapter-3-ode] which covers a wider range of application patterns by focusing exclusively on OpenCL using higher-level benchmarks.
-Before jumping into this work an evaluation of existing benchmark suites is considered in the remainder of this section.
+Before jumping into this work, existing benchmark suites are considered in the remainder of this section.
 
 The NAS parallel benchmarks [@bailey1991parallel] follow a ‘pencil-and-paper‘ approach, specifying the computational problems to be included in the benchmark suite but leaving implementation choices such as language, data structures and algorithms to the user.
 The benchmarks include varied kernels and applications which allow a nuanced evaluation of a complete HPC system, however, the unconstrained approach does not readily support direct performance comparison between different hardware accelerators using a single set of codes.
@@ -283,16 +283,8 @@ Their focus was on comparison with CUDA; OpenCL was not considered.
 Barnes et al. [@barnes2016evaluating] collected a representative set of applications from the current NERSC workload to guide optimization for Knights Landing in the Cori supercomputer.
 As it is not always feasible to perform such a detailed performance study of the capabilities of different computational devices for particular applications, the benchmarks described in this paper may give a rough understanding of device performance and limitations.
 
-Rodinia and the original OpenDwarfs benchmark suite focused on collecting a representative set of benchmarks for scientific applications, classified according to dwarfs, with a thorough diversity analysis to justify the addition of each benchmark to the corresponding suite.
-
-The Scalable Heterogeneous Computing benchmark suite (SHOC)[@lopez2015examining], unlike OpenDwarfs and Rodinia, supports multiple nodes using MPI for distributed parallelism.
-SHOC supports multiple programming models including OpenCL, CUDA and OpenACC, with benchmarks ranging from targeted tests of particular low-level hardware features to a handful of application kernels.
-
 @sun2016 propose Hetero-Mark, a Benchmark Suite for CPU-GPU Collaborative Computing, which has five benchmark applications each implemented in the Heterogeneous Compute Compiler (HCC) -- which compiles to OpenCL and HIP which converts CUDA codes to the AMD Radeon Open Compute back-end.
 Meanwhile, Chai by Gómez-Luna et al.[@gomez2017chai], offers 15 applications in 7 different implementations with the focus on supporting integrated architectures.
-
-Barnes et al.[@barnes2016evaluating] collected a representative set of applications from the current NERSC workload to guide optimization for Knights Landing in the Cori supercomputer.
-As it is not always feasible to perform such a detailed performance study of the capabilities of different computational devices for particular applications, the benchmarks described in this paper may give a rough understanding of device performance and limitations.
 
 The Princeton Application Repository for Shared-Memory Computers (PARSEC) is a benchmark suite proposed by @Bienia2008.
 It curates a set of real-world benchmarks from recognition, mining, synthesis and systems applications which mimic large-scale multithreaded commercial programs instead of the conventional types of HPC benchmark applications that achieve a high-performance.
@@ -300,33 +292,26 @@ Its primary focus is to have a general purpose suite that assesses performance o
 Additionally, they identify CPU performance is tied to problem size, as such, one of the features of PARSEC is that it includes multiple problem sizes for the benchmark simulations -- **simsmall**, **simmedium** and **simlarge**.
 Since accelerators are not considered in this work -- and as such, all applications are written in C -- it is not included in our evaluation, however, the fundamental principals of having a general purpose and portable set of applications that assess real-world workloads over multiple problem sizes, forms the basis of our extensions and are presented in Chapter 3.
 
+Rodinia and the original OpenDwarfs benchmark suite focused on collecting a representative set of benchmarks for scientific applications, classified according to dwarfs, with a thorough diversity analysis to justify the addition of each benchmark to the corresponding suite.
+The Scalable Heterogeneous Computing benchmark suite (SHOC)[@lopez2015examining] also features an OpenCL implementation of several scientific applications.
+We considered Rodinia, OpenDwarfs and SHOC as the potential basis for our extended benchmark suite -- the strengths and weaknesses of three are presented independently in the following subsections.
+
+
 ### Rodinia {#sssec:rodinia}
 
 
-Che et al. [@che2009rodinia] initially proposed a benchmark suite to cover a wide range of parallel communication patterns.
+Che et al. [@che2009rodinia] proposed the Rodinia benchmark suite to cover a wide range of parallel communication patterns to examine the performance of heterogeneous platforms free from language and device specific optimizations.
 The benchmarks were selected following the Berkeley Dwarf Taxonomy and are from real world high performance computing applications.
 The diversity between selected benchmarks was shown by measuring execution times, communications overheads and energy usage of running each benchmark on an NVIDIA GTX 280 GPU and an Intel Core 2 Extreme CPU.
 Across the suite: speedups in execution times ranged from 5.5x to 80.8x, communication overheads varied from 2-76% and GPU power consumption overheads ranged from 38-83 Watts, illustrating important architectural differences between the CPU and GPU.
-At the time this paper was written the Rodinia Benchmark suite consisted of nine applications; namely, Leukocyte Tracking, Speckle Reducing Anisotropic Diffusion, HotSpot, Back Propagation, Needleman-Wunsch, K-means, Stream Cluster, Breadth-First Search and Similarity Score, but it has since been extended. [@che2010characterization]
+At the time this thesis was written the Rodinia Benchmark suite consisted of nine applications; namely, Leukocyte Tracking, Speckle Reducing Anisotropic Diffusion, HotSpot, Back Propagation, Needleman-Wunsch, K-means, Stream Cluster, Breadth-First Search and Similarity Score, but it has since been extended. [@che2010characterization]
 This extension features a subset of the dwarfs, namely, Structured Grid, Unstructured Grid, Dynamic Programming, Dense Linear Algebra, MapReduce, and Graph Traversal all of which may be expected to benefit from GPU acceleration.
 Diversity analysis was also performed and took the form of a Micro-Architecture independent analysis study.
-The MICA framework, discussed in [Section @sec:microarchitecture-independent], was used as the basis of the evaluation and the motivation was to justify each applications inclusion in the benchmark suite by showing deviations between applications in the corresponding kiviat diagrams.
+The MICA framework, discussed in [Section @sec:microarchitecture-independent], was used as the basis of the evaluation and the motivation was to justify each application's inclusion in the benchmark suite by showing deviations between applications in the corresponding kiviat diagrams.
 Three separate implementations were developed for each application using CUDA for the GPU, OpenMP for the CPU and OpenCL for both architecture types.
 Several implementations caused fragmentation in development, which often resulted in the OpenCL version of each benchmark application being neglected; missing features offered in other implementations and in some instances lacking an implementation of a given application entirely.
 For this reason, Rodinia is not a suitable base for an OpenCL benchmark suite, however, we were able to incorporate the dwt2d benchmark into our extended version of the OpenDwarfs  benchmark suite as will be discussed in Chapter 3.
 Many of the benchmarks were added from Rodinia into the original OpenDwarfs suite, in our extended evaluation many of the datasets were generated by analyse the original Rodinia source.
-
-### SHOC
-
-The Scalable Heterogeneous Computing benchmark suite SHOC, presented by Danalis et al. [@danalis2010scalable], offer an alternative benchmark suite and unlike OpenDwarfs and Rodinia, supports multiple nodes using MPI for distributed parallelism.
-It also has not been structured into the dwarf taxonomy but rather the benchmarks it encompasses have been categorised according according to two major sets, whether the application performs a stress test role -- which assess the device capabilities --  or acts as a performance test -- which measure host / system performance usually on synthetic kernels.
-SHOC supports multiple programming models including OpenCL, CUDA and OpenACC, with benchmarks ranging from targeted tests of particular low-level hardware features to a handful of application kernels.
-The variety of language implementations for each benchmark application, was one of the original motivators for its construction.
-In this benchmark suite the OpenCL versions of each application have been designed to strongly mirror the CUDA counterparts, unfortunately this results in fixed tuning parameters such as local workgroup size that is well suited to GPU architectures but is not suited to CPU and other accelerator devices.
-
-Since this suite has not been classified according to the dwarf taxonomy and also if the classification were performed, adding more applications would likely need to occur to fully encompass the dwarf taxonomy; the addition of applications is more expensive in SHOC, since it would require implementations for the same application into at least three other languages -- which is not a motivating factor for this thesis.
-By focusing on application kernels written exclusively in OpenCL, our enhanced OpenDwarfs benchmark suite is able to cover a wider range of application patterns.
-
 
 ### OpenDwarfs
 
@@ -338,8 +323,26 @@ Additionally, several dwarfs currently have only one representative application 
 
 A potential criticism is that no diversity analysis was performed to justify the inclusion of each application -- however since many applications were inherited from the Rodinia code-base these applications have a proven MICA diversity.
 Recently, this work was updated and evaluated on FPGA devices by Krommydas et al. [@krommydas2016opendwarfs].
-Given the focused effort of having all the dwarfs represented, the choice to have one implementation -- and that being OpenCL, and the recent use of the benchmark suite for a new accelerator architecture all result in it being the selected benchmark suite to perform the extension.
+We selected OpenDwarfs as the basis for our extensions, this was a good place to start given it had the largest number of dwarfs already represented, the sole implementation was OpenCL, and had already been tested on a wide range of accelerators. 
 These efforts are discussed in Chapter 3.
+
+
+### SHOC
+
+The Scalable Heterogeneous Computing benchmark suite SHOC, presented by Danalis et al. [@danalis2010scalable], is an alternative benchmark suite to test the performance and stability of these scalable heterogeneous computing systems -- primarily GPU and multi-core CPU accelerators.
+It also has not been structured into the dwarf taxonomy but rather the benchmarks it encompasses have been categorised according according to two major sets: the micro-benchmarks perform a stress test role to assess the device capabilities and assess the architectural features of each accelerator, and application kernels which measure entire system performance on real world applications.
+Some application kernels also supports multiple nodes using MPI to assess distributed parallelism of the system --  intranode and internode communication among devices.
+
+SHOC supports multiple programming models including OpenCL, CUDA and OpenACC, with benchmarks ranging from targeted tests of particular low-level hardware features to a handful of application kernels.
+The variety of language implementations for each benchmark application, was one of the original motivators for its construction -- aside from testing the performance and stability of scalable heterogeneous computing systems it also seeks to provide a comparison of programming models.
+In this benchmark suite the OpenCL versions of each application have been designed to strongly mirror the CUDA counterparts, unfortunately this results in fixed tuning parameters such as local workgroup size that is well suited to GPU architectures but is not suited to CPU and other accelerator devices.
+
+There are two caveats of SHOC if it were used for our purposes.
+Firstly, there is a lack of classification according to the dwarf taxonomy, much of the work towards using micro-benchmarks to stress-test the system falls outside of the taxonomy and the higher level application benchmarks are too few to adequately cover a wide range of dwarfs -- indeed only a few are represented.
+Secondly, the addition of applications is more expensive in SHOC, since it would require implementations for the same application into at least three other languages.
+There are additional difficulties to ensure each implementation is identical in order to adequately compare the programming models.
+
+By focusing on application kernels written exclusively in OpenCL, our enhanced OpenDwarfs benchmark suite -- presented in Chapter 3 -- is able to represent a wider range of dwarfs while minimising development effort required when duplicating the functionality of applications between languages.
 
 
 ## Hardware Performance and Scaling
