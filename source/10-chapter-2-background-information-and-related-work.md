@@ -55,7 +55,7 @@ Table: The Berkeley Dwarfs and their limiting factors. \label{tbl:dwarf-taxonomy
 
 
 Implementations of applications that are represented by the Dwarf Taxonomy are discussed in the benchmark evaluations presented in Section \ref{sec:chapter2-benchmark-suites}.
-Having familiarity with the division of applications and which of the dwarfs they lie within assists in motivating the variety of accelerators used in HPC and is discussed in the next Section.
+Having familiarity with the division of applications and which of the dwarfs they lie within assists in motivating the variety of accelerators used in HPC and is discussed in the next section.
 
 
 ## Accelerator Architectures in HPC {#sec:chapter2-accelerator-architectures}
@@ -307,7 +307,7 @@ Across the suite: speedups in execution times ranged from 5.5x to 80.8x, communi
 At the time this thesis was written the Rodinia Benchmark suite consisted of nine applications; namely, Leukocyte Tracking, Speckle Reducing Anisotropic Diffusion, HotSpot, Back Propagation, Needleman-Wunsch, K-means, Stream Cluster, Breadth-First Search and Similarity Score, but it has since been extended. [@che2010characterization]
 This extension features a subset of the dwarfs, namely, Structured Grid, Unstructured Grid, Dynamic Programming, Dense Linear Algebra, MapReduce, and Graph Traversal all of which may be expected to benefit from GPU acceleration.
 Diversity analysis was also performed and took the form of a Micro-Architecture independent analysis study.
-The MICA framework, discussed in [Section @sec:microarchitecture-independent], was used as the basis of the evaluation and the motivation was to justify each application's inclusion in the benchmark suite by showing deviations between applications in the corresponding kiviat diagrams.
+The MICA framework, discussed in [section @sec:microarchitecture-independent], was used as the basis of the evaluation and the motivation was to justify each application's inclusion in the benchmark suite by showing deviations between applications in the corresponding kiviat diagrams.
 Three separate implementations were developed for each application using CUDA for the GPU, OpenMP for the CPU and OpenCL for both architecture types.
 Several implementations caused fragmentation in development, which often resulted in the OpenCL version of each benchmark application being neglected; missing features offered in other implementations and in some instances lacking an implementation of a given application entirely.
 For this reason, Rodinia is not a suitable base for an OpenCL benchmark suite, however, we were able to incorporate the dwt2d benchmark into our extended version of the OpenDwarfs  benchmark suite as will be discussed in Chapter 3.
@@ -349,130 +349,129 @@ By focusing on application kernels written exclusively in OpenCL, our enhanced O
 
 The performance of heterogeneous devices is often evaluated against a theoretical upper-bound.
 Computing this limit requires an understanding of a couple of important hardware characteristics.
-This sections discusses scaling with respect to clock frequency and core count.
-Also included, is a discussion on the impact frequency has on energy consumption.
+This section discusses scaling with respect to clock frequency and core count.
+Also included is a discussion on the impact frequency has on energy consumption.
 
-### Frequency
+Changing the clock frequency of a conventional CPU core ultimately changes performance results, where execution times are impacted but the energy efficiency of the device is also affected.
+Choi, Soma and Pedram [@choi2005fine] present an intra-process dynamic voltage and frequency scaling approach with the goal of minimising energy consumption yet maximising performance.
+This is achieved by modelling the on-chip / off-chip ratio using runtime event monitoring.
+Hardware measurements showed that dynamically lowering the clock frequency for memory bound problems up to 70% energy was saved with a 12% performance loss, compute bound workloads 15-60% energy savings were had at a cost of a performance drop of 5-20%.
 
-Changing the clock frequency of a conventional CPU core ultimately change performance results, where execution times are impacted but the energy efficiency of the device is also affected.
-Choi, Soma and Pedram [@choi2005fine] present an intra-process dynamic voltage and frequency scaling with the goal of minimising energy consumption yet maximising performance by dynamically changing the clock frequency of the CPU.
-This is achieved by modelling the on-chip / off-chip ratio which is updated using runtime event monitoring.
-Hardware measurements showed that dynamically lowing the clock frequency for memory bound problems up to 70% energy was saved with a 12% performance loss, compute bound workloads 15-60% energy savings were had at a cost of a performance drop of 5-20%.
-
-Recently, Brown [@brown2010toward] discusses how increasing the clock frequency to generate a result faster (known as race-to-idle or race-to-sleep) saves up to 95% of energy if the entire system can be put in a suspended state -- as in embedded and mobile systems.
-In 2014, this was validated for hardware used in HPC provided it supports a sleep state.
-Albers and Antoniadis [@Albers:2014:RIN:2578852.2556953] present a framework to accurately approximate the energy cost of speed scaling with a sleep state.
+Recently, Brown [@brown2010toward] showed that increasing the clock frequency to generate a result faster (known as race-to-idle or race-to-sleep) saves up to 95% of energy if the entire system can be put in a suspended state -- as in embedded and mobile systems.
+In 2014, this was validated by Albers and Antoniadis [@Albers:2014:RIN:2578852.2556953] for hardware used in HPC provided it supports a sleep state.
+They present a framework to approximate the energy cost of frequency scaling with a sleep state.
 In this study, the authors show that the active state of a CPU is comparable to the dynamic energy needed for processing.
 
 Meanwhile, Agarwal et al. [@Agarwal:2000:CRV:339647.339691] show that wire latencies (which correspond to memory movement and chip-to-chip communication) have not matched the increase in the range of clock-frequency.
 The bottle-neck on many of these workloads is also moving from being compute-bound to memory or communication bound, since the imbalance of hardware improvements shift application requirements to wait on communication and memory transfers.
-As such the impact of increasing the clock frequency is having (and will continue to have) less of an impact on computational efficiency.
+As such, the impact of increasing the clock frequency is having (and will continue to have) less of an impact on computational efficiency.
+This trend has been reinforced in current work by @sembrant2016hiding and @muller2016latency; Modern processors increasingly rely on both latency minimisation and latency hiding to conceal the widening gap between processor and memory clock frequencies.
+To this end, both @sembrant2016hiding and @muller2016latency introduce techniques to model parallelism and opportunistically steal work during interrupt events which result in hiding the latency in the processor pipeline and reducing the latency in the memory hierarchy.
 
-### Core count
+Since wire latencies have not matched the increase in the range of clock-frequency, the coupling between execution time and energy consumption is non-linear [@lively2011energy].
+As such, the impact of increasing the clock frequency on applications that are compute-bound will result in a proportional reduction in execution time to having a higher clock-frequency, however, there are applications that are memory or communication bound, where increasing the frequency of a core does not also increase the speed of the memory bus and thus will experience little to no benefit.
+Applications and dwarfs may benefit from an accelerator with a memory clock which matches the core clock.
 
-A good indication of a successful implementation of a parallel algorithm is by assessing performance scalability in response to core availability. [@johnston2017embedded][@johnston2017parallel][@baker2012scaling][@abraham2015gromacs]
-However, the trend of achieving good performance scaling by increasing the number of homogeneous cores on a system will cease, primarily, due to the power limitations of having arrived at the utilisation wall. [@venkatesh2010conservation][@esmaeilzadeh2011dark]
+A good indication of a successful implementation of a parallel algorithm is performance scalability in response to core availability [@johnston2017embedded][@johnston2017parallel][@baker2012scaling][@abraham2015gromacs].
+However, the trend of achieving good performance scaling by increasing the number of homogeneous cores on a system will cease, primarily, due to the power limitations of having arrived at the utilisation wall -- a limitation of the fraction of a chip that can run at full speed
+at one time [@venkatesh2010conservation][@esmaeilzadeh2011dark].
 
-Taylor [@taylor2012dark] surveys the transition of typical homogeneous cores to a potentially dark silicone.
-The primary factor is the percentage of a silicon chip that can switch at full frequency is dropping with each generator of processor, known as Dennardian scaling, and ensures that large fractions of chips are either idle or operating at a lower clock frequency.
+Taylor [@taylor2012dark] surveys the transition of typical homogeneous cores to a potentially dark silicon.
+The primary factor is the percentage of a silicon chip that can switch at full frequency is dropping with each generator of processor, known as Dennard scaling -- that as transistors get smaller, their power density stays constant, so that the power use stays in proportion with area -- and ensures that large fractions of chips are either idle or operating at a lower clock frequency.
 Limitations from hitting this power-wall has meant specialized architectures are increasingly employed to "buy" energy efficiency by "spending" more on die area -- thus increasing heterogeneity of the entire system.
 Indeed, the increasing utilization of accelerators as seen in today's leading supercomputers indicates an accurate prediction by Taylor -- a bright future for heterogeneous systems.
 Taylor also notes that a by-product of adding specialized architectures -- or accelerators -- is massive increases in complexity.
-Where mechanisms need be developed to direct codes to the most appropriate accelerator, and is one of the goals of this thesis.
-
-### Time and Energy -- a non-linear relationship
-
-There exist applications where the coupling between execution time and energy consumption is non-linear [@lively2011energy] and goes back to Agarwal et al. [@Agarwal:2000:CRV:339647.339691] results which show that wire latencies have not matched the increase in the range of clock-frequency.
-As such, the impact of increasing the clock frequency on applications that are compute-bound will benefit proportionally to having a higher clock-frequency, however, there are applications and potentially even dwarfs that are memory or communication bound, where increasing the frequency of a core does not also increase the speed of the memory bus and thus will experience little to no benefit.
-Indeed, the base-power demand of the system will increase at the expense of negligible difference in require execution time, applications within this dwarf will need be carefully and potentially scheduled on a accelerator with a memory clock which matches the core clock.
+Introducing a methodology to direct codes to the most appropriate accelerator is one of the goals of this thesis.
 
 ## OpenCL Performance
 
-The performance of OpenCL Kernels are lately affected by runtime parameters considering how work is divided, this allocation and partitioning of work changes between devices.
+The performance of OpenCL kernels is affected by runtime parameters determining the allocation and partitioning of work changes between devices.
 Much of the partitioning can occur automatically using autotuning.
 Autotuning and tools and techniques used to measure device performance are summarised in this subsection.
-Also discussed, is the common issue of phase shifting and how it relates to measuring OpenCL performance.
+Also discussed is the common issue of phase shifting and how it relates to measuring OpenCL performance.
 
 ### Autotuning{#sec:chapter2-autotuning}
 
-Autotuning is important when evaluating the performance of OpenCL codes on systems.
-Du et al. [@du2012cuda] migrated CUDA versions of level 3 BLAS routines to OpenCL and measured the direct performance on GPU accelerator devices.
-They show low-level languages achieve 80% of peak performance on multicores and accelerators whilst only 50% of peak performance can be obtained on GPUs in OpenCL.
-Whilst OpenCL is hardware-portable it is not inherently also performance-portable, at least, until auto-tuners are considered.
-Du et al. also propose the use of auto-tuning to explore the parameter space to improve the performance of OpenCL kernels.
-They conclude that OpenCL is fairly competitive with CUDA on Nvidia hardware in terms of performance and if architecture specifics are unknown, autotuning is an effective way to generate tuned kernels that deliver acceptable levels of performance with little programmer effort.
+Whilst OpenCL is hardware-portable it is not inherently also performance-portable, autotuning is important when evaluating the performance of OpenCL codes on systems.
+@du2012cuda migrated CUDA versions of level 3 BLAS routines to OpenCL and measured the direct performance on GPU accelerator devices.
+They show low-level languages achieve 80% of peak performance on multicores and accelerators whilst OpenCL only achieves 50% of peak performance.
+They propose the use of auto-tuning to improve the performance of OpenCL kernels.
+They conclude that OpenCL is fairly competitive with CUDA on Nvidia hardware in terms of performance, and if architecture specifics are unknown, autotuning is an effective way to generate tuned kernels that deliver acceptable levels of performance with little programmer effort.
 
-Indeed, when combined with autotuning, an OpenCL code may exhibit good performance across varied devices -- yielding accelerator device specific optimizations with no user or developer input.
+When combined with autotuning, an OpenCL code may exhibit good performance across varied devices -- yielding accelerator device specific optimizations with no user or developer input.
 Tasks such as compiler optimisations and kernel runtime tuning parameters are well suited to auto-tuners without requiring an exhaustive search in this search space.
 This has been manifested in many auto-tuning libraries that use machine learning.
-Spafford et al. [@spafford2010maestro], Chaimov et al. [@chaimov2014toward] and Nugteren and Codreanu [@nugteren2015cltune] all propose open source libraries capable of performing autotuning of dynamic execution parameters in OpenCL kernels.
+Spafford et al. [@spafford2010maestro], Chaimov et al. [@chaimov2014toward] and Nugteren and Codreanu [@nugteren2015cltune] all propose open source libraries capable of autotuning dynamic execution parameters in OpenCL kernels.
 
 Additionally, Price and McIntosh-Smith [@price2017analyzing] have demonstrated high performance using a general purpose autotuning library [@ansel:pact:2014], for three applications across twelve devices.
-The OpenTuner library requires the search space to be defined in order to effect the runtime performance of the application.
-These take the forms of command line of compile time arguments -- and are known as the configuration parameter when performing application execution.
+The OpenTuner library requires the search space to be defined the form of command line or compile time arguments -- which are used as configuration parameters when performing application execution.
 Next, machine learning techniques are used employing a black box mechanism to effectively search for the optimal configuration parameter arguments in the search space.
 Measurements are collected per run effectively updating a cost function.
-Both the objective of the search and the cost function are entirely flexible, since this framework takes the form of a modular python library.
+Both the objective of the search and the cost function are entirely flexible, since this framework takes the form of a modular Python library.
 
-In the Price [@price2017analyzing] survey, OpenCL kernels are optimised across 9 current GPUs, 5 Nvidia and 4 AMD devices, and 3 high-end Intel CPUs.
+In the @price2017analyzing paper, OpenCL kernels are optimised across 9 current GPUs, 5 Nvidia and 4 AMD devices, and 3 high-end Intel CPUs.
 The experiment was performed over 3 benchmarks, the Jacobi Iterative Method, a Bilateral Filtering algorithm and BUDE -- A general purpose molecular docking program.
 Presented results show the inefficiencies when auto-tuning for one target device and then execute this optimised program on the other systems.
 The usefulness of this multi-objective auto-tuning technique is demonstrated and shows that it is a useful tool to generate performance portable OpenCL kernels.
-Additionally the literature shows that over-optimisation hurts performance portability.
+Additionally, Price shows that over-optimisation hurts performance portability.
 
-Of the benchmarks presented in Section \ref{sec:chapter2-benchmark-suites}, every application presented in the Rodinia Benchmark Suite requires a local workgroup to be passed.
+Of the benchmarks presented in section \ref{sec:chapter2-benchmark-suites}, every application presented in the Rodinia Benchmark Suite requires a local workgroup to be passed.
 In the OpenDwarfs set of benchmarks 9 out of 14 allow for local workgroup tuning.
 Auto-tuning frameworks could be readily used with the Extended OpenDwarfs Benchmark Suite along with the other suites mentioned, however, since performance portability has been shown by others it is not the goal of this thesis and thus is left as future work.
 
 ### Phase-Shifting
 
-Phase is defined as a set of intervals (or slices in time) within a programs execution that has similar behaviour.
+A program phase is defined as a set of intervals (or slices in time) during execution that have similar behaviour.
 Therefore, the term phase-shifting refers to change of the execution of a program with temporal adjacency such that the program experiences time-varying effects.
-Sherwood  et al. [@sherwood2003discovering] observe that common system design and optimisation focus heavily on the assume average system behaviour.
+Sherwood et al. [@sherwood2003discovering] observe that common system design and optimisation focus heavily on the assume average system behaviour.
 They propose however instead programs should be modelled and optimised for phase-based program behaviour.
 The approach outlined states that phase-behaviour can be profiled quickly using block vector [@sherwood2002automatically] profiles (a vector of per element counts, where each element is the number of times a code block has been entered over a given interval) and off-line classification.
 
 An assumption in the literature is that OpenCL kernels are largely unaffected by program phase-shift.
 Rather, the program as a whole will doubtlessly experience phase-shifts, compiling an OpenCL kernel code which is an active component of all OpenCL programs will heavily utilise the host CPU device, and when a kernel is executed and the host waits for the device to finish, CPU utilisation is low.
-The kernel in execution itself will experience very little differences in phases since by their very nature OpenCL kernels are designed small and compartmentalised sections of computation.
-Such that, if a kernel executed on a particular accelerator device is memory bound, it will consistently be memory bound.
+The kernel in execution itself will experience very little differences in phases since by their very nature OpenCL kernels are small compartmentalised sections of computation.
+For example, if a kernel executed on a particular accelerator device is memory bound, it will consistently be memory bound.
 If the accelerator experiences consistent stalls on repeated branch mispredictions, this is consistent throughout the kernels entire execution.
 
-###Formal measurements{#sec:formal-measurements}
+###Measurements{#sec:formal-measurements}
 
 The studies presented in this thesis require the use of tools to perform high-accuracy and low-overhead measurements.
-Time measurements of OpenCL kernels have primarily used LibSciBench as the default performance measurement tool.
+We use LibSciBench for performance measurements of OpenCL kernels.
 It allows high precision timing events to be collected for statistical analysis [@hoefler2015scientific].
 Additionally, it offers a high-resolution timer in order to measure short running kernel codes, reported with one cycle resolution and roughly 6 ns of overhead.
 Throughout Chapter 3 LibSciBench was intensively used to record timings, energy usage and hardware events, which it collects via PAPI [@mucci1999papi] counters.
 
 ## Offline Ahead-of-Time Analysis
 
-The term offline analysis, in this setting, is defined as the detailed examination of the structure of code and that it requires the entire data set is given in advance.
-Ahead-of-time indicates that this analysis be done before the program is executed.
-The combination of theses two terms is directly applicable to OpenCL SPIR codes, which is based on LLVM, since LLVM is well suited to performing ahead-of-time optimised native code generation [@lattner2004llvm].
-Additionally, since SPIR is hardware agnostic/ISA-independent the patterns of computation and communication as shown in the dwarf taxonomy it can be done once the OpenCL source is converted to SPIR and the dwarf represented by the kernel will always be the same.
-Therefore, analysis such as the classification of which dwarf a new code can be identified, can be performed before any actual device execution is performed.
-Additionally, these classification and other analysis metrics can be embedded into the SPIR code as a comment in the header, which in turn can be used by a scheduler to determine which device the kernel should be executed.
+Offline Analysis it does not operate on a running code, for our purposes, the analysis provides a detailed examination of the structure of code.
+Ahead-of-time indicates that this analysis be done before the program is executed -- in the real-world usage of the code.
+The combination of theses two terms is directly applicable to OpenCL SPIR code, which is based on LLVM, since LLVM is well suited to performing ahead-of-time optimised native code generation [@lattner2004llvm].
+Additionally, SPIR is hardware agnostic and ISA-independent as these features can be computed directly on the intermediate representation, that is, before a binary for an device is generated.
+Our analysis, presented with AIWC in Chapter 4 outlines a methodology to collect features of programs before they are deployed. These features are embedded into the header of the SPIR code -- as a comment -- which can be evaluated at runtime on supercomputing systems to be used by the scheduler to provide useful information around scheduling, specifically, determining on which device the kernel should be executed.
 
-Closely related to the work performed in this thesis was independently performed by Muralidharan et al. [@muralidharan2015semi].
-Wherein, they use offline ahead-of-time analysis with Oclgrind to collect an instruction histogram of each OpenCL kernel execution in order to generate an estimate of the roofline model analysis for each given accelerator.
-The resultant tool-flow methodology is used to analyse and track the performance over 3 distinct heterogeneous platforms, and results in a metric to characterise performance.
-The basis of our work on AIWC is built on offline ahead-of-time analysis techniques and is presented in Chapter 4.
+Muralidharan et al. [@muralidharan2015semi] use offline ahead-of-time analysis with Oclgrind to collect an instruction histogram of each OpenCL kernel execution in order to generate an estimate of the roofline model analysis for each given accelerator.
+The resultant tool-flow methodology is used to analyse and track the performance over three distinct heterogeneous platforms, and results in a metric to characterise performance.
 
-##Program Diversity Analysis and characterization {#sec:chapter2-program-diversity-analysis}
+Oclgrind is an OpenCL device simulator developed by Price and McIntosh-Smith [@price:15] capable of performing simulated kernel execution.
+It operates on a restricted LLVM IR known as Standard Portable Intermediate Representation (SPIR) [@kessenich2015], thereby simulating OpenCL kernel code in a hardware agnostic manner.
+This architecture independence allows the tool to uncover many portability issues when migrating OpenCL code between devices.
+Additionally, Oclgrind comes with a set of tools to detect runtime API errors, race conditions and invalid memory accesses, and generate instruction histograms.
+AIWC is added as a tool to Oclgrind and leverages its ability to simulate OpenCL device execution using LLVM IR codes; this allows selected metrics to be collected by monitoring events during simulation, these metrics then indicate Architecture-Independent Workload Characteristics.
+Our work on AIWC is built on offline ahead-of-time analysis techniques and is presented in Chapter 4.
 
-Program Diversity Analysis has occurred historically to justify the inclusion of an application into a benchmark suite for many years, Principal Component Analysis (PCA) has been used to demonstrate program diversity by others[@blackburn2006dacapo][@hara2009proposal][@phansalkar2007analysis].
-Often this work, is manually performed by those focused on assembling the benchmark suites.
-Indeed, much of the motivation for curating OpenCL applications in Rodinia [@che2009rodinia], OpenDwarfs [@feng2012opencl] and SHOC [@danalis2010scalable] was to have real-world scientific problems that represented regular workloads of HPC and SC systems.
-Determining the suitability of an application regarding these characterised metrics has been evaluated by others.
-This Section examines these combined efforts in characterising workloads that are less sensitive to the architectures on which they are executed, and concludes with how these characterisation techniques have been used when assembling benchmark suites.
+
+##Program Diversity Analysis and Characterization {#sec:chapter2-program-diversity-analysis}
+
+Program Diversity Analysis has been used to justify the inclusion of an application into a benchmark suite.
+Principal Component Analysis (PCA) on virtual machine and hardware (PAPI) events has been used to demonstrate program diversity  [@blackburn2006dacapo][@phansalkar2007analysis].
+Often this work is manually performed by those assembling the benchmark suite, indeed, much of the motivation for curating OpenCL applications in Rodinia [@che2009rodinia], OpenDwarfs [@feng2012opencl] and SHOC [@danalis2010scalable] was to have real-world scientific problems that represented regular workloads of HPC and SC systems.
 
 The use of a vector-space or feature-space in order to classify the characteristics of parallel programs was performed by Meajil, El-Ghazawi and Sterling in 1997 [@meajil1997architecture].
 The target of this work was to determine the major factors in modelling performance between parallel computer architectures in an architecture-independent manner.
-The remainder of this section introduces more recent developments in using a vector-space to characterise applications.
+The focus of this section is examining the existing literature around the characterisation of an application in terms of dwarf and metrics, and concludes with how these characterisation techniques have been used when assembling benchmark suites.
 
-##Microarchitecture-independent workload characterization {#sec:microarchitecture-independent}
+
+###Microarchitecture-Independent Workload Characterization {#sec:microarchitecture-independent}
 
 Hoste and Eeckout [@hoste2007microarchitecture] show that although conventional microarchitecture-dependent characteristics are useful in locating performance bottlenecks [@ganesan2008performance,@prakash2008performance], they are misleading when used as a basis on which to differentiate benchmark applications.
 Microarchitecture-independent workload characterization and the associated analysis tool, known as MICA, was proposed to collect metrics to characterize an application independent of particular microarchitectural characteristics.
@@ -495,7 +494,7 @@ These metrics could potentially be used by a developer to modify codes to achiev
 
 Recently, Shao and Brooks [@shao2013isa] have since extended the generality of the MICA to be ISA independent.
 The primary motivation for this work was in evaluating the suitability of benchmark suites when targeted on general purpose accelerator platforms.
-The proposed framework briefly evaluates eleven SPEC benchmarks and examines 5 ISA-independent features/metrics.
+The proposed framework briefly evaluates eleven SPEC benchmarks and examines five ISA-independent features/metrics.
 Namely, number of opcodes (e.g., add, mul), the value of branch entropy -- a measure of the randomness of branch behaviour, the value of memory entropy -- a metric based on the lack of memory locality when examining accesses, the unique number of static instructions, and the unique number of data addresses.
 
 Related to the paper, Shao also presents a proof of concept implementation (WIICA) which uses an LLVM IR Trace Profiler to generate an execution trace, from which a python script collects the ISA independent metrics.
@@ -503,9 +502,9 @@ Any results gleaned from WIICA are easily reproducible, the execution trace is g
 Unfortunately, use of the tool is non-trivial given the complexity of the toolchain and the nature of dependencies (LLVM 3.4 and Clang 3.4).
 Additionally, WIICA operates on `C` and `C++` code, which cannot be executed directly on any accelerator device aside from the CPU.
 Our work on Architecture Independent Workload Characterisation or known as (AIWC) is presented in Chapter 4, and extends Shao's work to the broader OpenCL setting to collect architecture independent metrics from a hardware-agnostic language -- OpenCL.
-Additional metrics, such as Instructions To Barrier (ITB), Vectorization (SIMD) indicators and Instructions Per Operand (SIMT) were also determined and added by us in order to perform a similar analysis for concurrent and accelerator workloads.
+We also added metrics such as Instructions To Barrier (ITB), Vectorization (SIMD) indicators and Instructions Per Operand (SIMT) in order to perform a similar analysis for concurrent and accelerator workloads.
 
-AIWC relies on the selection of the instruction set architecture (ISA)-independent features determined by Shao and Brooks [@shao2013isa], which in turn builds on earlier work in microarchitecture-independent workload characterization discussed in [Section @sec:microarchitecture-independent].
+AIWC relies on the selection of the instruction set architecture (ISA)-independent features determined by Shao and Brooks [@shao2013isa], which in turn builds on earlier work in microarchitecture-independent workload characterization discussed in [section @sec:microarchitecture-independent].
 
 The branch entropy measure used by Shao and Brooks [@shao2013isa] was initially proposed by Yokota [@yokota2007introducing] and uses Shannon's information entropy to determine a score of Branch History Entropy.
 De Pestel, Eyerman and Eeckhout [@depestel2017linear] proposed an alternative metric, average linear branch entropy metric, to allow accurate prediction of miss rates across a range of branch predictors.
@@ -515,13 +514,13 @@ Caparrós Cabezas and Stanley-Marbell [@CaparrosCabezas:2011:PDM:1989493.1989506
 Instruction-level and thread-level parallelism are identified through analysis of data dependencies between instructions and basic blocks.
 The current version of AIWC does not perform dependency analysis for characterizing parallelism, however, we hope to include such metrics in future versions.
 
-### Using workload characterization for diversity analysis in the benchmark suites
+### Workload Characterization for Benchmark Diversity Analysis
 
 In contrast to our proposed multidimensional workload characterization, models such as Roofline [@williams2009roofline] and Execution-Cache-Memory [@hager2013exploring] seek to characterize an application based on one or two limiting factors such as memory bandwidth.
 The advantage of these approaches is the simplicity of analysis and interpretation.
 We view these models as capturing a 'principal component' of a more complex performance space; we claim that by allowing the capture of additional dimensions, AIWC supports performance prediction for a greater range of applications.
 In other words, there is less bias introduced when used for prediction since there is no cherry-picking of features and all are provided directly into a model.
-However this is discussed in greater detail in the next Section.
+However this is discussed in greater detail in the next section.
 
 Several benchmarks have performed characterisation of applications in the past, this has been primarily, at least historically motivated, for diversity analysis to justify the inclusion of an application into a benchmark suite.
 Rodinia used MICA as the diversity analysis framework.
@@ -533,31 +532,23 @@ For this reason Chapter 4 of this thesis apart from extending the OpenDwarfs Ben
 To some extent Chapter 5 does this even more formally by generating and clustering the feature-space of all applications grouped as dwarfs.
 The evaluation on the feature-space is critical to the inclusion of particular extended OpenDwarfs applications and is performed in Chapter 4.
 
-##Oclgrind: Debugging OpenCL kernels via simulation{#sec:oclgrind}
 
-Oclgrind is an OpenCL device simulator developed by Price and McIntosh-Smith [@price:15] capable of performing simulated kernel execution.
-It operates on a restricted LLVM IR known as Standard Portable Intermediate Representation (SPIR) [@kessenich2015], thereby simulating OpenCL kernel code in a hardware agnostic manner.
-This architecture independence allows the tool to uncover many portability issues when migrating OpenCL code between devices.
-Additionally, Oclgrind comes with a set of tools to detect runtime API errors, race conditions and invalid memory accesses, and generate instruction histograms.
-AIWC is added as a tool to Oclgrind and leverages its ability to simulate OpenCL device execution using LLVM IR codes; this allows selected metrics to be collected by monitoring events during simulation, these metrics then indicate Architecture-Independent Workload Characteristics.
-
-
-##Schedulers and Predicting the most Appropriate Accelerator
+##Scheduling and Performance Prediction for Heterogeneous Architectures
 
 Predicting the performance of a particular application on a given device is challenging due to complex interactions between the computational requirements of the code and the capabilities of the target device.
 Certain classes of application are better suited to a certain type of accelerator [@che2008accelerating], and choosing the wrong device results in slower and more energy-intensive computation [@yildirim2012single].
 Thus accurate performance prediction is critical to making optimal scheduling decisions in a heterogeneous supercomputing environment.
 
-Lyerly [@lyerly2014automatic] demonstrates by executing a subset of applications from OpenDwarfs it becomes apparent that not one accelerator has the fastest execution time for all benchmarks.
+Lyerly [@lyerly2014automatic] execute a subset of applications from OpenDwarfs to demonstrate that not one accelerator has the fastest execution time for all benchmarks.
 This contribution focuses on developing a scheduler to delegate the most appropriate accelerator for a given program.
 This was achieved by developing a partitioning tool to separate computationally intensive OpenMP regions from C, extracting to and building a predictive model based on past history of the programs executing on the accelerators.
-We broaden this analysis by claiming that all benchmarks encompassing a dwarf will perform optimally on one accelerator type, but identify that one type of accelerator is non-optimal for all dwarfs.
+We broaden their scheduling analysis in Chapter 5 and claim that all benchmarks encompassing a dwarf will perform optimally on one accelerator type, but identify that one type of accelerator is non-optimal for all dwarfs.
 
 Hoste et al. [@hoste2006performance] show that the prediction of performance can be based on inherent program similarity.
 In particular, they show that the metrics collected from a program executing on a particular instruction set architecture (ISA) with a specific compiler offers a relatively accurate characterization of workload for the same application on a totally different micro-architecture.
-[Che et al. @che2009rodinia] broadens this finding with an assumption that performing analysis on a single threaded CPU version of a benchmark application maintains the underlying set of instructions and the composition of the application.
+@che2009rodinia broadens this finding by performing analysis on a single threaded CPU version and find that a benchmark application maintains the underlying set of instructions -- the composition of the application is largely the same.
 
-Therefore, it is intuitive that the composition of a program collected using a simulator (such as Oclgrind discussed in [Section @sec:oclgrind], which operates on the most common intermediate form for the OpenCL runtime) regardless of accelerator to which it is ultimately mapped, offers a more accurate architecture agnostic set of metrics around an applications workload.
+Therefore, it is intuitive that the composition of a program collected using a simulator (such as Oclgrind discussed in [Section @sec:oclgrind], which operates on the most common intermediate form for the OpenCL runtime) regardless of accelerator to which it is ultimately mapped, offers a more accurate architecture agnostic set of metrics for an application workload.
 This, in turn, can be used as a basis for performance prediction on general accelerators.
 
 ##Predictions and Modelling
@@ -566,10 +557,10 @@ Augonnet et al. [@augonnet2010data] propose a task scheduling framework for effi
 They focus on the dynamic scheduling of tasks while automating data transfers between processing units to better utilise GPU-based HPC systems.
 Much of this work is placed on evaluating the scaling of two applications over multiple nodes -- each of which are comprised of many GPUs.
 Unfortunately, the presented methodology requires code to be rewritten using their MPI-like library.
-OpenCL, by comparison, has been in use since 2008 and supports heterogeneous execution on most accelerator devices.
+<!-- OpenCL, by comparison, has been in use since 2008 and supports heterogeneous execution on most accelerator devices.-->
 The algorithms presented to automate data movement should be reused for scheduling of OpenCL kernels to heterogeneous accelerator systems.
 
-Existing works, [@topcuoglu1999task], [@bajaj2004improving], [@xiaoyong2011novel] and [@sinnen2004list], have addressed heterogeneous distributed system scheduling and in particular the use of Directed Acyclic Graphs to track dependencies of high priority tasks.
+Existing works [@topcuoglu1999task], [@bajaj2004improving], [@xiaoyong2011novel], [@sinnen2004list], have addressed heterogeneous distributed system scheduling and in particular the use of Directed Acyclic Graphs to track dependencies of high priority tasks.
 Provided the parallelism of each dependency is expressed as OpenCL kernels, the model proposed here can be used to improve each of these scheduler algorithms by providing accurate estimates of execution time for each task for each potential accelerator on which the computation could be performed.
 
 One such approach uses partial execution, as introduced by Yang et al. [@yang2005cross] enables low-cost performance estimates over a wide range of execution platforms.
@@ -596,11 +587,9 @@ The X-MAP tool is proposed by Shetty [@shetty2017x] to achieve performance predi
 A Machine Learning based inference model is presented to predict the performance of a application on accelerator and programming language -- either CUDA or OpenCL.
 Hardware counters are collected and are used as inputs into a Random Forest Classification Model.
 Most of the efforts of this tool is on locating bottlenecks in applications and committing the developer to target a specific implementation and device vendor.
-However, this misses the point of having heterogeneous systems and equally portable OpenCL codes, for instance, if the optimal device is unavailable being committed to just using one device means that work is unable to proceed until the resource is free -- and would be undesirable when scheduling work to devices over many nodes.
-
+Thus this work is orthogonal to our aim of scheduling OpenCL kernels given a variety of available devices.
 <!--
-can't find a thesis for this -- also results aren't very impressive http://inf-server.inf.uth.gr/~mispyrou/files/Spyrou_Michalis_presentation.pdf
--->
+However, this misses the point of having heterogeneous systems and equally portable OpenCL codes, for instance, if the optimal device is unavailable being committed to just using one device means that work is unable to proceed until the resource is free -- and would be undesirable when scheduling work to devices over many nodes.-->
 
 Che and Skadron [@che2014benchfriend] propose a set of first-order metrics that most influence GPU performance and scalability that are separate from those bound to CPUs.
 Hardware counters are used to collect and generate these metrics, which are then used in a performance prediction model.
@@ -608,8 +597,8 @@ Similarly, a GPU performance modeling framework is proposed by Boyer, Meng and K
 The main motivation of this work is to examine a CUDA kernels potential, in terms of performance, before it is optimized.
 This work shows that the inclusion of transfer time is significant when improving a predictive models accuracy and is especially useful for predicting speed-up on accelerators located over slower interconnect, such as PCIe -- including the data transfer time in the model improved prediction error from 255% to 9%.
 
-We propose an alternative model which allows accurate execution time predictions of OpenCL kernels on a wide range of architecturally-diverse accelerators.
-This methodology discussed in detail in Chapter 5 and uses features from AIWC -- from Chapter 4 -- to form a basis for a predictive model bound to run-times -- from Chapter 3.
+In Chapter 5, we propose an alternative model which allows accurate execution time predictions of OpenCL kernels on a wide range of architecturally-diverse accelerators.
+This methodology uses features from AIWC -- from Chapter 4 -- to form a basis for a predictive model bound to run-times measured or the benchmark codes presented in Chapter 3.
 
 @Shelepov2009 propose the Heterogeneity-Aware Signature-Supported (HASS) scheduler -- a scheduling algorithm that matching threads to the most appropriate CPU cores.
 The architectural properties of an application are presented as signatures -- a compact summary of the applications memory-boundedness, available ILP, sensitivity to variations in clock speed.
@@ -624,6 +613,6 @@ However, this the proposed methodology is the most similar and is the predecesso
 Lee and Wu [@lee2017performance] directly tackle the problem of scheduling OpenCL applications to the most suitable accelerator device.
 They propose HeteroPDP -- a scalable performance degradation predictor -- to dynamically balance the execution time slowdown when co-locating multiple applications in the same heterogeneous system.
 The device selection decision is based on individual kernel metrics such as the degree of parallelism and divergence in an application and by the amount of data movement overhead between the host system and the selected accelerator.
-They conclude that designing a scheduler which considers the effect of memory interference between processes provides improvements in the final scheduler.
-A major focus is on final schedulers and orchestrating these workloads -- we believe the accuracy of our predictive framework [@johnston2018opencl] based on AIWC metrics is complimentary to this work and would only improve the accuracy of their scheduler, however this is left as future work.
+They conclude that designing a scheduler which considers the effect of memory interference between processes provides improvements.
+A major focus is on schedulers and orchestrating these workloads -- we believe the accuracy of our predictive framework [@johnston2018opencl] based on AIWC metrics is complimentary to this work and would only improve the accuracy of their scheduler.
 
