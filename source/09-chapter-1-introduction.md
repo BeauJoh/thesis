@@ -8,8 +8,10 @@ For bold and italic, add _** on either side of the text
 
 <!-- Introduction to the Introduction -->
 
-
-Supercomputers are becoming increasingly heterogeneous.
+Supercomputers are used in computationally intensive tasks and are a critical component in current scientific research.
+They are essential in simulations for quantum mechanics, weather forecasting, climate research, oil and gas exploration and molecular modeling.
+However the largest supercomputers are requiring huge amounts of electricity to operate -- the Summit, currently number one in the TOP500, requires 8.8 MW to power, which is in the capacity of a small coal power plant.
+To reduce this large energy footprint supercomputers are becoming increasingly heterogeneous.
 At an individual node, there is a trend towards specialised hardware -- known as accelerators -- which can expedite the computation of codes from particular classes of scientific workloads.
 The use of accelerators for certain programs offers a shorter time to completion, and less energy expenditure, when compared to a conventional CPU architecture.
 The next generation of these systems has been designed to incorporate a greater number of accelerators, and of varying types per node.
@@ -34,26 +36,26 @@ We believe this research will be of benefit to the scheduling of codes to the mo
 
 ##Context
 
-
+Accelerators can be programmed in a variety of different languages -- CUDA for Nvidia CPUs, ROCm for AMD devices, OpenMP on Intel CPUs and the MIC.
 The Open Compute Language (OpenCL) allows programs to be written once and run anywhere on a range of accelerators.
 A majority of accelerator vendors ship products with an OpenCL supported runtime, many of which will be components on the next-generation of supercomputing nodes.
 Programs in the OpenCL setting are structured into two partitions, the host and the accelerator/device side.
 The developer is responsible for allocating and transferring memory between the host and device.
 This requires programs to be structured with computationally intensive regions of code -- known as kernels -- to be identified and written in the OpenCL C kernel language.
-Kernels are viewed as indivisible functions and as such the nature of these kernels is fixed for all executions, and as such, a kernel does not suffer from the phase-transitions that are common when looking at larger scientific codes.
-The composition of all kernels forms a full accelerator agnostic implementation for a larger scientific code.
+Kernels are viewed as indivisible functions, and as such, the nature of these kernels is fixed for all executions, specifically, a kernel does not suffer from the phase-transitions that are common when looking at larger scientific codes.
+The composition of all kernels forms an accelerator agnostic implementation for full scientific applications.
 
 
 A benefit of the fixed/static nature of OpenCL kernels is that the collection of the characteristics is also constant.
 Instrumentation of the execution of a kernel measures computation, memory, branching and parallelism metrics -- these form the characteristics of a program and are largely unchanged between run and are independent of data set.
-To this end, the Architecture Independent Workload Characterisation (AIWC) tool has been developed.
+To this end, we developed the Architecture Independent Workload Characterisation (AIWC) tool.
 This tool collects 40+ metrics that indicate computation, memory, branching and parallelism characteristics on a per kernel basis.
 It simulates an OpenCL device using the Oclgrind tool and the AIWC plugin analyses the program trace, memory locations accessed, and thread-states to generate the metrics.
 Metrics can be collected quickly since it is a multi-threaded simulator.
 AIWC features, are generated for each kernel invocation and can be embedded as a comment into the header of OpenCL kernel codes -- either in plain-text source or in the SPIR format.
 
 
-Separately, additional work in this thesis comprises of the extension of a benchmark suite.
+Separately, additional work in this thesis comprises of the extension of the OpenDwarfs benchmark suite.
 This was needed since programs that are representative of scientific High Performance Computing (HPC) applications which are capable of execution over a wide range of accelerators are few and far between, specifically with portable performance and reproducible results.
 Additionally, until this work was undertaken, the available OpenCL benchmark suites were not rich enough to adequately characterise performance across the diverse range of applications or accelerator devices of interest.
 Thus this thesis presents an enhanced version of the OpenDwarfs OpenCL benchmark suite -- denoted the Extended OpenDwarfs Benchmark Suite (EOD) -- which was developed with a strong focus placed on the robustness of applications, the curation of additional benchmarks with an increased emphasis on correctness of results and the selection of 4 problem sizes.
@@ -70,7 +72,7 @@ These AIWC metrics were used as predictor variables into the random forest, and 
 The accelerators examined in these predictions range from CPU, GPU and MIC, however, the methodology finally presented is expected to perform over DSP and FPGA also.
 
 
-The final model performs well and is capable of highly accurate predictions which on average differ from the measured experimental run-times by 1.1%, which correspond to actual execution time mispredictions of 8 $\mu s$ to 1 secs according to problem size.
+The final random forest model performs well and is capable of highly accurate predictions which on average differ from the measured experimental run-times by 1.1%, which correspond to actual execution time mispredictions of 8 $\mu s$ to 1 secs according to problem size.
 The model is capable of predicting execution times for specific devices based on the computational characteristics captured by the AIWC tool, which in turn, provides a good prediction of an accelerator devices execution time needed for a real-world scheduler for nodes of future super-computing systems.
 
 <!-- Restatement of the problem -->
@@ -96,7 +98,8 @@ Additionally, the extended suite incorporates a high precision timing library wh
 Examining the performance of the benchmark suite over a range of devices allows a direct evaluation to be made between these devices on a per application basis.
 From this evaluation, the suitably of OpenCL as a hardware agnostic language is shown.
 
-Architecture Independent Workload Characterisation (AIWC) tool is capable of analysing kernels in order to extract a set of predefined features or characteristics.
+
+Separately, the Architecture Independent Workload Characterisation (AIWC) tool is presented and is shown to be capable of analysing kernels and extract a set of predefined features or characteristics.
 The benefits of AIWC include that it:
 
 1) provides insights around the inclusion of an application via diversity analysis of the feature-space.
@@ -105,7 +108,7 @@ The benefits of AIWC include that it:
 The tool can be used in diversity analysis -- which is essential when assembling benchmark suites and justifying the inclusion of an application.
 Furthermore, these metrics are used for creating the prediction model to evaluate the performance of OpenCL kernels on different hardware devices and settings.
 Such a model is then applied as a prognosis tool to predict the performance of an application for any given platform without additional instrumentation.
-This prediction adds information that can be incorporated into existing HPC schedulers and has no run-time overhead -- codes are examined one time by the developer when instrumenting with AIWC and these, in turn, are embedded into the header of each kernel code to be evaluated by the scheduler at the time of scheduling.
+This prediction adds information that can be incorporated into existing HPC schedulers and has no run-time overhead -- codes are examined one time by the developer when instrumenting with AIWC and these, in turn, are embedded into the header of each kernel code to be evaluated by the predictive model at the time of scheduling.
 
 
 <!-- Roadmap -->
