@@ -2,13 +2,13 @@
 
 The next-generation of supercomputers will feature a diverse mix of accelerator devices.
 The increase of heterogeneity is explained by the nature of these devices -- certain accelerators offer acceleration, or a shorter time to completion, for particular programs.
-Characteristics of these programs are fixed regardless of which accelerator is used for computation; for instance, a graph traversal program always exhibits the same high-branch and low-computation properties of graph traversal regardless of what device is used to execute it.
+Characteristics of these programs are fixed and impose fundamental limitations to the workloads regardless of which accelerator is used for computation; for instance, a graph traversal program always exhibits the same high-branch and low-computation properties of graph traversal regardless of what device is used to execute it.
 To support efficient scheduling on HPC systems it is necessary to make accurate performance predictions for workloads on varied compute devices, which is challenging due to diverse computation, communication and memory access characteristics which result in varying performance between devices.
-This work presents a methodology to use device-independent characteristics of scientific codes to select the optimal accelerator device with regard to execution time or energy expenditure.
 On HPC systems a single node may feature a GPU, CPU, and an FPGA or MIC.
+This work presents a device independent predictor -- a methodology to use device-independent characteristics of scientific codes to select the optimal accelerator device with regard to execution time or energy expenditure.
 <!-- The usefulness of this work is more general, since the trend of having heterogenous nodes is becoming increasingly applicable to general purpose high-performance computing systems, where currently, it is not uncommon for a GPU, a CPU co-processor and an FPGA or MIC to exist on a single node.-->
 
-OpenCL is an attractive programming model for high-performance computing systems.
+OpenCL is a suitable programming model for high-performance computing systems.
 With wide support from hardware vendors it is a highly portable language -- a single implementation can execute on CPU, GPU, MIC and FPGA alike.
 
 
@@ -23,6 +23,7 @@ The metrics collected are primarily used in the prediction of execution times, b
 We also discuss the design decisions made to collect AIWC features.
 
 Finally, this work culminates in a methodology which uses AIWC features to form a model capable of predicting accelerator execution times.
+The model is formed using the random forest algorithm from machine learning.
 We use this methodology to predict execution times for a set of 37 computational kernels running on 15 different devices representing a broad range of CPU, GPU and MIC architectures.
 The predictions are highly accurate, differing from the measured experimental run-times by an average of only 1.2%.
 A previously unencountered code can be instrumented once and the AIWC metrics embedded in the kernel, to allow performance prediction across the full range of modeled devices.

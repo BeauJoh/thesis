@@ -15,7 +15,7 @@ rundata.energy$device <- revalue(rundata.energy$device,
                                    ))
 
 p1 <- ggplot(rundata.energy, aes(x=application,y=energy,color=device)) + geom_boxplot(outlier.alpha = 0.1,varwidth=TRUE) + labs(y=TeX('energy (J)'), x=TeX('benchmark'), colour="accelerator") +
-    scale_color_viridis(discrete=TRUE) + theme_bw() + 
+    scale_color_viridis(discrete=TRUE,end=0.25) + theme_bw() + 
     scale_y_continuous(limit = c(0, max(rundata.energy$energy)*1.05)) +
     theme(axis.text.x = element_text(size=10, angle = 45, hjust = 1),
           title = element_text(size=10, face="bold"),
@@ -26,7 +26,7 @@ dev.off()
 
 breaks=c(0.02,0.2,2,20,200)
 p2 <- ggplot(rundata.energy, aes(x=application,y=energy,color=device)) + geom_boxplot(outlier.alpha = 0.1,varwidth=TRUE) + labs(y=TeX('$\\log_{10}\\left($energy (J)$\\right)$'), x=TeX('benchmark'), colour="accelerator") + scale_y_continuous(trans='log10', breaks=breaks, labels=breaks) +
-    scale_color_viridis(discrete=TRUE) + theme_bw() + 
+    scale_color_viridis(discrete=TRUE,end=0.25) + theme_bw() + 
     theme(axis.text.x = element_text(size=10, angle = 45, hjust = 1),
           title = element_text(size=10, face="bold"),
           plot.margin = unit(c(0,0.0,0.0,0.0), "cm"))

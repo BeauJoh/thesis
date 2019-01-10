@@ -392,7 +392,7 @@ While execution time increases with problem size for all benchmarks and platform
 Generally, the HPC GPUs are older and were designed to alleviate global memory limitations amongst consumer GPUs of the time.
 (Global memory size is not listed in Table \ref{tbl:hardware}.)
 Despite their larger memory sizes, the clock speed of all HPC GPUs is slower than all evaluated consumer GPUs.
-While the HPC GPUs (devices 7-9, in yellow) outperformed consumer GPUs of the same generation (devices 10-13, in green) for most benchmarks and problem sizes, they were always beaten by more modern GPUs.
+While the HPC GPUs (devices 7-9, in green) outperformed consumer GPUs of the same generation (devices 4-6 and 10-13, in blue) for most benchmarks and problem sizes, they were always beaten by more modern GPUs.
 This is no surprise since all selected problem sizes fit within the global memory of all devices.
 
 A comparison between CPUs (devices 1-3, in purple) indicates the importance of examining multiple problem sizes.
@@ -437,7 +437,7 @@ Thus we expect that the **large** problem size will also show the largest differ
 
 Figures \ref{fig:energy}\ (a) and \ (b) show the kernel execution energy for several benchmarks for the **large** size.
 All results are presented in joules.
-The box plots are coloured according to device: purple for the Intel Skylake i7-6700k CPU and yellow for the Nvidia GTX1080 GPU.
+The box plots are coloured according to device: purple for the Intel Skylake i7-6700k CPU and blue for the Nvidia GTX1080 GPU.
 The logarithmic transformation has been applied to Figure \ref{fig:energy-log}\ (b) to emphasise the variation at smaller energy scales ($<$ \SI{1}{\joule}), which was necessary due to small execution times for some benchmarks.
 In future this will be addressed by balancing the amount of computation required for each benchmark, to standardize the magnitude of results.
 

@@ -103,10 +103,14 @@ for(a in applications){
             geom_boxplot(outlier.alpha = 0.1,varwidth=TRUE)+
             labs(colour="accelerator type",y='time (ms)',x='')+
             scale_y_continuous(limit = c(0, max(x$total_time*0.001)*1.05)) +
-            scale_color_viridis(discrete=TRUE) + theme_bw() + 
+            scale_color_viridis(discrete=TRUE,end=0.75) + theme_bw() + 
             theme(axis.text.x = element_text(size=10, angle = 45, hjust = 1),
                   title = element_text(size=10, face="bold"),
                   plot.margin = unit(c(0,0,0,0), "cm"))
+
+        if(a == "crc"){
+            p <- p + scale_color_viridis(discrete=TRUE,end=1)
+        }
 
         #just adjust the size-title since the application row title sits over the top of them
         s_title <- s
@@ -384,7 +388,7 @@ p <- ggplot(data.procswat, aes(x=factor(device), y=time*0.001,colour=accelerator
         geom_boxplot(outlier.alpha = 0.1,varwidth=TRUE)+
             labs(colour="accelerator type",y='time (ms)',x='')+
                 scale_y_continuous(limit = c(0, max(x$time*0.001)*1.05)) +
-                    scale_color_viridis(discrete=TRUE) + theme_bw() +
+                    scale_color_viridis(discrete=TRUE,end=0.75) + theme_bw() +
                         theme(axis.text.x = element_text(size=10, angle = 45, hjust = 1),
                                         title = element_text(size=10, face="bold"),
                                                   plot.margin = unit(c(0,0,0,0), "cm"))
