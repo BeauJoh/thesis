@@ -18,7 +18,7 @@ The next generation of these systems has been designed to incorporate a greater 
 For instance, the CAPI and NVLINK technologies included in the latest IBM POWER9 processor offers a high-speed interconnect which allows the rapid movement data between processor and accelerator --  where NVIDIA Graphical Processing Unit (GPU) use NVLink, whereas other accelerator devices such as Altera Field-Programmable Gate Array (FPGA), Digital Signal Processors (DSPs), Intel Many-Integrated-Core (MIC) devices, and both Intel and AMD Central Processing Unit (CPU) and AMD GPU devices can utilise the CAPI interconnect.
 The support from hardware vendors for a greater mix of heterogeneous devices indicates this is the new direction of supercomputing.
 However, this development is recent, and as such the scheduling of workloads to the most suitable accelerator is a new problem.
-The cost of exascale computing and their corresponding energy efficiency will be prohibitive without significant improvements in effectively using accelerators on current and future supercomputers.
+The cost of exascale computing and their corresponding energy efficiency will be prohibitive without significant improvements in effectively using accelerators on the emerging generation of supercomputers.
 
 
 This thesis will argue that the characteristics of a scientific code, specifically around computation, memory, branching and parallelism, are independent of any particular device on which they may be finally executed.
