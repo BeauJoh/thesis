@@ -60,10 +60,12 @@ Having familiarity with the division of applications and which of the dwarfs the
 
 ## Accelerator Architectures in HPC {#sec:chapter2-accelerator-architectures}
 
+Applications depicted by dwarfs in The Dwarf Taxonomy, [Section @sec:the-dwarf-taxonomy], offer a wide-range of characteristics realistic to scientific computing applications.
+Lee et al. [@Lee:2010:DGV:1816038.1816021] show that certain applications -- the constraint solver and database sorting benchmark -- are better suited for CPUs while evaluating the validity of reported speedup results on GPU devices, which suggest structural characteristics of application impact on device performance.
+By extension, it is envisaged that applications represented by a dwarf will experience different performance based on the characteristics of application codes and the device on which it is executed, in other words, certain applications are better suited to specific types of accelerator.
 Accelerators, in this setting, refer to any form of hardware specialized to a particular pattern of computation; Thus, specialized hardware may accelerate a given application code according to that codes characteristics.
-From The Dwarf Taxonomy previously presented in [Section @sec:the-dwarf-taxonomy], it is envisaged that all applications represented by a dwarf are are better suited to specific types of accelerator.
 Accelerators commonly include GPU, FPGA, DSP, ASIC and MIC devices.
-We define accelerators to include all compute devices, including CPUs, since their architecture is well suited to accelerate the computation of specific dwarfs\ [@Lee:2010:DGV:1816038.1816021]; Additionally, the heterogeneous configuration of side cores on modern CPUs presents a similar set of work-scheduling problems, that occur on other accelerators, primarily, these cores need to be given the appropriate work to ensure good system performance.
+We define accelerators to include all compute devices, including CPUs, since their architecture is well suited to accelerate the computation of specific dwarfs; Additionally, the heterogeneous configuration of side cores on modern CPUs presents a similar set of work-scheduling problems, that occur on other accelerators, primarily, these cores need to be given the appropriate work to ensure good system performance.
 The remainder of this section will present and describe each type of accelerator, its history and its uses.
 
 Central Processing Units (CPU) have additional circuitry for branch control logic, and generally operate at a high frequency, ensuring this architecture is highly suited to sequential tasks or workloads with many divergent logical comparisons -- corresponding to the finite-state machine, combinational logic, dynamic programming and backtrack branch and bound dwarfs of the Berkeley Dwarf Taxonomy.
@@ -126,6 +128,10 @@ DSP cores operate on a separate clock to the host CPU and have circular memory b
 Mitra et al. [@mitra2018development] evaluate a prototype nCore Brown-Dwarf system where each node contains an ARM Cortex-A15 host CPU, a single Texas Instruments Keystone II DSP and two Keystone I DSPs.
 They compare the performance and energy-efficiency of dense matrix multiplication and a real-world scientific code for biostructure based drug design against conventional x86 based HPC systems with attached accelerators.
 They show a Brown-Dwarf node is competitive with contemporary systems for memory-bound computations and show the C66x multi-core DSP is capable of running floating-point intensive HPC application codes.
+
+Reagen et al. [@reagen2013quantifying] consider the energy efficiency of accelerators by exploring properties of workloads and how these properties affect the shape of the large design space of hardware accelerators.
+They examine implementations of five benchmarks in terms of energy and explore the architectural parameters by sweeping through four configurable directives -- loop unrolling, array partitioning, pipelining and Multiplier Stages.
+Their work provides insight around which workloads benefit most from acceleration.
 
 Research around the suitability of ARM CPUs for HPC systems is highly active, with comparisons against the conventional Intel and AMD CPUs being made and the potential strengths of ARM systems when striving for energy efficiency  [@maqbool2015evaluating][@rajovic2014tibidabo1][@jarus2013performance].
 Isambard [@feldman_2017_isambard] and Astra [@lacy2018building] systems use the Cavium ThunderX2 CPU accelerator, where each ThunderX2 accelerator consists of 32 high-end ARM cores operating at 2.1 GHz [@mcintoshcomparative].
@@ -202,7 +208,7 @@ The percentage of cores in each system that is made up of accelerator / co-proce
     \label{fig:top500-gflops-per-watt-with-and-without-accelerators-in-supercomputers}
 \end{figure*}
 
-Figure \ref{fig:top500-gflops-per-watt-with-and-without-accelerators-in-supercomputers} presents a comparison of the energy efficiency -- the rate of computation that can be delivered by a computer for every watt of power consumed -- in terms of billions of floating point operations per second per watt, of supercomputers which use accelerators, presented as the solid purple line, and systems which do not use accelerators -- shown as the dashed blue line.
+Figure \ref{fig:top500-gflops-per-watt-with-and-without-accelerators-in-supercomputers} presents a comparison of the energy efficiency -- the rate of computation that can be delivered by a computer for every watt of power consumed -- in terms of billions of floating point operations per second per watt, of supercomputers which use accelerators, presented as the solid purple line, and systems which do not use accelerators -- shown as the dashed teal line.
 Generally, we see that the mean energy efficiency of all systems improves over time.
 However, it is apparent that the use of accelerators in supercomputers has always offered better energy efficiency than using conventional x86 architectures as the primary means of computation.
 Systems without accelerators had a mean energy efficiency of 500 MFlops/Watt in 2012 and have increased on average by 200 MFlops/Watt every year, in 2018 these systems achieved 2 GFlops/Watt.
