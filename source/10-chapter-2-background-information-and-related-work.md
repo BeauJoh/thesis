@@ -8,14 +8,14 @@ Next, we define accelerators and a provide brief survey regarding their use in s
 The hardware agnostic programming framework OpenCL is presented.
 Finally, this section culminates in a discussion of benchmark suites, applications and where they are incorporated into the dwarf taxonomy.
 
-## The Dwarf Taxonomy
+## The Dwarf Taxonomy{#sec:the-dwarf-taxonomy}
 
 Phil Colella [@colelladefining] identified seven motifs of numerical methods which he thought would be important for the next decade.
 Based on this style of analysis, The Berkeley Dwarf Taxonomy [@dwarfmine_2006] was conceived to present the motifs commonplace in HPC.
 Initially performed by Asanovic et al. [@asanovic2006landscape], the Dwarf Taxonomy claims that many applications in parallel computing share patterns of communication and computation.
 Applications with similar patterns are defined as being represented by a single dwarf.
 Dwarfs are removed from specific implementations and optimisations.
-Asanovic et al. [@asanovic2006landscape] present a total of 13 dwarfs, and whilst it is believed that more dwarfs may be added to this list in the future, all currently encountered scientific codes can be classified as belonging to one or more of these dwarfs.
+Asanovic et al. [@asanovic2006landscape] present a total of 13 dwarfs, and the authors state that whilst it is believed that more dwarfs may be added to this list in the future, all currently encountered scientific codes can be classified as belonging to one or more of these dwarfs.
 For each of the 13 dwarfs the authors indicate the performance limit -- in other words, whether the dwarf is compute bound, memory latency limited or memory bandwidth limited.
 The dwarfs and their limiting factors are presented in Table \ref{tbl:dwarf-taxonomy}.
 Note, the **?** symbol indicates the unknown performance limit at the time of publication -- none of these have been resolved since.
@@ -61,7 +61,7 @@ Having familiarity with the division of applications and which of the dwarfs the
 ## Accelerator Architectures in HPC {#sec:chapter2-accelerator-architectures}
 
 Accelerators, in this setting, refer to any form of hardware specialized to a particular pattern of computation; Thus, specialized hardware may accelerate a given application code according to that codes characteristics.
-From The Dwarf Taxonomy previously presented, it is envisaged that all applications represented by a dwarf are are better suited to specific types of accelerator.
+From The Dwarf Taxonomy previously presented in [Section @sec:the-dwarf-taxonomy], it is envisaged that all applications represented by a dwarf are are better suited to specific types of accelerator.
 Accelerators commonly include GPU, FPGA, DSP, ASIC and MIC devices.
 We define accelerators to include all compute devices, including CPUs, since their architecture is well suited to accelerate the computation of specific dwarfs; Additionally, the heterogeneous configuration of side cores on modern CPUs presents a similar set of work-scheduling problems, that occur on other accelerators, primarily, these cores need to be given the appropriate work to ensure good system performance.
 The remainder of this section will present and describe each type of accelerator, its history and its uses.
