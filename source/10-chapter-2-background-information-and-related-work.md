@@ -63,7 +63,7 @@ Having familiarity with the division of applications and which of the dwarfs the
 Accelerators, in this setting, refer to any form of hardware specialized to a particular pattern of computation; Thus, specialized hardware may accelerate a given application code according to that codes characteristics.
 From The Dwarf Taxonomy previously presented in [Section @sec:the-dwarf-taxonomy], it is envisaged that all applications represented by a dwarf are are better suited to specific types of accelerator.
 Accelerators commonly include GPU, FPGA, DSP, ASIC and MIC devices.
-We define accelerators to include all compute devices, including CPUs, since their architecture is well suited to accelerate the computation of specific dwarfs; Additionally, the heterogeneous configuration of side cores on modern CPUs presents a similar set of work-scheduling problems, that occur on other accelerators, primarily, these cores need to be given the appropriate work to ensure good system performance.
+We define accelerators to include all compute devices, including CPUs, since their architecture is well suited to accelerate the computation of specific dwarfs\ [@Lee:2010:DGV:1816038.1816021]; Additionally, the heterogeneous configuration of side cores on modern CPUs presents a similar set of work-scheduling problems, that occur on other accelerators, primarily, these cores need to be given the appropriate work to ensure good system performance.
 The remainder of this section will present and describe each type of accelerator, its history and its uses.
 
 Central Processing Units (CPU) have additional circuitry for branch control logic, and generally operate at a high frequency, ensuring this architecture is highly suited to sequential tasks or workloads with many divergent logical comparisons -- corresponding to the finite-state machine, combinational logic, dynamic programming and backtrack branch and bound dwarfs of the Berkeley Dwarf Taxonomy.
@@ -128,14 +128,14 @@ They compare the performance and energy-efficiency of dense matrix multiplicatio
 They show a Brown-Dwarf node is competitive with contemporary systems for memory-bound computations and show the C66x multi-core DSP is capable of running floating-point intensive HPC application codes.
 
 Research around the suitability of ARM CPUs for HPC systems is highly active, with comparisons against the conventional Intel and AMD CPUs being made and the potential strengths of ARM systems when striving for energy efficiency  [@maqbool2015evaluating][@rajovic2014tibidabo1][@jarus2013performance].
-Isambard[@feldman_2017_isambard] and Astra[@lacy2018building] systems use the Cavium ThunderX2 CPU accelerator, where each ThunderX2 accelerator consists of 32 high-end ARM cores operating at 2.1 GHz [@mcintoshcomparative].
+Isambard [@feldman_2017_isambard] and Astra [@lacy2018building] systems use the Cavium ThunderX2 CPU accelerator, where each ThunderX2 accelerator consists of 32 high-end ARM cores operating at 2.1 GHz [@mcintoshcomparative].
 Separately, Fujitsu propose using ARMv8-A cores for the Post-K supercomputer [@morgan_2016_postk].
 In a similar layout to the ThunderX2 the FX100 is a Scalable Many Core (SMaC) with the memory model -- Core Memory Group -- and core configuration -- Compute Engine -- also in a grid-layout.
 
 Currently, only 25 of the Top500 systems are based on ARM technologies, but these experimental systems may indicate the way forward for exascale supercomputing.
 The most compelling reason for this transition to ARM is improved energy efficiency.
-ARM processors were originally targeted for embedded and mobile computing markets, where energy efficiency is a major constraint, and may explain that while time-to-completion times are higher on these systems verses conventional x86 architectures, the energy usage is much lower.
-@simula2018real evaluate ARM processors against conventional x86 processors on real-time cortical simulations and consider the energy and interconnect scaling over distributed systems.
+ARM processors were originally targeted for embedded and mobile computing markets, where energy efficiency is a major constraint, and may explain that while time-to-completion of tasks is higher verses conventional x86 architectures, the energy usage is much lower.
+Simula et al. [@simula2018real] evaluate ARM processors against conventional x86 processors on real-time cortical simulations and consider the energy and interconnect scaling over distributed systems.
 They show joules per synaptic event on a network of ARM based Jetson systems use 3$\times$ less energy than the Intel solution, whilst being 5$\times$ slower.
 The benchmark identifies an interesting bottleneck on current HPC x86 based systems: as the problem sizes grow larger more nodes and a larger network is required, thus, it is the lack of a low-latency, energy-efficient interconnect that is the primary concern.
 However, since ARM based HPC systems can be populated more densely and offer a lower baseline energy profile, it is an architecture better suited to bio-inspired artificial intelligence applications and scientific investigations of the cognitive functions of the brain.
@@ -143,7 +143,7 @@ However, since ARM based HPC systems can be populated more densely and offer a l
 A major motivation for the increasing use of heterogeneous architectures is to reduce energy use; indeed, without significant improvements in energy efficiency, the cost of exascale computing will be prohibitive [@villa2014scaling].
 The diversity of accelerators in this space is best shown in a survey of accelerator usage and energy consumption in the worlds leading supercomputers.
 The complete results from the TOP500 and Green500 lists [@feldman_2017] were examined, over consecutive years from 2012 to 2018.
-2012 was selected as the starting year since it was the first occurrence in the TOP500 spreadsheets to provide both accelerator name and accelerator core count information.
+The starting year was selected as 2012 because it was the first occurrence in the TOP500 spreadsheets to provide both accelerator name and accelerator core count information.
 Each dataset was taken from the June editions of the yearly listings.
 
 \begin{figure*}[t]
@@ -153,16 +153,16 @@ Each dataset was taken from the June editions of the yearly listings.
     \label{fig:top500-percentage-of-supercomputers-using-accelerators}
 \end{figure*}
 
-Figure \ref{fig:top500-percentage-of-supercomputers-using-accelerators} shows steady increase in the use of accelerators in supercomputers depicted as the purple line.
+Figure \ref{fig:top500-percentage-of-supercomputers-using-accelerators} shows steady increase in the use of accelerators in supercomputers depicted as the solid purple line.
 This is presented as a percentage of the number of systems using accelerators in the TOP500 divided by 500 -- the total number of systems listed in the TOP500 every year.
 In 2012 and 2013 11\% of systems in the TOP500 used accelerators, this increased by roughly 2\% per year.
-As of 2018 22\% of the TOP500 use accelerators.
+As of 2018, 22\% of the TOP500 use accelerators.
 Note, from 2016 the Sunway TaihuLight system was introduced and is in the top 10, however due to the reliance on the CPE side-core to achieve the FLOPs for its rank, the data was adjusted to be listed as containing an accelerator [@dongarra2016report].
-Also shown in Figure \ref{fig:top500-percentage-of-supercomputers-using-accelerators} is the average percentage of cores in the TOP500 every year dedicated to accelerators, presented as the teal line.
+Also shown in Figure \ref{fig:top500-percentage-of-supercomputers-using-accelerators} is the average percentage of cores in the TOP500 every year dedicated to accelerators, presented as the dashed blue line.
 This measure indicates how much of the TOP500 compute is dependent on the accelerator -- for systems that contain accelerators.
 The rationale for this metric is that systems in the TOP500 which use accelerators are not only accelerator based systems -- they contain conventional x86 CPU architectures as a host-side device which mirror the non-accelerator HPC systems, the teal line indicates what percentage of compute resources are attributed to the accelerator.
 Unsurprisingly, every year from 2012 to 2018, we see that a greater contribution of system resources -- cores -- are dedicated for accelerator devices and fewer resources for systems with accelerators are provided for the host. 
-In 2012 63% of supercomputer cores were located on the accelerator, by 2013 it jumped to 76%, this increased on average by 1.5% per year to 85% of compute cores being accelerator based in 2018.
+In 2012, 63% of supercomputer cores were located on the accelerator, by 2013 it jumped to 76%, this increased on average by 1.5% per year to 85% of compute cores being accelerator based in 2018.
 
 <!--
 \begin{figure*}[t]
@@ -173,11 +173,12 @@ In 2012 63% of supercomputer cores were located on the accelerator, by 2013 it j
 \end{figure*}
 --> 
 
-A closer inspection of the top 10 of the TOP500 systems over the same time period is presented as the yellow line in Figure\ \ref{fig:top500-percentage-of-supercomputers-using-accelerators} and shows a greater dependence on accelerators and a corresponding increase in heterogeneity.
-In 2012 3 out of the top 10 supercomputers used accelerators to secure a position.
-From 2013 to 2017 the use of accelerators in these systems was consistently at 40% however in 2018 it jumped to 70%.
+A closer inspection of the top 10 of the TOP500 systems over the same time period is presented as the green long dashed line in Figure\ \ref{fig:top500-percentage-of-supercomputers-using-accelerators} and shows a greater dependence on accelerators and a corresponding increase in heterogeneity.
+In 2012, three out of the top 10 supercomputers used accelerators to secure a position.
+From 2013 to 2017, the use of accelerators in these systems was consistently at 40% however in 2018 it jumped to 70%.
 Since the use of accelerators in the top 10 is much higher than in the rest of the TOP500 (purple line), we can conclude that the use of accelerators gives an edge to the ranking of these systems.
 The general trend of increased use of accelerators throughout all of the TOP500 continues to increase and reinforces the importance of accelerators in this space.
+Another benefit from the increasing dependence on a heterogeneous mix of accelerator devices is improved energy efficiency on these systems.
 
 <!--
 To further investigate this conclusion a further analysis is presented, the emphasis if placed on the reliance of accelerators to secure the place of the list for these accelerator systems.
@@ -193,7 +194,6 @@ The percentage of cores in each system that is made up of accelerator / co-proce
 \todo[inline]{accelerators for energy efficiency}
 -->
 
-Another benefit from the increasing dependence on a heterogeneous mix of accelerator devices is improved energy efficiency on these systems.
 
 \begin{figure*}[t]
     \centering
@@ -202,7 +202,7 @@ Another benefit from the increasing dependence on a heterogeneous mix of acceler
     \label{fig:top500-gflops-per-watt-with-and-without-accelerators-in-supercomputers}
 \end{figure*}
 
-Figure \ref{fig:top500-gflops-per-watt-with-and-without-accelerators-in-supercomputers} presents a comparison of the energy efficiency -- the rate of computation that can be delivered by a computer for every watt of power consumed -- in terms of billions of floating point operations per second per watt, of supercomputers which use accelerators, presented as the purple line, and systems which do not use accelerators -- shown as the yellow line.
+Figure \ref{fig:top500-gflops-per-watt-with-and-without-accelerators-in-supercomputers} presents a comparison of the energy efficiency -- the rate of computation that can be delivered by a computer for every watt of power consumed -- in terms of billions of floating point operations per second per watt, of supercomputers which use accelerators, presented as the solid purple line, and systems which do not use accelerators -- shown as the dashed blue line.
 Generally, we see that the mean energy efficiency of all systems improves over time.
 However, it is apparent that the use of accelerators in supercomputers has always offered better energy efficiency than using conventional x86 architectures as the primary means of computation.
 Systems without accelerators had a mean energy efficiency of 500 MFlops/Watt in 2012 and have increased on average by 200 MFlops/Watt every year, in 2018 these systems achieved 2 GFlops/Watt.
@@ -286,7 +286,7 @@ As it is not always feasible to perform such a detailed performance study of the
 @sun2016 propose Hetero-Mark, a Benchmark Suite for CPU-GPU Collaborative Computing, which has five benchmark applications each implemented in the Heterogeneous Compute Compiler (HCC) -- which compiles to OpenCL and HIP which converts CUDA codes to the AMD Radeon Open Compute back-end.
 Meanwhile, Chai by Gómez-Luna et al.[@gomez2017chai], offers 15 applications in 7 different implementations with the focus on supporting integrated architectures.
 
-The Princeton Application Repository for Shared-Memory Computers (PARSEC) is a benchmark suite proposed by @Bienia2008.
+The Princeton Application Repository for Shared-Memory Computers (PARSEC) is a benchmark suite proposed by Bienia et al. @Bienia2008.
 It curates a set of real-world benchmarks from recognition, mining, synthesis and systems applications which mimic large-scale multithreaded commercial programs instead of the conventional types of HPC benchmark applications that achieve a high-performance.
 Its primary focus is to have a general purpose suite that assesses performance of multiprocessor CPUs over realistic application domains.
 Additionally, they identify CPU performance is tied to problem size, as such, one of the features of PARSEC is that it includes multiple problem sizes for the benchmark simulations -- **simsmall**, **simmedium** and **simlarge**.

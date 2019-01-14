@@ -40,7 +40,7 @@
 \addcontentsline{toc}{section}{Principal Component Analysis}
 \label{appendix:diversity-analysis}
 
-A brief overview of diversity analysis is conducted in this appendix.
+A brief overview of the diversity analysis conducted is presented in this appendix.
 Features from AIWC are used as the predictor variables in the random forest model -- presented in Chapter 5.
 This model was trained from the combined results of all application kernels and all problem sizes.
 In this section the predictor variables are examined independently to evaluate the variances between kernels and problem sizes in the AIWC feature-space.

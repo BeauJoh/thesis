@@ -131,8 +131,8 @@ for (y in unique(emeasure$publication.year)){
 
 energy_df <- z
 
-p <- ggplot(energy_df,aes(x=year,y=value,colour=metric)) + geom_line() + expand_limits(y = 0) + labs(x="Publication Year (TOP500 June issue)",y=TeX("Power Efficiency $\\left[$mean$\\left(\\frac{$GFlops$}{$Watt$}\\right)\\right]$"),colour="Metric") + scale_color_viridis(discrete=TRUE,labels=c("supercomputers with accelerators",'supercomputers without accelerators')) #scale_colour_manual(labels=c("Machines using Accelerators in the TOP500",TeX("mean($\\frac{Accelerator Cores}{Total Cores}$)")),values=c("blue","red"))#title="Accelerator use in the Top500",
-pdf("top500_GFlops_per_Watt_of_supercomputers_with_and_without_accelerators.pdf",width=11.7,height=8.3)
+p <- ggplot(energy_df,aes(x=year,y=value,colour=metric,linetype=metric)) + geom_line() + expand_limits(y = 0) + labs(x="Publication Year (TOP500 June issue)",y=TeX("Power Efficiency $\\left[$mean$\\left(\\frac{$GFlops$}{$Watt$}\\right)\\right]$"),colour="Supercomputers") + scale_linetype("Supercomputers",labels=c("with accelerators",'without accelerators')) + scale_color_viridis(discrete=TRUE,labels=c("with accelerators",'without accelerators'),end=0.5)
+pdf("top500_GFlops_per_Watt_of_supercomputers_with_and_without_accelerators.pdf",width=10.7,height=7.3)
 print(p)
 dev.off()
 
@@ -204,8 +204,8 @@ dev.off()
 top10_accelerator_use$value <- top10_accelerator_use$value/10
 z <- rbind(top500_accelerator_use,top10_accelerator_use)
 top500_accelerator_use <- z
-p <- ggplot(z,aes(x=year,y=value*100,colour=metric)) + geom_line() + expand_limits(y = 0) + labs(x="Publication Year (TOP500 June issue)",y="Percentage of system (%)",colour="Metric") + scale_color_viridis(discrete=TRUE,labels=c("using accelerators in the TOP500",lapply(sprintf('dedicated to accelerator $\\left(\\frac{\\sum$Accelerator Cores$}{\\sum$Total Cores$}\\right)$'), TeX),"using accelerators in the top 10 of the TOP500"))  #scale_colour_manual(labels=c("Machines using Accelerators in the TOP500",TeX("mean($\\frac{Accelerator Cores}{Total Cores}$)")),values=c("blue","red"))#title="Accelerator use in the Top500",
-pdf("top500_percentage_of_supercomputers_with_accelerators.pdf",width=11.7,height=8.3)
+p <- ggplot(z,aes(x=year,y=value*100,colour=metric,linetype=metric)) + geom_line() + expand_limits(y = 0) + labs(x="Publication Year (TOP500 June issue)",y="Percentage of system (%)",colour="Metric") + scale_linetype("Metric",labels=c("using accelerators in the TOP500",lapply(sprintf('dedicated to accelerator $\\left(\\frac{\\sum$Accelerator Cores$}{\\sum$Total Cores$}\\right)$'), TeX),"using accelerators in the top 10 of the TOP500")) + scale_color_viridis(discrete=TRUE,labels=c("using accelerators in the TOP500",lapply(sprintf('dedicated to accelerator $\\left(\\frac{\\sum$Accelerator Cores$}{\\sum$Total Cores$}\\right)$'), TeX),"using accelerators in the top 10 of the TOP500"),end=0.75)
+pdf("top500_percentage_of_supercomputers_with_accelerators.pdf",width=10.7,height=7.3)
 print(p)
 dev.off()
 
