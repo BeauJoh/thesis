@@ -16,7 +16,7 @@ Examining the performance of the benchmark suite over a range of devices allows 
 The exploration of the differences in codes was an increasingly compelling justification to explain the performance differences on heterogeneous devices.
 To this end, the Architecture Independent Workload Characterisation (AIWC) was developed and is capable of identifying the fundamental characteristics of programs free from any specific device.
 AIWC is capable of analysing kernels in order to extract a set of predefined features or characteristics.
-The tool can be used in diversity analysis -- which is essential when assembling benchmark suites and justifying the inclusion of an application.
+The tool can be used in diversity analysis -- see Appendix \ref{appendix:diversity-analysis} -- which is essential when assembling benchmark suites and justifying the inclusion of an application.
 Furthermore, these metrics were then used for creating the prediction model to evaluate the performance of OpenCL kernels on different hardware devices and settings.
 Such a model was then applied as a prognosis tool to predict the performance of an application for any given platform without additional instrumentation.
 This prediction adds information that can be incorporated into existing HPC schedulers and has no run-time overhead -- codes are examined one time by the developer when instrumenting with AIWC and these, in turn, are embedded into the header of each kernel code to be evaluated by the scheduler at the time of scheduling.
