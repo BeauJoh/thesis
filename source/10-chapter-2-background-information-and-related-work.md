@@ -234,21 +234,22 @@ The Tianhe-2A uses a Matrix2000 DSP accelerator [@morgan_2017_tianhe]; so will t
 
 OpenCL is a standard that allows computationally intensive codes to be written once and run efficiently on any compliant accelerator device.
 It is supported on a wide range of systems including CPU, GPU, FPGA, DSP and MIC devices.
-Unlike device specific languages.
-While it is possible to write application code directly in OpenCL, it may also be used as a base to implement higher-level programming models.
+Unlike device specific languages, such as, CUDA for Nvidia GPUs and Cilk for the Intel Xeon Phi, the OpenCL programming framework is well-suited to heterogeneous computing environments, as one common OpenCL code may be executed on multiple different devices.
+Additionally, OpenCL may also be used as a base to implement higher-level programming models such as SYCL, OpenMP and OpenACC.
 This technique was shown by Mitra et al., [@mitra2014implementation] where an OpenMP runtime was implemented over an OpenCL framework for Texas Instruments Keystone II DSP architecture.
-Having a common back-end in the form of OpenCL allows a direct comparison of identical code across this diverse range of architectures.
+Similarly, Martineau et al. [@martineau2016performance] collected a suite of benchmarks and three mini-apps to evaluate Clang OpenMP 4.5 support for Nvidia GPUs.
+The focus of benchmarking was as a comparison with CUDA; OpenCL was not considered.
+However, they provide an overview of the current clang compiler support and the success of higher level languages -- the directives based abstractions of OpenMP -- to be mapped to lower level frameworks; OpenCL could replace CUDA as the backend framework in a similar study.
 
-The OpenCL programming framework is well-suited to heterogeneous computing environments, as a single OpenCL code may be executed on multiple different device types.
-When combined with autotuning, an OpenCL code may exhibit good performance across varied devices. [@spafford2010maestro, @chaimov2014toward, @nugteren2015cltune, @price2017analyzing]
+When combined with autotuning, an OpenCL code may exhibit good performance across varied devices [@spafford2010maestro, @chaimov2014toward, @nugteren2015cltune, @price2017analyzing].
 OpenCL has been used for DSP programming since 2012 [@li2012enabling].
 Furthermore, Mitra et al. [@mitra2018development] propose a hybrid programming environment that combines OpenMP, OpenCL and MPI to utilize a nCore Brown-Dwarf system where each node contains an ARM Cortex-A15 host CPU, a single Texas Instruments Keystone II DSP and two Keystone I DSPs.
 OpenCL codes can be written to be easily linked with auto-tuners, by allowing the local work group size to be set from the command line or as a macro in the pre-processor at execution and during compilation respectively.
+Having a common back-end in the form of OpenCL allows a direct comparison of identical code across this diverse range of architectures, making it the desirable language implementation for our benchmark suite -- presented in Chapter 3.
 
 OpenCL programs consist of a host and a device side, which cooperate to perform a computation using a standard sequence of steps.
 The host is responsible for querying the suitable platforms, vendor OpenCL runtime drivers, and establishing a context on the selected devices.
 Next, the host sets up memory buffers, compiles a kernel program for each device -- the final compiled device binaries are generated for each specific device instruction set architecture (ISA).
-
 On the device side, the developer code is enqueued for execution.
 Device side code is typically small intensive sub-regions of programs and is known as the kernel.
 Kernel code is written in a subset of the C programming language.
@@ -274,7 +275,6 @@ Mathematical intrinsic options can also be set to disable double floating point 
 Other optimisations for less critical codes can include using the strictest aliasing rules, use of the fast fused-multiply-and-add instruction (with reduced precision), ignoring the signedness of floating point zeros and relaxed, finite or unsafe math operations.
 These can also be corrected using autotuning for both kernel specific and device specific optimisations.
 
-
 ## Benchmark Suites{#sec:chapter2-benchmark-suites}
 
 Benchmarking forms the basis on which comparisons between languages and environments are made.
@@ -283,26 +283,28 @@ Our work focuses on benchmarking for device specific performance limitations, fo
 For these reasons, we introduce the Extended OpenDwarfs benchmark suite in [Chapter @sec:chapter-3-ode] which covers a wider range of application patterns by focusing exclusively on OpenCL using higher-level benchmarks.
 Before jumping into this work, existing benchmark suites are considered in the remainder of this section.
 
-The NAS parallel benchmarks [@bailey1991parallel] follow a ‘pencil-and-paper‘ approach, specifying the computational problems to be included in the benchmark suite but leaving implementation choices such as language, data structures and algorithms to the user.
+The NAS parallel benchmarks [@bailey1991parallel] specify the computational problems to be included in the benchmark suite but leave the implementation choices such as language, data structures and algorithms to the user.
 The benchmarks include varied kernels and applications which allow a nuanced evaluation of a complete HPC system, however, the unconstrained approach does not readily support direct performance comparison between different hardware accelerators using a single set of codes.
-
-Martineau et al. [@martineau2016performance] collected a suite of benchmarks and three mini-apps to evaluate Clang OpenMP 4.5 support for Nvidia GPUs.
-Their focus was on comparison with CUDA; OpenCL was not considered.
 
 Barnes et al. [@barnes2016evaluating] collected a representative set of applications from the current NERSC workload to guide optimization for Knights Landing in the Cori supercomputer.
 As it is not always feasible to perform such a detailed performance study of the capabilities of different computational devices for particular applications, the benchmarks described in this paper may give a rough understanding of device performance and limitations.
 
-@sun2016 propose Hetero-Mark, a Benchmark Suite for CPU-GPU Collaborative Computing, which has five benchmark applications each implemented in the Heterogeneous Compute Compiler (HCC) -- which compiles to OpenCL and HIP which converts CUDA codes to the AMD Radeon Open Compute back-end.
-Meanwhile, Chai by Gómez-Luna et al.[@gomez2017chai], offers 15 applications in 7 different implementations with the focus on supporting integrated architectures.
+Sun et al. [@sun2016] propose Hetero-Mark, a Benchmark Suite for CPU-GPU Collaborative Computing, which has five benchmark applications each implemented in the Heterogeneous Compute Compiler (HCC) -- which compiles to OpenCL and HIP which converts CUDA codes to the AMD Radeon Open Compute back-end.
+Meanwhile, Chai by Gómez-Luna et al. [@gomez2017chai], offers 15 applications in 7 different implementations with the focus on supporting integrated architectures.
 
-The Princeton Application Repository for Shared-Memory Computers (PARSEC) is a benchmark suite proposed by Bienia et al. @Bienia2008.
+The Princeton Application Repository for Shared-Memory Computers (PARSEC) is a benchmark suite proposed by Bienia et al. [@Bienia2008].
 It curates a set of real-world benchmarks from recognition, mining, synthesis and systems applications which mimic large-scale multithreaded commercial programs instead of the conventional types of HPC benchmark applications that achieve a high-performance.
 Its primary focus is to have a general purpose suite that assesses performance of multiprocessor CPUs over realistic application domains.
 Additionally, they identify CPU performance is tied to problem size, as such, one of the features of PARSEC is that it includes multiple problem sizes for the benchmark simulations -- **simsmall**, **simmedium** and **simlarge**.
 Since accelerators are not considered in this work -- and as such, all applications are written in C -- it is not included in our evaluation, however, the fundamental principals of having a general purpose and portable set of applications that assess real-world workloads over multiple problem sizes, forms the basis of our extensions and are presented in Chapter 3.
 
-Rodinia and the original OpenDwarfs benchmark suite focused on collecting a representative set of benchmarks for scientific applications, classified according to dwarfs, with a thorough diversity analysis to justify the addition of each benchmark to the corresponding suite.
-The Scalable Heterogeneous Computing benchmark suite (SHOC)[@lopez2015examining] also features an OpenCL implementation of several scientific applications.
+Reagen et al. [@reagen2014machsuite] present MachSuite, a collection of 19 benchmarks to evaluate accelerators and the tools to convert C or C++ codes to FPGA devices.
+They aim to standardise the selection of kernels used by the HPC community by offering standardised implementations of the most commonly used algorithms in the literature to present FPGA results.
+12 of the 13 dwarfs are represented by the chosen benchmarks, and are presented as a C / C++ implmentation; due to the wider FPGA vendor support for the high-level synthesis tools to convert these codes to register-transfer level designs to run on FPGAs accelerators.
+It is unclear why OpenCL was not considered.
+
+Rodinia [@che2009rodinia] and the original OpenDwarfs [@feng2012opencl] benchmark suite focused on collecting a representative set of benchmarks for scientific applications, classified according to dwarfs, with a thorough diversity analysis to justify the addition of each benchmark to the corresponding suite.
+The Scalable Heterogeneous Computing benchmark suite (SHOC) [@lopez2015examining] also features an OpenCL implementation of several scientific applications.
 We considered Rodinia, OpenDwarfs and SHOC as the potential basis for our extended benchmark suite -- the strengths and weaknesses of three are presented independently in the following subsections.
 
 
@@ -313,7 +315,7 @@ Che et al. [@che2009rodinia] proposed the Rodinia benchmark suite to cover a wid
 The benchmarks were selected following the Berkeley Dwarf Taxonomy and are from real world high performance computing applications.
 The diversity between selected benchmarks was shown by measuring execution times, communications overheads and energy usage of running each benchmark on an NVIDIA GTX 280 GPU and an Intel Core 2 Extreme CPU.
 Across the suite: speedups in execution times ranged from 5.5x to 80.8x, communication overheads varied from 2-76% and GPU power consumption overheads ranged from 38-83 Watts, illustrating important architectural differences between the CPU and GPU.
-At the time this thesis was written the Rodinia Benchmark suite consisted of nine applications; namely, Leukocyte Tracking, Speckle Reducing Anisotropic Diffusion, HotSpot, Back Propagation, Needleman-Wunsch, K-means, Stream Cluster, Breadth-First Search and Similarity Score, but it has since been extended. [@che2010characterization]
+The Rodinia Benchmark suite originally consisted of nine applications; namely, Leukocyte Tracking, Speckle Reducing Anisotropic Diffusion, HotSpot, Back Propagation, Needleman-Wunsch, K-means, Stream Cluster, Breadth-First Search and Similarity Score, but it has since been extended [@che2010characterization].
 This extension features a subset of the dwarfs, namely, Structured Grid, Unstructured Grid, Dynamic Programming, Dense Linear Algebra, MapReduce, and Graph Traversal all of which may be expected to benefit from GPU acceleration.
 Diversity analysis was also performed and took the form of a Micro-Architecture independent analysis study.
 The MICA framework, discussed in [section @sec:microarchitecture-independent], was used as the basis of the evaluation and the motivation was to justify each application's inclusion in the benchmark suite by showing deviations between applications in the corresponding kiviat diagrams.
@@ -330,7 +332,7 @@ In this paper 11 applications were evaluated on a CPU, an Intel Xeon E5405, and 
 A larger range of dwarfs are covered by OpenDwarfs than Rodinia; however, one dwarf, MapReduce, is still not represented by any application.
 Additionally, several dwarfs currently have only one representative application which may not expose the entire set of characteristics of that dwarf.
 
-A potential criticism is that no diversity analysis was performed to justify the inclusion of each application -- however since many applications were inherited from the Rodinia code-base these applications have a proven MICA diversity.
+No diversity analysis was performed to justify the inclusion of each application -- however since many applications were inherited from the Rodinia code-base these applications have a proven MICA diversity.
 Recently, this work was updated and evaluated on FPGA devices by Krommydas et al. [@krommydas2016opendwarfs].
 We selected OpenDwarfs as the basis for our extensions, this was a good place to start given it had the largest number of dwarfs already represented, the sole implementation was OpenCL, and had already been tested on a wide range of accelerators. 
 These efforts are discussed in Chapter 3.
@@ -374,19 +376,18 @@ In this study, the authors show that the active state of a CPU is comparable to 
 Meanwhile, Agarwal et al. [@Agarwal:2000:CRV:339647.339691] show that wire latencies (which correspond to memory movement and chip-to-chip communication) have not matched the increase in the range of clock-frequency.
 The bottle-neck on many of these workloads is also moving from being compute-bound to memory or communication bound, since the imbalance of hardware improvements shift application requirements to wait on communication and memory transfers.
 As such, the impact of increasing the clock frequency is having (and will continue to have) less of an impact on computational efficiency.
-This trend has been reinforced in current work by @sembrant2016hiding and @muller2016latency; Modern processors increasingly rely on both latency minimisation and latency hiding to conceal the widening gap between processor and memory clock frequencies.
-To this end, both @sembrant2016hiding and @muller2016latency introduce techniques to model parallelism and opportunistically steal work during interrupt events which result in hiding the latency in the processor pipeline and reducing the latency in the memory hierarchy.
+This trend has been reinforced in current work by Sembrant [@sembrant2016hiding] and Muller and Acar [@muller2016latency]; Modern processors increasingly rely on both latency minimisation and latency hiding to conceal the widening gap between processor and memory clock frequencies.
+To this end, both Sembrant [@sembrant2016hiding] and Muller and Acar [@muller2016latency] introduce techniques to model parallelism and opportunistically steal work during interrupt events which result in hiding the latency in the processor pipeline and reducing the latency in the memory hierarchy.
 
 Since wire latencies have not matched the increase in the range of clock-frequency, the coupling between execution time and energy consumption is non-linear [@lively2011energy].
 As such, the impact of increasing the clock frequency on applications that are compute-bound will result in a proportional reduction in execution time to having a higher clock-frequency, however, there are applications that are memory or communication bound, where increasing the frequency of a core does not also increase the speed of the memory bus and thus will experience little to no benefit.
 Applications and dwarfs may benefit from an accelerator with a memory clock which matches the core clock.
 
 A good indication of a successful implementation of a parallel algorithm is performance scalability in response to core availability [@johnston2017embedded][@johnston2017parallel][@baker2012scaling][@abraham2015gromacs].
-However, the trend of achieving good performance scaling by increasing the number of homogeneous cores on a system will cease, primarily, due to the power limitations of having arrived at the utilisation wall -- a limitation of the fraction of a chip that can run at full speed
-at one time [@venkatesh2010conservation][@esmaeilzadeh2011dark].
+However, the trend of achieving good performance scaling by increasing the number of homogeneous cores on a system will cease, primarily, due to the power limitations of having arrived at the utilisation wall -- a limitation of the fraction of a chip that can run at full speed at one time [@venkatesh2010conservation][@esmaeilzadeh2011dark].
 
-Taylor [@taylor2012dark] surveys the transition of typical homogeneous cores to a potentially dark silicon.
-The primary factor is the percentage of a silicon chip that can switch at full frequency is dropping with each generator of processor, known as Dennard scaling -- that as transistors get smaller, their power density stays constant, so that the power use stays in proportion with area -- and ensures that large fractions of chips are either idle or operating at a lower clock frequency.
+Taylor [@taylor2012dark] surveys the transition of typical homogeneous cores to a many accelerators on the same chip -- known as dark silicon.
+The main reason for this transition, is the percentage of a silicon chip that can switch at full frequency is dropping with each generator of processor, known as Dennard scaling -- that as transistors get smaller, their power density stays constant, so the power use stays in proportion with area -- and ensures large fractions of chips are either idle or operating at a lower clock frequency.
 Limitations from hitting this power-wall has meant specialized architectures are increasingly employed to "buy" energy efficiency by "spending" more on die area -- thus increasing heterogeneity of the entire system.
 Indeed, the increasing utilization of accelerators as seen in today's leading supercomputers indicates an accurate prediction by Taylor -- a bright future for heterogeneous systems.
 Taylor also notes that a by-product of adding specialized architectures -- or accelerators -- is massive increases in complexity.
@@ -394,7 +395,7 @@ Introducing a methodology to direct codes to the most appropriate accelerator is
 
 ## OpenCL Performance
 
-The performance of OpenCL kernels is affected by runtime parameters determining the allocation and partitioning of work changes between devices.
+The performance of OpenCL kernels is affected by runtime parameters, such as local workgroup, memory prefetching and blocking, and loop unrolling, which determine the allocation and partitioning of work between devices.
 Much of the partitioning can occur automatically using autotuning.
 Autotuning and tools and techniques used to measure device performance are summarised in this subsection.
 Also discussed is the common issue of phase shifting and how it relates to measuring OpenCL performance.
@@ -411,12 +412,13 @@ When combined with autotuning, an OpenCL code may exhibit good performance acros
 Tasks such as compiler optimisations and kernel runtime tuning parameters are well suited to auto-tuners without requiring an exhaustive search in this search space.
 This has been manifested in many auto-tuning libraries that use machine learning.
 Spafford et al. [@spafford2010maestro], Chaimov et al. [@chaimov2014toward] and Nugteren and Codreanu [@nugteren2015cltune] all propose open source libraries capable of autotuning dynamic execution parameters in OpenCL kernels.
+Filipovic et al. [@Filipovic:2017:AOK:3152821.3152877]also show OpenCL tuning strategies can take into account numerical accuracy to search for kernel implementations within specific numerical error bounds whilst optimizing for a shorter execution time.
 
 Additionally, Price and McIntosh-Smith [@price2017analyzing] have demonstrated high performance using a general purpose autotuning library [@ansel:pact:2014], for three applications across twelve devices.
 The OpenTuner library requires the search space to be defined the form of command line or compile time arguments -- which are used as configuration parameters when performing application execution.
 Next, machine learning techniques are used employing a black box mechanism to effectively search for the optimal configuration parameter arguments in the search space.
 Measurements are collected per run effectively updating a cost function.
-Both the objective of the search and the cost function are entirely flexible, since this framework takes the form of a modular Python library.
+Both the objective of the search and the cost function are entirely flexible, since this framework takes the form of OpenTuner, a modular Python library.
 
 In the @price2017analyzing paper, OpenCL kernels are optimised across 9 current GPUs, 5 Nvidia and 4 AMD devices, and 3 high-end Intel CPUs.
 The experiment was performed over 3 benchmarks, the Jacobi Iterative Method, a Bilateral Filtering algorithm and BUDE -- A general purpose molecular docking program.

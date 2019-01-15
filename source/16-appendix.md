@@ -5,8 +5,7 @@
 \appendixtitletocon
 
 \begin{appendices}
-\chapter{Runtimes}
-\addcontentsline{toc}{section}{Runtimes}
+\chapter{Time Results}
 
 \begin{figure*}
     \centering
@@ -37,7 +36,6 @@
 \end{figure*}
 
 \chapter{Diversity Analysis}
-\addcontentsline{toc}{section}{Principal Component Analysis}
 \label{appendix:diversity-analysis}
 
 A brief overview of the diversity analysis conducted is presented in this appendix.
