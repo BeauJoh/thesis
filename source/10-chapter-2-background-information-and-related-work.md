@@ -60,17 +60,19 @@ Having familiarity with the division of applications and which of the dwarfs the
 
 ## Accelerator Architectures in HPC {#sec:chapter2-accelerator-architectures}
 
-Applications depicted by dwarfs in The Dwarf Taxonomy, [Section @sec:the-dwarf-taxonomy], offer a wide-range of characteristics realistic to scientific computing applications.
-Lee et al. [@Lee:2010:DGV:1816038.1816021] show that certain applications -- the constraint solver and database sorting benchmark -- are better suited for CPUs while evaluating the validity of reported speedup results on GPU devices, which suggest structural characteristics of application impact on device performance.
-By extension, it is envisaged that applications represented by a dwarf will experience different performance based on the characteristics of application codes and the device on which it is executed, in other words, certain applications are better suited to specific types of accelerator.
-Accelerators, in this setting, refer to any form of hardware specialized to a particular pattern of computation; Thus, specialized hardware may accelerate a given application code according to that codes characteristics.
+We will use the term "accelerators" to refer to any form of hardware specialized to a particular pattern of computation; Thus, specialized hardware may accelerate a given application code according to that codes characteristics.
 Accelerators commonly include GPU, FPGA, DSP, ASIC and MIC devices.
-We define accelerators to include all compute devices, including CPUs, since their architecture is well suited to accelerate the computation of specific dwarfs; Additionally, the heterogeneous configuration of side cores on modern CPUs presents a similar set of work-scheduling problems, that occur on other accelerators, primarily, these cores need to be given the appropriate work to ensure good system performance.
+We define accelerators to include all compute devices, including CPUs, since their architecture is well suited to accelerate the computation of specific dwarfs.
+Applications depicted by dwarfs in The Dwarf Taxonomy, [Section @sec:the-dwarf-taxonomy], offer a wide-range of characteristics realistic to scientific computing applications.
+Lee et al. [@Lee:2010:DGV:1816038.1816021] evaluate the validity of reported speedup results between CPU and GPU devices over five benchmarks while considering optimizations which impact the characteristics of the codes.
+They find optimizations such as multithreading, cache blocking, and reorganization of memory accesses strongly affect CPU devices whilst minimizing global synchronization and using local shared buffers benefit GPU devices.
+Two of their benchmarks are better suited for CPUs and suggest structural characteristics of applications impact on device performance.
+By extension, we expect that the performance of an application which is representative of a given dwarf will depend on the execution device and the structural characteristics which define that dwarf, in other words, certain applications are better suited to specific types of accelerator.
 The remainder of this section will present and describe each type of accelerator, its history and its uses.
 
 Central Processing Units (CPU) have additional circuitry for branch control logic, and generally operate at a high frequency, ensuring this architecture is highly suited to sequential tasks or workloads with many divergent logical comparisons -- corresponding to the finite-state machine, combinational logic, dynamic programming and backtrack branch and bound dwarfs of the Berkeley Dwarf Taxonomy.
-Additionally, CPUs are increasingly configured as two separate CPUs but provided on the same System-on-a-Chip (SoC) and strengthens the argument of defining accelerators to include CPUs.
-Comprised of two separate micro-architectures, a high-performance CPU -- faster base clock speed with additional hardware for branching -- to support the irregular control and access behaviour of typical workloads; and a smaller CPU -- commonly with a lower base-clock frequency but with many more cores and support for longer vector instructions -- for the highly parallel workloads/tasks common in scientific computing.
+Additionally, it is increasingly common to combine heterogeneous CPUs in a System-on-a-Chip (SoC).
+Comprised of two separate micro-architectures, SoCs have a high-performance CPU -- faster base clock speed with additional hardware for branching -- to support the irregular control and access behaviour of typical workloads; and a smaller CPU -- commonly with a lower base-clock frequency but with many more cores and support for longer vector instructions -- for the highly parallel workloads/tasks common in scientific computing.
 
 The SW26010 and ARM big.LITTLE type processors are current examples of how CPUs are treated as accelerators to achieve performance on modern supercomputers.
 The SW26010 CPU deployed in the Sunway TaihuLight supercomputer, contains high-performance cores known as Management Processing Elements (MPE), and low-powered Computer Processing Elements (CPE).
@@ -83,7 +85,8 @@ ARM processors with big.LITTLE and dynamIQ configurations have been proposed to 
 big.LITTLE is an heterogeneous configuration of CPU cores on the same die and memory regions.
 The big cores have higher clock frequencies and are generally more powerful  than the LITTLE cores, which creates a multi-core processor that suites a dynamic workload more than clock scaling.
 Tasks can migrate to the most appropriate core, and unused cores can be powered down.
-CPUs can be considered accelerators since many heterogenous configurations including the SW26010 and big.LITTLE devices, have side cores, which, with careful work scheduling, can accelerate workloads and achieve high FLOPs.
+CPUs can be considered accelerators since many heterogeneous configurations including the SW26010 and big.LITTLE devices, have side cores, which, with careful work scheduling, can accelerate workloads and achieve high FLOPs.
+Additionally, the heterogeneous configuration of side cores on modern CPUs presents a similar set of work-scheduling problems, that occur on other accelerators, primarily, these cores need to be given the appropriate work to ensure good system performance.
 
 Graphics Processing Units (GPU) were originally designed to accelerate manipulating computer graphics and image processing, which is achieved by having circuit designs to apply the same operation to many values at once.
 This highly parallel structure makes them suitable for applications which involve processing large blocks of data.
@@ -216,8 +219,7 @@ These results are modest when compared to the gains in efficiency when using acc
 In contrast, in 2012 the mean energy efficiency of supercomputers with accelerators was 900 MFlops/Watt and reached 5.9 GFlops/Watt in 2018, growing non-linearly by 750 MFlops/Watt per year.
 The efficiency of systems using accelerators is improving faster than supercomputers which rely on homogeneous CPU architectures.
 
-Similar efficiencies have also been shown in the most energy efficient supercomputing list -- the Green500.
-From June 2016 to June 2017, the average energy efficiency of the top 10 of the Green500 supercomputers rose by 2.3x, from 4.8 to 11.1 gigaflops per watt [@feldman_2017].
+Similar efficiencies have also been shown in the most energy efficient supercomputing list -- the Green500 -- where from June 2016 to June 2017, the average energy efficiency of the top 10 of the Green500 supercomputers rose by 2.3x, from 4.8 to 11.1 gigaflops per watt [@feldman_2017].
 For many systems, this was made possible by highly energy-efficient Nvidia Tesla P100 GPUs.
 In addition to GPUs, future HPC architectures are also likely to include nodes with FPGA, DSP, ASIC and MIC components.
 A single node may be heterogeneous, containing multiple different computing devices; moreover, an HPC system may offer nodes of different types.
@@ -231,10 +233,17 @@ The Tianhe-2A uses a Matrix2000 DSP accelerator [@morgan_2017_tianhe]; so will t
 ## The Open Compute Language (OpenCL)
 
 OpenCL is a standard that allows computationally intensive codes to be written once and run efficiently on any compliant accelerator device.
-OpenCL is supported on a wide range of systems including CPU, GPU, FPGA, DSP and MIC devices.
+It is supported on a wide range of systems including CPU, GPU, FPGA, DSP and MIC devices.
+Unlike device specific languages.
 While it is possible to write application code directly in OpenCL, it may also be used as a base to implement higher-level programming models.
 This technique was shown by Mitra et al., [@mitra2014implementation] where an OpenMP runtime was implemented over an OpenCL framework for Texas Instruments Keystone II DSP architecture.
 Having a common back-end in the form of OpenCL allows a direct comparison of identical code across this diverse range of architectures.
+
+The OpenCL programming framework is well-suited to heterogeneous computing environments, as a single OpenCL code may be executed on multiple different device types.
+When combined with autotuning, an OpenCL code may exhibit good performance across varied devices. [@spafford2010maestro, @chaimov2014toward, @nugteren2015cltune, @price2017analyzing]
+OpenCL has been used for DSP programming since 2012 [@li2012enabling].
+Furthermore, Mitra et al. [@mitra2018development] propose a hybrid programming environment that combines OpenMP, OpenCL and MPI to utilize a nCore Brown-Dwarf system where each node contains an ARM Cortex-A15 host CPU, a single Texas Instruments Keystone II DSP and two Keystone I DSPs.
+OpenCL codes can be written to be easily linked with auto-tuners, by allowing the local work group size to be set from the command line or as a macro in the pre-processor at execution and during compilation respectively.
 
 OpenCL programs consist of a host and a device side, which cooperate to perform a computation using a standard sequence of steps.
 The host is responsible for querying the suitable platforms, vendor OpenCL runtime drivers, and establishing a context on the selected devices.
@@ -256,15 +265,9 @@ In essence, the global work items can be viewed from the data-parallelism perspe
 Global work indicates the number of threads or instances of a kernel to execute in total.
 Additionally, these work items can be run in teams -- denoted local work groups.
 Each local work group has a given size, and as previously mentioned can be determined on the device side, in the kernel code, with `get_local_id`.
-Incorrectly setting the number of local work groups and therefore also the size of each work group can reduce performance however, recent work shows these parameters can be automatically optimised for any accelerator architecture as will be discussed in [Section @sec:chapter2-autotuning].
+Incorrectly setting the number of local work groups and therefore also the size of each work group can reduce performance however, recent work with autotuning shows these parameters can be automatically optimised for any accelerator architecture as will be discussed in [Section @sec:chapter2-autotuning].
 
-The OpenCL programming framework is well-suited to heterogeneous computing environments, as a single OpenCL code may be executed on multiple different device types.
-When combined with autotuning, an OpenCL code may exhibit good performance across varied devices. [@spafford2010maestro, @chaimov2014toward, @nugteren2015cltune, @price2017analyzing]
-OpenCL has been used for DSP programming since 2012 [@li2012enabling].
-Furthermore, Mitra et al. [@mitra2018development] propose a hybrid programming environment that combines OpenMP, OpenCL and MPI to utilize a nCore Brown-Dwarf system where each node contains an ARM Cortex-A15 host CPU, a single Texas Instruments Keystone II DSP and two Keystone I DSPs.
-OpenCL codes can be written to be easily linked with auto-tuners, by allowing the local work group size to be set from the command line or as a macro in the pre-processor at execution and during compilation respectively.
-
-Kernel compilation flags are an additional tuning argument which affects runtime performance of accelerator specific OpenCL kernel codes.
+Kernel compilation flags are an additional parameter to be used by autotuners and affects runtime performance of accelerator specific OpenCL kernel codes.
 These flags are set on the host side during the `clBuildProgram` procedure.
 Pre-processor macros can also be defined on the kernel side which allows various loop level parallelism constructs to be enabled or disabled.
 Mathematical intrinsic options can also be set to disable double floating point precision, and change how denormalised numbers are handled.
