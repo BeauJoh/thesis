@@ -318,7 +318,7 @@ Across the suite: speedups in execution times ranged from 5.5x to 80.8x, communi
 The Rodinia Benchmark suite originally consisted of nine applications; namely, Leukocyte Tracking, Speckle Reducing Anisotropic Diffusion, HotSpot, Back Propagation, Needleman-Wunsch, K-means, Stream Cluster, Breadth-First Search and Similarity Score, but it has since been extended [@che2010characterization].
 This extension features a subset of the dwarfs, namely, Structured Grid, Unstructured Grid, Dynamic Programming, Dense Linear Algebra, MapReduce, and Graph Traversal all of which may be expected to benefit from GPU acceleration.
 Diversity analysis was also performed and took the form of a Micro-Architecture independent analysis study.
-The MICA framework, discussed in [section @sec:microarchitecture-independent], was used as the basis of the evaluation and the motivation was to justify each application's inclusion in the benchmark suite by showing deviations between applications in the corresponding kiviat diagrams.
+The MICA framework, discussed in [Section @sec:microarchitecture-independent], was used as the basis of the evaluation and the motivation was to justify each application's inclusion in the benchmark suite by showing deviations between applications in the corresponding kiviat diagrams.
 Three separate implementations were developed for each application using CUDA for the GPU, OpenMP for the CPU and OpenCL for both architecture types.
 Several implementations caused fragmentation in development, which often resulted in the OpenCL version of each benchmark application being neglected; missing features offered in other implementations and in some instances lacking an implementation of a given application entirely.
 For this reason, Rodinia is not a suitable base for an OpenCL benchmark suite, however, we were able to incorporate the dwt2d benchmark into our extended version of the OpenDwarfs  benchmark suite as will be discussed in Chapter 3.
@@ -403,7 +403,7 @@ Also discussed is the common issue of phase shifting and how it relates to measu
 ### Autotuning{#sec:chapter2-autotuning}
 
 Whilst OpenCL is hardware-portable it is not inherently also performance-portable, autotuning is important when evaluating the performance of OpenCL codes on systems.
-@du2012cuda migrated CUDA versions of level 3 BLAS routines to OpenCL and measured the direct performance on GPU accelerator devices.
+Du et al. [@du2012cuda] migrated CUDA versions of level 3 BLAS routines to OpenCL and measured the direct performance on GPU accelerator devices.
 They show low-level languages achieve 80% of peak performance on multicores and accelerators whilst OpenCL only achieves 50% of peak performance.
 They propose the use of auto-tuning to improve the performance of OpenCL kernels.
 They conclude that OpenCL is fairly competitive with CUDA on Nvidia hardware in terms of performance, and if architecture specifics are unknown, autotuning is an effective way to generate tuned kernels that deliver acceptable levels of performance with little programmer effort.
@@ -420,19 +420,19 @@ Next, machine learning techniques are used employing a black box mechanism to ef
 Measurements are collected per run effectively updating a cost function.
 Both the objective of the search and the cost function are entirely flexible, since this framework takes the form of OpenTuner, a modular Python library.
 
-In the @price2017analyzing paper, OpenCL kernels are optimised across 9 current GPUs, 5 Nvidia and 4 AMD devices, and 3 high-end Intel CPUs.
-The experiment was performed over 3 benchmarks, the Jacobi Iterative Method, a Bilateral Filtering algorithm and BUDE -- A general purpose molecular docking program.
+In the Price and McIntosh-Smith [@price2017analyzing] paper, OpenCL kernels are optimised across 9 current GPUs, 5 Nvidia and 4 AMD devices, and 3 high-end Intel CPUs.
+The experiment was performed over 3 benchmarks, the Jacobi Iterative Method, a Bilateral Filtering algorithm and BUDE [@mcintosh2015high] -- A general purpose molecular docking program.
 Presented results show the inefficiencies when auto-tuning for one target device and then execute this optimised program on the other systems.
 The usefulness of this multi-objective auto-tuning technique is demonstrated and shows that it is a useful tool to generate performance portable OpenCL kernels.
-Additionally, Price shows that over-optimisation hurts performance portability.
+Additionally, they show that over-optimisation hurts performance portability.
 
-Of the benchmarks presented in section \ref{sec:chapter2-benchmark-suites}, every application presented in the Rodinia Benchmark Suite requires a local workgroup to be passed.
+Of the benchmarks presented in Section \ref{sec:chapter2-benchmark-suites}, every application presented in the Rodinia Benchmark Suite requires a local workgroup to be passed.
 In the OpenDwarfs set of benchmarks 9 out of 14 allow for local workgroup tuning.
-Auto-tuning frameworks could be readily used with the Extended OpenDwarfs Benchmark Suite along with the other suites mentioned, however, since performance portability has been shown by others it is not the goal of this thesis and thus is left as future work.
+Auto-tuning frameworks could be readily used with the Extended OpenDwarfs Benchmark Suite along with the other suites mentioned, however, since performance portability has been shown by others it is not the goal of this thesis.
 
 ### Phase-Shifting
 
-A program phase is defined as a set of intervals (or slices in time) during execution that have similar behaviour.
+A program phase is defined as a set of intervals (or slices in time) during execution that have similar behaviour [@eeckhout2005exploiting].
 Therefore, the term phase-shifting refers to change of the execution of a program with temporal adjacency such that the program experiences time-varying effects.
 Sherwood et al. [@sherwood2003discovering] observe that common system design and optimisation focus heavily on the assume average system behaviour.
 They propose however instead programs should be modelled and optimised for phase-based program behaviour.
@@ -447,17 +447,17 @@ If the accelerator experiences consistent stalls on repeated branch mispredictio
 ###Measurements{#sec:formal-measurements}
 
 The studies presented in this thesis require the use of tools to perform high-accuracy and low-overhead measurements.
-We use LibSciBench for performance measurements of OpenCL kernels.
-It allows high precision timing events to be collected for statistical analysis [@hoefler2015scientific].
+We use LibSciBench [@hoefler2015scientific] for performance measurements of OpenCL kernels.
+It allows high precision timing events to be collected for statistical analysis.
 Additionally, it offers a high-resolution timer in order to measure short running kernel codes, reported with one cycle resolution and roughly 6 ns of overhead.
-Throughout Chapter 3 LibSciBench was intensively used to record timings, energy usage and hardware events, which it collects via PAPI [@mucci1999papi] counters.
+Throughout Chapter 3 LibSciBench was intensively used to record timings, energy usage and hardware events, which it collects via Performance Application Programming Interface (PAPI) [@mucci1999papi] counters.
 
 ## Offline Ahead-of-Time Analysis
 
-Offline Analysis it does not operate on a running code, for our purposes, the analysis provides a detailed examination of the structure of code.
+Offline Analysis does not operate on a running code, for our purposes, the analysis provides a detailed examination of the structure of code.
 Ahead-of-time indicates that this analysis be done before the program is executed -- in the real-world usage of the code.
 The combination of theses two terms is directly applicable to OpenCL SPIR code, which is based on LLVM, since LLVM is well suited to performing ahead-of-time optimised native code generation [@lattner2004llvm].
-Additionally, SPIR is hardware agnostic and ISA-independent as these features can be computed directly on the intermediate representation, that is, before a binary for an device is generated.
+Additionally, SPIR is hardware agnostic and ISA-independent as these features can be computed directly on the intermediate representation, that is, before a binary for a device is generated.
 Our analysis, presented with AIWC in Chapter 4 outlines a methodology to collect features of programs before they are deployed. These features are embedded into the header of the SPIR code -- as a comment -- which can be evaluated at runtime on supercomputing systems to be used by the scheduler to provide useful information around scheduling, specifically, determining on which device the kernel should be executed.
 
 Muralidharan et al. [@muralidharan2015semi] use offline ahead-of-time analysis with Oclgrind to collect an instruction histogram of each OpenCL kernel execution in order to generate an estimate of the roofline model analysis for each given accelerator.
@@ -508,14 +508,14 @@ The primary motivation for this work was in evaluating the suitability of benchm
 The proposed framework briefly evaluates eleven SPEC benchmarks and examines five ISA-independent features/metrics.
 Namely, number of opcodes (e.g., add, mul), the value of branch entropy -- a measure of the randomness of branch behaviour, the value of memory entropy -- a metric based on the lack of memory locality when examining accesses, the unique number of static instructions, and the unique number of data addresses.
 
-Related to the paper, Shao also presents a proof of concept implementation (WIICA) which uses an LLVM IR Trace Profiler to generate an execution trace, from which a python script collects the ISA independent metrics.
+Shao and Brooks [@shao2013isa] also present a proof of concept implementation (WIICA) which uses an LLVM IR Trace Profiler to generate an execution trace, from which a python script collects the ISA independent metrics.
 Any results gleaned from WIICA are easily reproducible, the execution trace is generated by manually selecting regions of code built from the LLVM IR Trace Profiler.
 Unfortunately, use of the tool is non-trivial given the complexity of the toolchain and the nature of dependencies (LLVM 3.4 and Clang 3.4).
 Additionally, WIICA operates on `C` and `C++` code, which cannot be executed directly on any accelerator device aside from the CPU.
 Our work on Architecture Independent Workload Characterisation or known as (AIWC) is presented in Chapter 4, and extends Shao's work to the broader OpenCL setting to collect architecture independent metrics from a hardware-agnostic language -- OpenCL.
 We also added metrics such as Instructions To Barrier (ITB), Vectorization (SIMD) indicators and Instructions Per Operand (SIMT) in order to perform a similar analysis for concurrent and accelerator workloads.
 
-AIWC relies on the selection of the instruction set architecture (ISA)-independent features determined by Shao and Brooks [@shao2013isa], which in turn builds on earlier work in microarchitecture-independent workload characterization discussed in [section @sec:microarchitecture-independent].
+AIWC relies on the selection of the instruction set architecture (ISA)-independent features determined by Shao and Brooks [@shao2013isa], which in turn builds on earlier work in microarchitecture-independent workload characterization discussed in [Section @sec:microarchitecture-independent].
 
 The branch entropy measure used by Shao and Brooks [@shao2013isa] was initially proposed by Yokota [@yokota2007introducing] and uses Shannon's information entropy to determine a score of Branch History Entropy.
 De Pestel, Eyerman and Eeckhout [@depestel2017linear] proposed an alternative metric, average linear branch entropy metric, to allow accurate prediction of miss rates across a range of branch predictors.
@@ -523,7 +523,6 @@ As their metric is more suitable for architecture-independent studies, we adopt 
 
 Caparrós Cabezas and Stanley-Marbell [@CaparrosCabezas:2011:PDM:1989493.1989506] present a framework for characterizing instruction and thread-level parallelism, thread parallelism, and data movement, based on cross-compilation to a MIPS-IV simulator of an ideal machine with perfect caches and branch prediction and unlimited functional units.
 Instruction-level and thread-level parallelism are identified through analysis of data dependencies between instructions and basic blocks.
-The current version of AIWC does not perform dependency analysis for characterizing parallelism, however, we hope to include such metrics in future versions.
 
 ### Workload Characterization for Benchmark Diversity Analysis
 
@@ -534,7 +533,7 @@ In other words, there is less bias introduced when used for prediction since the
 However this is discussed in greater detail in the next section.
 
 Several benchmarks have performed characterisation of applications in the past, this has been primarily, at least historically motivated, for diversity analysis to justify the inclusion of an application into a benchmark suite.
-Rodinia used MICA as the diversity analysis framework.
+Rodinia used MICA as the diversity analysis framework [@].
 The OpenDwarfs benchmark suite have applications which have been manually classified as dwarfs and any characterisation into this taxonomy is based largely intuition.
 Some of the shared applications ported from the Rodinia Benchmark suite cluster microarchitecture-dependent characteristics of applications into dwarfs.
 Unfortunately, this approach has the same limitations as those presented in [Section @sec:microarchitecture-independent].

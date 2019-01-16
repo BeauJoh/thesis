@@ -100,6 +100,7 @@ It can be used with the existing workflow.
 Indeed, since AIWC is a plugin into Oclgrind which is an OpenCL device simulator, and is mostly used for debugging, the developer may check for memory leaks and race conditions in their code and use the same tool -- but with the AIWC argument -- to examine its architecture-independent workload characteristics.
 Optimization could happen based on AIWC metrics, but does not exclude the ability to use hardware performance counters, PIN events or vendor specific profiler tools.
 
+
 ##Performance Prediction
 
 A highly accurate model has been presented that is capable of predicting execution times of OpenCL kernels on specific devices based on the computational characteristics captured by the AIWC tool.
