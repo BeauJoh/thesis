@@ -350,6 +350,83 @@ Most kernels have very little available parallelism, suggesting that this benchm
 
 None of the bioinformatics benchmarks is vectorized (instructions per operand = 1), and therefore fail to take advantage of the floating point capabilities available on CPU and MIC architectures.
 
+## Usage and Limitations
+
+We believe that AIWC will be useful to diversity analysis, to this end, this Section presents information about using the tool.
+It is available as a fork of Oclgrind and can be publicly found on GitHub\footnote{\url{https://github.com/BeauJoh/Oclgrind}}.
+The collected metrics are logged as text in the command line interface during execution and also in a csv file, stored separately for each kernel and invocation.
+These files can be found in the working directory with the naming convention `aiwc_`$\alpha$`_`$\beta$`.csv`.
+Where $\alpha$ is the kernel name and $\beta$ is the invocation count -- the number of times the kernel has been executed.
+
+<!--
+        without AIWC                    with AIWC
+        time(us)        memory(kb)      time(us)        memory(kb)
+tiny    38.96           80036           73400.55        85940
+small   154.93          75856           427768.6        149004
+medium  2887.06         101440          12418784        636808
+large   19574.41        203756          69305608        2213208
+(microseconds)\label{tab:aiwc-overhead}
+-->
+
+<!--
+\begin{table*}[t]
+\caption{Overhead of the \textbf{AIWC} tool on the {\tt fft} benchmark and the Intel i7-6700K CPU. \label{tbl:aiwc-overhead}}
+\centering
+\begin{tabular}{ |l|l|l|l|l| }
+\hline
+        & \multicolumn{2}{|c|}{without AIWC}        & \multicolumn{2}{|c|}{with AIWC}\\
+        & time ($\mu$s) & memory (\si{\kilo\byte})  & time ($\mu$s) & memory (\si{\kilo\byte}) \\
+\hline
+tiny    & 38.96         & 80036                     & 73400.55      & 85940 \\
+small   & 154.93        & 75856                     & 427768.6      & 149004 \\
+medium  & 2887.06       & 101440                    & 12418784      & 636808 \\
+large   & 19574.41      & 203756                    & 69305608      & 2213208 \\
+\hline
+\end{tabular}
+\end{table*}
+-->
+
+
+\begin{table*}[t]
+\caption{Overhead of the \textbf{AIWC} tool on the {\tt fft} benchmark and the Intel i7-6700K CPU. \label{tbl:aiwc-overhead}}
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{ |l|r|r|r|r|r|r| }
+\hline
+        & \multicolumn{3}{c|}{time}                                         & \multicolumn{3}{c|}{memory} \\
+        & \multicolumn{2}{c|}{usage (ms)}& \multicolumn{1}{c|}{increase}    & \multicolumn{2}{c|}{usage (\si{\mega\byte})}   & \multicolumn{1}{c|}{increase} \\
+        & without AIWC  & with AIWC     &                                   & without AIWC   & with AIWC                     & \\
+\hline
+tiny    & 0.04          & 73.4          & $\approx$1830$\times$             & 80.0           &  85.9                         & 1.07$\times$        \\
+small   & 0.2{ }        & 427.8         & $\approx$2800$\times$             & 75.9           &  149.0                        & 1.96$\times$        \\
+medium  & 2.9{ }        & 12420{ }{ }   & $\approx$4300$\times$             & 101.4          &  636.8                        & 6.28$\times$        \\
+large   & 19.6{ }       & 69300{ }{ }   & $\approx$3540$\times$             & 203.8          &  2213.2                       & 10.86$\times$       \\
+\hline
+\end{tabular}
+}
+\end{table*}
+
+
+AIWC has limitations, for illustration we examined the overheads of using AIWC on the `fft` benchmark -- from Chapter 3.
+The `fft` benchmark was selected as it has average runtime results -- it falls in the roughly in the middle of the other benchmarks.
+Table \ref{tbl:aiwc-overhead} shows the relative overhead in terms of the elapsed time per kernel invocation and the maximum resident set size (peak virtual memory usage) during the benchmark execution, the results report with and without AIWC on four sizes of the `fft` benchmark on the Intel i7-6700K CPU.
+These results were collected with LibSciBench, for the kernel execution time, and Unix GNU time tool for the maximum resident set size.
+The execution times are the mean time from collecting a 2 second sample -- the `fft` benchmark invokes the top level kernel many times during a 2 second run depending on problem size and the choice of OpenCL device.
+
+We see that executing the same application on a simulator instead of directly on the Intel OpenCL runtime has significant performance costs, both in terms of execution time and memory usage.
+AIWC takes 1800-4300$\times$ longer to execute, depending on the problem size, and uses 10%, 96%, 6.2$\times$, and 10.8$\times$ more memory as the problem size increases from tiny, small, medium and large respectively.
+This large memory footprint was limiting for us on one of the benchmarks; we encountered an issue with running the largest `lud` application where we exhausted the available RAM on our test system (16 GB), this was overcome by running the same experiment on a system with more RAM.
+Alternatives exist if this is a limiting factor to users, instead of executing the full range of kernel invocations to completion -- since some applications will repeat kernel execution hundreds or thousands of times to completion -- the developer could use AIWC for performance analysis on just a few iterations or a subset of the larger problem.
+In general, the final performance of the tool was not a limiting factor on a majority of the codes examined with AIWC and can still be performed quickly on the computer systems of today; \si{2{\giga\byte}} is a fraction of the total RAM available on commodity PCs, and the detailed AIWC metrics are valuable and take a few minutes to be generated on large problem sizes.
+
+The envisaged use of AIWC is that it is only run once, for instance, a developer wished to examine the characteristics of the kernel in order to identify suitability for accelerators or verify that a high degree of SIMD vectorization had been achieved.
+In the predictive scheduling setting, AIWC would be run on the codes prior to them being shipped / delivered; since these characteristics are collected by the developer on a realistic problem size, the metrics can be included as a comment in each kernels SPIR code, and the scheduler can use them by evaluating the shipped metrics on the model.
+Given the proposed work flow, the overhead added by AIWC is not significant or prohibitive to the prediction and scheduler pipeline.
+The predictive model is presented in detail in Chapter 5.
+
+Examples on how AIWC metrics can be used for diversity analysis and device predictions are presented as Jupyter artefacts\footnote{\url{https://github.com/BeauJoh/aiwc-opencl-based-architecture-independent-workload-characterization-artefact}} \footnote{\url{https://github.com/BeauJoh/opencl-predictions-with-aiwc}}.
+
+
 ## Summary
 
 We have presented the Architecture-Independent Workload Characterization tool (AIWC), which supports the collection of architecture-independent features of OpenCL application kernels.

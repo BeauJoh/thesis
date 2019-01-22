@@ -69,6 +69,9 @@ The original goal of this research was to discover methods for choosing the best
 Until now, we found the available OpenCL benchmark suites were not rich enough to adequately characterize performance across the diverse range of applications and computational devices of interest.
 This work resulted in a flexible benchmark suite with results that could can be generated quickly and reliably on a range of accelerators, and formed foundation for testing AIWC and the predictive model.
 
+The Extended OpenDwarfs Benchmark Suite can be found here:
+
+\todo[inline]{add this link -- maybe a jupyter workbook when it can be used}
 
 ##AIWC
 
@@ -100,6 +103,11 @@ It can be used with the existing workflow.
 Indeed, since AIWC is a plugin into Oclgrind which is an OpenCL device simulator, and is mostly used for debugging, the developer may check for memory leaks and race conditions in their code and use the same tool -- but with the AIWC argument -- to examine its architecture-independent workload characteristics.
 Optimization could happen based on AIWC metrics, but does not exclude the ability to use hardware performance counters, PIN events or vendor specific profiler tools.
 
+\todo[inline]{summarise 3 links}
+https://github.com/BeauJoh/aiwc-opencl-based-architecture-independent-workload-characterization-artefact
+https://mybinder.org/v2/gh/BeauJoh/aiwc-opencl-based-architecture-independent-workload-characterization-artefact/master
+https://github.com/BeauJoh/aiwc-opencl-based-architecture-independent-workload-characterization-artefact/blob/master/AIWC-figures.ipynb
+
 
 ##Performance Prediction
 
@@ -122,8 +130,11 @@ EOD is run over updated devices and the performance runtimes provided into a new
 The runtime results from EOD could also be saved in an online corpus / database with the corresponding devices name allowing the automatic training of one large shared model.
 
 \todo[inline]{7 years of hardware is assuming I rerun results with P100 and xeon gold}
-Using the same predictive model over run-times generated over 7 years of different hardware and four processor generations shows both, that OpenCL has reached a position of maturity and stability, and also that the methodology of prediction is sound.
+Using the same predictive model over run-times generated over 6 years of different hardware and four processor generations shows both, that OpenCL has reached a position of maturity and stability, and also that the methodology of prediction is sound.
 Specifically, performing predictions with a single model generated over a large window of time shows that with each generation the individual device prediction accuracy is good and therefore we expect this same methodology to continue to be equally accurate on future systems.
+
+\todo[inline]{state this link is to an interactive workbook}
+https://nbviewer.jupyter.org/github/BeauJoh/opencl-predictions-with-aiwc/blob/master/OpenCL%20Performance%20Prediction%20using%20Architecture-Independent%20Features.ipynb
 
 ##Future Directions
 
