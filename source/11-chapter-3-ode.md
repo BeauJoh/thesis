@@ -51,7 +51,7 @@ Through PAPI modules such as Intel's Running Average Power Limit (RAPL) and Nvid
 \label{ssec:hardware}
 \begin{table*}[t]
 \centering
-\caption{Hardware}\label{tbl:hardware}
+\caption{Hardware utilized during the Extended OpenDwarfs Benchmark Suite evaluation.}\label{tbl:hardware}
 \begin{threeparttable}
     \centering
     \resizebox{\linewidth}{!}{%
@@ -139,7 +139,7 @@ The applications examined in this work are presented in Table\ref{table:applicat
 
 \begin{table}
 \centering
-\caption{List of Extended OpenDwarfs Applications and their respective dwarfs}
+\caption{List of Extended OpenDwarfs Applications and their respective dwarfs.}
 \label{table:applications-and-dwarf}
 \begin{adjustbox}{max width=0.7\textwidth}
 \begin{tabular}{@{}ll@{}}
@@ -250,7 +250,7 @@ The problem size parameters for all benchmarks are presented in Table \ref{tab:p
 	\centering
 	\begin{threeparttable}
 		\centering
-		\caption{OpenDwarfs workload scale parameters $\Phi$}
+    \caption{The different problem sizes in the Extended OpenDwarfs adjusted by selecting the workload scale parameter ($\Phi$).}
 		\begin{tabular}{l|c|c|c|c}
             \bf Benchmark         & \bf tiny   & \bf small  & \bf medium     & \bf large\\\hline
             \texttt{kmeans} & 256 & 2048 & 65600 & 131072\\
@@ -280,7 +280,7 @@ Where $\Phi$ is substituted as the argument for each benchmark, it is taken as t
 	\centering
 	\begin{threeparttable}
 		\centering
-		\captionof{table}{Program Arguments}
+		\captionof{table}{Program Arguments for benchmarks in the Extended OpenDwarf Suite.}
 		\vspace{0pt}
 		\begin{tabular}{l|l}
 			\bf Benchmark & \bf Arguments\\\hline
