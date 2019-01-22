@@ -452,7 +452,7 @@ It allows high precision timing events to be collected for statistical analysis.
 Additionally, it offers a high-resolution timer in order to measure short running kernel codes, reported with one cycle resolution and roughly 6 ns of overhead.
 Throughout Chapter 3 LibSciBench was intensively used to record timings, energy usage and hardware events, which it collects via Performance Application Programming Interface (PAPI) [@mucci1999papi] counters.
 
-## Offline Ahead-of-Time Analysis
+## Offline Ahead-of-Time Analysis{#sec:offline-ahead-of-time-analysis}
 
 Offline Analysis does not operate on a running code, for our purposes, the analysis provides a detailed examination of the structure of code.
 Ahead-of-time indicates that this analysis be done before the program is executed -- in the real-world usage of the code.
@@ -533,7 +533,7 @@ In other words, there is less bias introduced when used for prediction since the
 However this is discussed in greater detail in the next section.
 
 Several benchmarks have performed characterisation of applications in the past, this has been primarily, at least historically motivated, for diversity analysis to justify the inclusion of an application into a benchmark suite.
-Rodinia used MICA as the diversity analysis framework [@].
+Rodinia used MICA as the diversity analysis framework [@hoste2007microarchitecture].
 The OpenDwarfs benchmark suite have applications which have been manually classified as dwarfs and any characterisation into this taxonomy is based largely intuition.
 Some of the shared applications ported from the Rodinia Benchmark suite cluster microarchitecture-dependent characteristics of applications into dwarfs.
 Unfortunately, this approach has the same limitations as those presented in [Section @sec:microarchitecture-independent].
@@ -546,8 +546,11 @@ The evaluation on the feature-space is critical to the inclusion of particular e
 ##Scheduling and Performance Prediction for Heterogeneous Architectures
 
 Predicting the performance of a particular application on a given device is challenging due to complex interactions between the computational requirements of the code and the capabilities of the target device.
-Certain classes of application are better suited to a certain type of accelerator [@che2008accelerating], and choosing the wrong device results in slower and more energy-intensive computation [@yildirim2012single].
-Thus accurate performance prediction is critical to making optimal scheduling decisions in a heterogeneous supercomputing environment.
+Certain classes of application are better suited to a certain type of accelerator [@che2008accelerating], and choosing the wrong device results in slower and more energy-intensive computation.
+Fowers et al. [@fowers2013performance] investigated show how problem size and optimizations and algorithm implementations affect energy performance on a range of accelerators.
+They use 1D convolutions as the area of study and found the FPGA was the most energy efficient option for large signal and small kernel sizes, GPUs achieved a comparable performance for larger kernels and the CPU implementation was fastest when signal and kernel sizes were small where accelerator devices could not amortize high bus-transfer costs.
+The GPU had the largest variation in energy efficiency in the time-domain tests and shows it can be an inefficient candidate if given smaller problem sizes and the characteristics of the kernel are ill-suited.
+The large range of inputs and the equally variable performance indicates that accurate performance prediction is critical to making optimal scheduling decisions in a heterogeneous supercomputing environment, and the associated potential energy savings are large.
 
 Lyerly [@lyerly2014automatic] execute a subset of applications from OpenDwarfs to demonstrate that not one accelerator has the fastest execution time for all benchmarks.
 This contribution focuses on developing a scheduler to delegate the most appropriate accelerator for a given program.
@@ -556,10 +559,10 @@ We broaden their scheduling analysis in Chapter 5 and claim that all benchmarks 
 
 Hoste et al. [@hoste2006performance] show that the prediction of performance can be based on inherent program similarity.
 In particular, they show that the metrics collected from a program executing on a particular instruction set architecture (ISA) with a specific compiler offers a relatively accurate characterization of workload for the same application on a totally different micro-architecture.
-@che2009rodinia broadens this finding by performing analysis on a single threaded CPU version and find that a benchmark application maintains the underlying set of instructions -- the composition of the application is largely the same.
+Che et al. [@che2009rodinia] broadens this finding by performing analysis on a single threaded CPU version and find that a benchmark application maintains the underlying set of instructions -- the composition of the application is largely the same.
 
-Therefore, it is intuitive that the composition of a program collected using a simulator (such as Oclgrind discussed in [Section @sec:oclgrind], which operates on the most common intermediate form for the OpenCL runtime) regardless of accelerator to which it is ultimately mapped, offers a more accurate architecture agnostic set of metrics for an application workload.
-This, in turn, can be used as a basis for performance prediction on general accelerators.
+It is intuitive that the collection of characteristics a program collected using a simulator -- such as Oclgrind discussed in [Section @sec:offline-ahead-of-time-analysis] -- offers a more general purpose, abstract, representation of the composition of the kernel and is indifferent to which accelerator it is ultimately mapped.
+This device abstraction, offers a more accurate architecture agnostic set of metrics for an application workload, which, in turn, can be used as a basis for performance prediction on general accelerators.
 
 ##Predictions and Modelling
 
@@ -584,7 +587,7 @@ There are also many components and tools in use, for instance, network traffic i
 
 Karami et al. [@karami2013statistical] design a performance model for NVIDIA GPUs from OpenCL kernels to aid developers to locate GPU specific performance bottlenecks in their codes.
 This model depends on the collection of GPU performance counters over a range of benchmarks, these counters are then provided to a regression model with principle component analysis to develop a model to show how different GPU parameters account for applications performance bottlenecks.
-The model predicts application behavior with a 91% accuracy and when coupled with a larger database of collections can be used to predict their likely performance bottlenecks of unknown applications based on similarities with those previously collected.
+The model predicts application behaviour with good accuracy (91%) and when coupled with a larger database of collections can be used to predict their likely performance bottlenecks of unknown applications based on similarities with those previously collected.
 A caveat of this approach is that collecting performance counters as a basis for a model is microarchitecture specific -- where counters collected from a system can range wildly between generation of processor and is not portable between vendors.
 
 A GPU power-estimation model was developed by Wu et al. [@wu2015gpgpu] which also uses hardware performance counter values to train a machine learning model.
@@ -610,14 +613,14 @@ This work shows that the inclusion of transfer time is significant when improvin
 In Chapter 5, we propose an alternative model which allows accurate execution time predictions of OpenCL kernels on a wide range of architecturally-diverse accelerators.
 This methodology uses features from AIWC -- from Chapter 4 -- to form a basis for a predictive model bound to run-times measured or the benchmark codes presented in Chapter 3.
 
-@Shelepov2009 propose the Heterogeneity-Aware Signature-Supported (HASS) scheduler -- a scheduling algorithm that matching threads to the most appropriate CPU cores.
+Shelepov et al. [@Shelepov2009] propose the Heterogeneity-Aware Signature-Supported (HASS) scheduler -- a scheduling algorithm that matching threads to the most appropriate CPU cores.
 The architectural properties of an application are presented as signatures -- a compact summary of the applications memory-boundedness, available ILP, sensitivity to variations in clock speed.
 These are generated offline and can be embedded into the program binary.
 The scheduler then matches these signatures to the most appropriate core.
 HASS is targeted on heterogeneous CPU cores and is evaluated over two big.LITTLE type, asymmetric single-ISA, configurations -- an Intel Xeon X5365 and AMD Opteron 8356.
 CPU systems were treated as heterogeneous by changing the clock frequencies of individual cores.
 The evaluation examines the performance of automatic mapping of memory-bound threads to slow / smaller cores leaving threads that are capable of fully utilizing the faster cores.
-A caveat of this approach is that other accelerators are not considered and as such the signatures are not architecture-independent
+A caveat of this approach is that other accelerators are not considered and as such the signatures are not architecture-independent.
 However, this the proposed methodology is the most similar and is the predecessor to our work.
 
 Lee and Wu [@lee2017performance] directly tackle the problem of scheduling OpenCL applications to the most suitable accelerator device.
