@@ -407,24 +407,24 @@ large   & 19.6{ }       & 69300{ }{ }   & $\approx$3540$\times$             & 20
 \end{table*}
 
 
-AIWC has limitations, for illustration we examined the overheads of using AIWC on the `fft` benchmark -- from Chapter 3.
-The `fft` benchmark was selected as it has average runtime results -- it falls in the roughly in the middle of the other benchmarks.
+AIWC has limitations, for illustration, we examined the overheads of using AIWC on the `fft` benchmark -- from Chapter 3.
+The `fft` benchmark was selected as it has average runtime results -- it falls roughly in the middle of the other benchmarks.
 Table \ref{tbl:aiwc-overhead} shows the relative overhead in terms of the elapsed time per kernel invocation and the maximum resident set size (peak virtual memory usage) during the benchmark execution, the results report with and without AIWC on four sizes of the `fft` benchmark on the Intel i7-6700K CPU.
 These results were collected with LibSciBench, for the kernel execution time, and Unix GNU time tool for the maximum resident set size.
-The execution times are the mean time from collecting a 2 second sample -- the `fft` benchmark invokes the top level kernel many times during a 2 second run depending on problem size and the choice of OpenCL device.
+The execution times are the mean time from collecting a two second sample -- the `fft` benchmark invokes the top level kernel many times during a two second run depending on problem size and the choice of OpenCL device.
 
 We see that executing the same application on a simulator instead of directly on the Intel OpenCL runtime has significant performance costs, both in terms of execution time and memory usage.
-AIWC takes 1800-4300$\times$ longer to execute, depending on the problem size, and uses 10%, 96%, 6.2$\times$, and 10.8$\times$ more memory as the problem size increases from tiny, small, medium and large respectively.
+AIWC takes 1800-4300$\times$ longer to execute depending on the problem size and uses 10%, 96%, 6.2$\times$, and 10.8$\times$ more memory as the problem size increases from tiny, small, medium and large respectively.
 This large memory footprint was limiting for us on one of the benchmarks; we encountered an issue with running the largest `lud` application where we exhausted the available RAM on our test system (16 GB), this was overcome by running the same experiment on a system with more RAM.
 Alternatives exist if this is a limiting factor to users, instead of executing the full range of kernel invocations to completion -- since some applications will repeat kernel execution hundreds or thousands of times to completion -- the developer could use AIWC for performance analysis on just a few iterations or a subset of the larger problem.
 In general, the final performance of the tool was not a limiting factor on a majority of the codes examined with AIWC and can still be performed quickly on the computer systems of today; \si{2{\giga\byte}} is a fraction of the total RAM available on commodity PCs, and the detailed AIWC metrics are valuable and take a few minutes to be generated on large problem sizes.
 
 The envisaged use of AIWC is that it is only run once, for instance, a developer wished to examine the characteristics of the kernel in order to identify suitability for accelerators or verify that a high degree of SIMD vectorization had been achieved.
-In the predictive scheduling setting, AIWC would be run on the codes prior to them being shipped / delivered; since these characteristics are collected by the developer on a realistic problem size, the metrics can be included as a comment in each kernels SPIR code, and the scheduler can use them by evaluating the shipped metrics on the model.
-Given the proposed work flow, the overhead added by AIWC is not significant or prohibitive to the prediction and scheduler pipeline.
+In the predictive scheduling setting, AIWC would be run on the codes prior to them being shipped/delivered; since these characteristics are collected by the developer on a realistic problem size, the metrics can be included as a comment in each kernels SPIR code, and the scheduler can use them by evaluating the shipped metrics on the model.
+Given the proposed workflow, the overhead added by AIWC is not significant or prohibitive to the prediction and scheduler pipeline.
 The predictive model is presented in detail in Chapter 5.
 
-Examples on how AIWC metrics can be used for diversity analysis and device predictions are presented as Jupyter artefacts\footnote{\url{https://github.com/BeauJoh/aiwc-opencl-based-architecture-independent-workload-characterization-artefact}} \footnote{\url{https://github.com/BeauJoh/opencl-predictions-with-aiwc}}.
+Examples of how AIWC metrics can be used for diversity analysis and device predictions are presented as Jupyter artefacts\footnote{\url{https://github.com/BeauJoh/aiwc-opencl-based-architecture-independent-workload-characterization-artefact}} \footnote{\url{https://github.com/BeauJoh/opencl-predictions-with-aiwc}}.
 
 
 ## Summary
