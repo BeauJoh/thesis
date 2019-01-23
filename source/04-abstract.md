@@ -16,7 +16,7 @@ The first focus of this work is to present a comprehensive benchmark suite for O
 Our extensions improve portability and robustness of applications, correctness of results and choice of problem size, and increase diversity through coverage of additional application patterns.
 This work manifests in performance measurements on a set 15 devices and over 11 applications.
 
-We next present the Architecture Independent Workload Characterization (AIWC) tool which characterizes OpenCL kernels according to a set of architecture-independent features.
+We next present our Architecture Independent Workload Characterization (AIWC) tool which characterizes OpenCL kernels according to a set of architecture-independent features.
 Features are measured by counting target characteristics which are collected during program execution in a simulator.
 They are presented as 42 metrics that indicate performance bottlenecks in four categories: parallelism -- how well an algorithm scales in response to core count; compute -- the diversity of instructions; memory -- working memory footprint and entropy measurements which correspond to caching characteristics; and control -- branching and program flow.
 The metrics collected are primarily used in the prediction of execution times, but since they are representative of structural characteristics of the underlying program and are free from architectural traits, they can be used in diversity analysis in benchmark suites, identifying program requirements which allows the automatic calculation of theoretical peak performance for a given device and examining the differences in kernels to show the phase-transitional properties of application codes.

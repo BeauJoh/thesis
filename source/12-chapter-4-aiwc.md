@@ -438,7 +438,7 @@ In addition, the architecture independent characteristics of a scientific worklo
 
 To identify which AIWC characteristics are the best indicators of opportunities for optimization, we are currently looking at how individual characteristics change for a particular code through the application of best-practice optimizations for CPUs and GPUs (as recommended in vendor optimization guides).
 
-AIWC was also used to evaluate the performance bottle-necks of bioinformatics codes from the EOD suite.
+AIWC was also used to evaluate the performance bottlenecks of bioinformatics codes from the EOD suite.
 When also coupled with the runtime performance results of Chapter 3, it is interesting to note that optimal accelerators are typically GPU based, given the high available thread parallelism and high barrier synchronization counts of many sequencing analysis applications.
 However, the bioinformatics applications examined contain few kernels with higher branch and memory access entropies, interspersed with the GPU suited workloads, which suggests that CPUs are critical to achieving good performance on these systems.
 Indeed, partitioning applications by scheduling kernel to their optimal accelerator may generally provide better performance for HPC bioinformatics applications.
