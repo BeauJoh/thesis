@@ -244,7 +244,7 @@ However, they provide an overview of the current clang compiler support and the 
 When combined with autotuning, an OpenCL code may exhibit good performance across varied devices [@spafford2010maestro, @chaimov2014toward, @nugteren2015cltune, @price2017analyzing].
 OpenCL has been used for DSP programming since 2012 [@li2012enabling].
 Furthermore, Mitra et al. [@mitra2018development] propose a hybrid programming environment that combines OpenMP, OpenCL and MPI to utilize a nCore Brown-Dwarf system where each node contains an ARM Cortex-A15 host CPU, a single Texas Instruments Keystone II DSP and two Keystone I DSPs.
-OpenCL codes can be written to be easily linked with auto-tuners, by allowing the local work group size to be set from the command line or as a macro in the pre-processor at execution and during compilation respectively.
+OpenCL codes can be written to be easily linked with autotuners, by allowing the local work group size to be set from the command line or as a macro in the pre-processor at execution and during compilation respectively.
 Having a common back-end in the form of OpenCL allows a direct comparison of identical code across this diverse range of architectures, making it the desirable language implementation for our benchmark suite -- presented in Chapter 3.
 
 OpenCL programs consist of a host and a device side, which cooperate to perform a computation using a standard sequence of steps.
@@ -346,7 +346,10 @@ Some application kernels also supports multiple nodes using MPI to assess distri
 
 SHOC supports multiple programming models including OpenCL, CUDA and OpenACC, with benchmarks ranging from targeted tests of particular low-level hardware features to a handful of application kernels.
 The variety of language implementations for each benchmark application, was one of the original motivators for its construction -- aside from testing the performance and stability of scalable heterogeneous computing systems it also seeks to provide a comparison of programming models.
-In this benchmark suite the OpenCL versions of each application have been designed to strongly mirror the CUDA counterparts, unfortunately this results in fixed tuning parameters such as local workgroup size that is well suited to GPU architectures but is not suited to CPU and other accelerator devices.
+The two real world applications presented in the level 2 applications offer 4 different problem sizes for each benchmark and represent an attempt to fully stress the hardware, but also enable the suite to run in a reasonable amount of time.
+These problem sizes include CPUs, Mobile/Integrated GPUs, Discrete GPUs and HPC-Focused or Large Memory GPUs.
+In this benchmark suite the OpenCL versions of each application have been designed to strongly mirror the CUDA counterparts.
+However both the selection of problem sizes and the selection of tuning parameters, such as workgroup sizes, is fixed according to the performance of the technology of the time -- the suite was released in 2011.
 
 There are two caveats of SHOC if it were used for our purposes.
 Firstly, there is a lack of classification according to the dwarf taxonomy, much of the work towards using micro-benchmarks to stress-test the system falls outside of the taxonomy and the higher level application benchmarks are too few to adequately cover a wide range of dwarfs -- indeed only a few are represented.
@@ -405,12 +408,12 @@ Also discussed is the common issue of phase shifting and how it relates to measu
 Whilst OpenCL is hardware-portable it is not inherently also performance-portable, autotuning is important when evaluating the performance of OpenCL codes on systems.
 Du et al. [@du2012cuda] migrated CUDA versions of level 3 BLAS routines to OpenCL and measured the direct performance on GPU accelerator devices.
 They show low-level languages achieve 80% of peak performance on multicores and accelerators whilst OpenCL only achieves 50% of peak performance.
-They propose the use of auto-tuning to improve the performance of OpenCL kernels.
+They propose the use of autotuning to improve the performance of OpenCL kernels.
 They conclude that OpenCL is fairly competitive with CUDA on Nvidia hardware in terms of performance, and if architecture specifics are unknown, autotuning is an effective way to generate tuned kernels that deliver acceptable levels of performance with little programmer effort.
 
 When combined with autotuning, an OpenCL code may exhibit good performance across varied devices -- yielding accelerator device specific optimizations with no user or developer input.
-Tasks such as compiler optimisations and kernel runtime tuning parameters are well suited to auto-tuners without requiring an exhaustive search in this search space.
-This has been manifested in many auto-tuning libraries that use machine learning.
+Tasks such as compiler optimisations and kernel runtime tuning parameters are well suited to autotuners without requiring an exhaustive search in this search space.
+This has been manifested in many autotuning libraries that use machine learning.
 Spafford et al. [@spafford2010maestro], Chaimov et al. [@chaimov2014toward] and Nugteren and Codreanu [@nugteren2015cltune] all propose open source libraries capable of autotuning dynamic execution parameters in OpenCL kernels.
 Filipovic et al. [@Filipovic:2017:AOK:3152821.3152877]also show OpenCL tuning strategies can take into account numerical accuracy to search for kernel implementations within specific numerical error bounds whilst optimizing for a shorter execution time.
 
@@ -422,13 +425,13 @@ Both the objective of the search and the cost function are entirely flexible, si
 
 In the Price and McIntosh-Smith [@price2017analyzing] paper, OpenCL kernels are optimised across 9 current GPUs, 5 Nvidia and 4 AMD devices, and 3 high-end Intel CPUs.
 The experiment was performed over 3 benchmarks, the Jacobi Iterative Method, a Bilateral Filtering algorithm and BUDE [@mcintosh2015high] -- A general purpose molecular docking program.
-Presented results show the inefficiencies when auto-tuning for one target device and then execute this optimised program on the other systems.
-The usefulness of this multi-objective auto-tuning technique is demonstrated and shows that it is a useful tool to generate performance portable OpenCL kernels.
+Presented results show the inefficiencies when autotuning for one target device and then execute this optimised program on the other systems.
+The usefulness of this multi-objective autotuning technique is demonstrated and shows that it is a useful tool to generate performance portable OpenCL kernels.
 Additionally, they show that over-optimisation hurts performance portability.
 
 Of the benchmarks presented in Section \ref{sec:chapter2-benchmark-suites}, every application presented in the Rodinia Benchmark Suite requires a local workgroup to be passed.
 In the OpenDwarfs set of benchmarks 9 out of 14 allow for local workgroup tuning.
-Auto-tuning frameworks could be readily used with the Extended OpenDwarfs Benchmark Suite along with the other suites mentioned, however, since performance portability has been shown by others it is not the goal of this thesis.
+Autotuning frameworks could be readily used with the Extended OpenDwarfs Benchmark Suite along with the other suites mentioned, however, since performance portability has been shown by others it is not the goal of this thesis.
 
 ### Phase-Shifting
 

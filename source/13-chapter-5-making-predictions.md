@@ -1,10 +1,19 @@
 # Making Performance Predictions for Scheduling {#sec:chapter-5-accelerator-predictions}
-
+\todo{How starPU could use these metrics}
 The OpenCL programming framework is well-suited heterogeneous computing environments, as a single OpenCL code may be executed on multiple different device types including most CPU, GPU and FPGA devices.
 Predicting the performance of a particular application on a given device is challenging due to complex interactions between the computational requirements of the code and the capabilities of the target device.
-Certain classes of application are better suited to a certain type of accelerator [@che2008accelerating], and choosing the wrong device results in slower and more energy-intensive computation [@yildirim2012single].
+Certain classes of application are better suited to a certain type of accelerator [@che2008accelerating], and choosing the wrong device results in slower and more energy-intensive computation [@fowers2013performance].
 Thus accurate performance prediction is critical to making optimal scheduling decisions in a heterogeneous supercomputing environment.
+
+There are many current projects which attempt task scheduling on heterogeneous multicore architectures, these include, StarPU [@augonnet2011starpu], Ompss [@duran2011ompss] and CoreTSAR [@scogland2014coretsar]<!-- and AutoMatch [@helal2017automatch].-->
+Many of these schedulers track dependencies within tasks and target either compute bandwidth or latency by scheduling work to the most appropriate accelerator at the granularity of function call level or the work inside a single parallel region.
+The history of the performance of a task is used to determine the optimal device to use in the future.
+However, by the nature of this approach means these schedulers must execute a new kernel code on all available accelerators before any scheduler smart strategies can be used --  and this is where our predictive method can be employed.
+We can provide the initial expected execution times of a kernel before it is execute, if this prediction is incorrect, these schedulers can default back to their old strategy of measuring the performance on all available accelerators.
+However in this Chapter we present a highly accurate predictive framework and discuss the methodology used in its development.
+It provides the low-hanging fruit useful in energy efficient scheduling by providing the initial estimates of execution time and prevents redundant computing work involved in the start-up of new kernels on schedulers.
 This work was published in 16th International Conference on High Performance Computing & Simulation, HPCS 2018 [@johnston2018opencl].
+
 
 ## Methodology
 
@@ -55,7 +64,7 @@ In optimizing the model, we searched over a range of values for each parameter i
 * min.node.size, the minimal node size per tree: ranges from $1 - 50$, where $50$ is the number of observations per sample.
 
 Given the size of the data set, it was not computationally viable to perform an exhaustive search of the entire 3-dimensional range of parameters.
-Auto-tuning to determine the suitability of these parameters has been performed by Lie\ss\ et al. [@liess2014sloping] to determine the optimal value of mtry given a fixed num.trees.
+Autotuning to determine the suitability of these parameters has been performed by Lie\ss\ et al. [@liess2014sloping] to determine the optimal value of mtry given a fixed num.trees.
 Instead, to enable an efficient search of all variables at once, we used Flexible Global Optimization with Simulated-Annealing, in particular, the variant found in the R package \textit{optimization} by Husmann, Lange and Spiegel [@husmannr].
 The simulated-annealing method both reduces the risk of getting trapped in a local minimum and is able to deal with irregular and complex parameter spaces as well as with non-continuous and sophisticated loss functions.
 In this setting, it is desirable to minimise the out-of-bag prediction error of the resultant fitted model, by simultaneously changing the parameters (num.trees, mtry and min.node.size).
@@ -306,7 +315,7 @@ However this could be systematic of the i5 processor having the lowest clock spe
 \begin{figure*}
 \centering
 \includegraphics[width=\linewidth]{./figures/chapter-5/large-predicted-vs-measured-1.pdf}
-\caption{\label{fig:large-predicted-vs-measured}Mean measured kernel execution times compared against mean predicted kernel execution times to perform a selection of kernels on large problem sizes across 15 accelerator devices.}
+\caption{\label{fig:large-predicted-vs-measured}Mean measured kernel execution times compared against mean predicted kernel execution times to perform a selection of kernels on large problem sizes across 15 accelerator devices. The square indicates the mean measured time, and the diamond indicates the mean predicted time.}
 \end{figure*}
 
 
@@ -330,8 +339,12 @@ As such, the proposed model provides sufficiently accurate execution time predic
 
 If the predictive model were used in a real-world setting -- say on a HPC node -- the final metrics collected by AIWC could be embedded as a comment at the beginning of each kernel code.
 This would follow the use-case for AIWC as a plugin to the OpenCL debugger Oclgrind.
-The developer would first use Oclgrind to debug, optimize and confirm functionality of a kernel, then, enable the AIWC plugin to generate the metrics for the final kernel code.
+The developer would first use Oclgrind to debug, optimize and confirm functionality of a kernel, then, enable the AIWC plugin to generate the metrics for the final kernel code with the program settings that will be used at runtime.
+These metrics are included as a comment into the kernel -- either in source or SPIR form.
+The scheduler extracts these metrics at runtime and evaluates them with the model to make performance predictions on the nodes available devices.
+If the runtime settings lead to substantially different AIWC features to the ones collected than the runtimes predictions may be inaccurate.
 This approach would allow the high accuracy of the predictive model without any significant overhead -- metrics are only generated and embedded once per kernel and is done largely automatically, with the guidance of the developer.
+StarPU [@augonnet2011starpu], Ompss [@duran2011ompss] and CoreTSAR [@scogland2014coretsar] schedulers could incorporate this prediction methodology to provide the initial estimate of a kernels execution time or energy usage without having to first execute it on all accelerators -- the strategy historically employed.
 Separately, the training of the model would only need to occur when the HPC system is updated, such that, a new accelerator device is added, or the drivers, or compiler updated.
 The extent of model training is also largely automatic following the methodology presented in this thesis.
 EOD is run over updated devices and the performance runtimes provided into a newly trained regression model -- by following the approach outlined in this Chapter.

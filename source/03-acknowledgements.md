@@ -3,7 +3,7 @@
 Thank you to my supervisors Josh, Greg and Alistair.
 Josh, you've been an excellent friend and mentor and I wouldn't have a thesis if you weren't so supportive or engaged in this work -- it has actually been a lot of fun working so closely and bouncing ideas off each other.
 Greg, you've always supported me, technically and emotionally and I feel privileged that we've been able to collaborate so closely despite being 750 kilometers apart.
-Alistair, thank you for bringing me to the ANU and being so patient with this perpetual student, you have shaped me -- for better or worse -- into thinking a bit like a cynical and critical scientist. You've taught me the basics and still found the time -- and funding -- for me, I don't know how you've certainly had your plate full, supervising me must have felt like a 4th helping, you must be sick to busting point of me -- and rightly so -- and that's why you're moving to Adelaide.
+Alistair, thank you for bringing me to the ANU and being so patient with this perpetual student, you have shaped me -- for better or worse -- into thinking like a cynical scientist. You've taught me the basics and still somehow found the time -- and funding -- for me, I don't know how,  you've certainly had your plate full, supervising me must have felt like a 4th helping, you must be sick to busting point of me -- and rightly so -- and that's why you're moving to Adelaide.
 You have all had to repeat yourselves far too frequently yet somehow maintained the vigour to keep me on track whilst still temper my wild ideas -- and then finally pushed me through the writing up process.
 I wouldn't have considered spending my life as a researcher or scientist if my role-models had been any less kind or brilliant. Thank you so much!
 

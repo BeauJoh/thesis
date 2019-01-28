@@ -350,10 +350,17 @@ Most kernels have very little available parallelism, suggesting that this benchm
 
 None of the bioinformatics benchmarks is vectorized (instructions per operand = 1), and therefore fail to take advantage of the floating point capabilities available on CPU and MIC architectures.
 
-## Usage and Limitations
+## Usage and Limitations{#chapter4-aiwc-limitations}
 
 We believe that AIWC will be useful to diversity analysis, to this end, this Section presents information about using the tool.
-It is available as a fork of Oclgrind and can be publicly found on GitHub\footnote{\url{https://github.com/BeauJoh/Oclgrind}}.
+The AIWC plugin is only $\approx1000$ lines of code and  it is available as a fork of Oclgrind and can be publicly found on GitHub\footnote{\url{https://github.com/BeauJoh/Oclgrind}}.
+To use AIWC over the command line it is passed the appropriate `--aiwc` argument immediately after calling the oclgrind program.
+An example of its usage on the tiny kmeans application is shown below:
+
+```
+    oclgrind --aiwc ./kmeans -p 0 -d 0 -t 0 -- -g -p 256 -f 30
+```
+
 The collected metrics are logged as text in the command line interface during execution and also in a csv file, stored separately for each kernel and invocation.
 These files can be found in the working directory with the naming convention `aiwc_`$\alpha$`_`$\beta$`.csv`.
 Where $\alpha$ is the kernel name and $\beta$ is the invocation count -- the number of times the kernel has been executed.
@@ -414,7 +421,7 @@ These results were collected with LibSciBench, for the kernel execution time, an
 The execution times are the mean time from collecting a two second sample -- the `fft` benchmark invokes the top level kernel many times during a two second run depending on problem size and the choice of OpenCL device.
 
 We see that executing the same application on a simulator instead of directly on the Intel OpenCL runtime has significant performance costs, both in terms of execution time and memory usage.
-AIWC takes 1800-4300$\times$ longer to execute depending on the problem size and uses 10%, 96%, 6.2$\times$, and 10.8$\times$ more memory as the problem size increases from tiny, small, medium and large respectively.
+AIWC takes 1800-4300$\times$ longer to execute depending on the problem size and uses 1.07$\times$, 1.96$\times$, 6.2$\times$, and 10.8$\times$ more memory as the problem size increases from tiny, small, medium and large respectively.
 The large memory footprint was limiting for us on one of the benchmarks; we encountered an issue with running the largest `lud` application where we exhausted the available RAM on our test system (16 GB), this was overcome by running the same experiment on a system with more RAM.
 The memory usage of AIWC is currently due to storing every register accessed during the simulated kernel run, it is needed for the local and global memory accesses entropy metrics which are calculated over different striding distances once the kernel has finished.
 We propose instead of these addresses being stored in a linked list they instead could be written to disk -- which is much less of a factor on current development computers -- however this is future work.

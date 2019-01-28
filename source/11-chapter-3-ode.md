@@ -1,40 +1,95 @@
 # Extending the OpenDwarfs Benchmark Suite {#sec:chapter-3-ode}
 
-This chapter presents an extended and enhanced version of the OpenDwarfs OpenCL benchmark suite (EOD) to provide a test platform of representative codes.
-It will be later used for workload characterization, performance prediction and ultimately scheduling, but these sophisticated studies first need simple empirical data.
+
+The purpose of this chapter is to outline the development of a testbed that can be used to evaluate approaches to workload characterization and device performance prediction that are proposed in later chapters.
+Key characteristics of the testbed are that it should
+
+1. Support multiple devices
+2. Support multiple problem sizes so it can be applied to embedded systems as well as top end scientific processors
+3. Spans as many of the dwarfs as possible.
+
+In the related work, [Section @sec:chapter2-benchmark-suites], three potential benchmarks suites were considered for the testbed: SHOC [@danalis2010scalable], Rodinia [@che2009rodinia] and OpenDwarfs [@feng2012opencl].
+SHOC is focused on microbenchmarks rather than complete kernels as required here.
+Rodinia, while focused on complete kernels, is primarily developed as a benchmark suite to compare languages and does not cover all dwarfs.
+OpenDwarfs has the widest coverage and best candidate for use here.
+The problems with OpenDwarf is that the current release:
+
+* Includes architecture specific optimisations hard-coded into many of the benchmarks, which impacts the functionality when executed on other accelerators and often results in crashes.
+* Has several parameters fixed, which limits the performance portability on other devices.
+* Does not currently support multiple problem sizes, which impacts benchmark performance on accelerators with a memory hierarchy.
+
+In this chapter, we show enhancements made to OpenDwarfs to remedy these issues; and present the Extended OpenDwarfs benchmark suite (EOD) to provide a testbed of representative codes required for the bulk of this thesis.
+First we review the existing OpenDwarf Benchmark Suite, we then discuss our enhancements.
+The experimental setup, methodology and results are then reported and culminates with a conclusion and discussions on future work.
+The work presented in this chapter will be later used for workload characterization, performance prediction and ultimately scheduling, but these sophisticated studies first need simple empirical data.
 However, methodologies to acquire these results -- in the form of execution times -- must first be presented.
 Additionally, for reproducibility and assurances of realistic scientific applications, the codes, settings and range of heterogeneous accelerator devices must be disclosed.
-
-The OpenDwarfs benchmark suite [@krommydas2016opendwarfs] was selected from a set of benchmark suites -- discussed in [Section @sec:chapter2-benchmark-suites] -- but required several essential extensions to meet the needs of the broader goals of this thesis.
-EOD places a strong focus on the robustness of applications, curation of additional benchmarks with an increased emphasis on correctness of results and choice of problem size.
-Other improvements focus on adding additional benchmarks to better represent each Dwarf along with supporting a range of 4 problem sizes for each application.
-The rationale for the latter is to survey the range of applications over a diverse set of HPC accelerators across increasing amounts of work, which allows for a deeper analysis of the memory subsystem on each of these devices.
-Having a common back-end in the form of OpenCL allows a direct comparison of identical code across diverse architectures.
 Results and analysis are reported for eight benchmark codes on a diverse set of architectures -- three Intel CPUs, five Nvidia GPUs, six AMD GPUs and a Xeon Phi.
-This Chapter is based off our publication in the Proceedings of the 47th International Conference on Parallel Processing Companion, ICPP 2018 [@johnston18opendwarfs].
+This Chapter is based off our publication in the Proceedings of the 47^th^ International Conference on Parallel Processing Companion, ICPP 2018 [@johnston18opendwarfs].
 
-<!-- The corresponding analysis directly addresses the sub-question around: *Does problem size affect the optimality of a dwarf and its suitability for an accelerator type?* -->
-
-## Enhancing the OpenDwarfs Benchmark Suite
+## Extending the OpenDwarfs Benchmark Suite
 
 \label{sec:extending_the_opendwarfs_benchmark_suite}
 
 The OpenDwarfs benchmark suite comprises a variety of OpenCL codes, classified according to the Dwarf Taxonomy [@asanovic2006landscape].
 The original suite focused on collecting representative benchmarks for scientific applications, with a thorough diversity analysis to justify the addition of each benchmark to the corresponding suite.
-We aim to extend these efforts to achieve a full representation of each dwarf, both by integrating other benchmark suites and adding custom kernels.
+We extend these efforts to achieve a full representation of each dwarf, both by integrating other benchmark suites and adding custom kernels.
+It lacked coverage across all dwarfs, specifically, Map Reduce lacked a representative application in-built as part of the suite, and the Spectral Methods Dwarf had an FFT application that both generated incorrect results or crashed.
 
-@marjanovic2016hpc argue that the selection of problem size for HPC benchmarking critically affects which hardware properties are relevant.
-We have observed this to be true across a wide range of accelerators, therefore we have enhanced the OpenDwarfs benchmark suite to support running different problem sizes for each benchmark.
-To improve reproducibility of results, we also modified each benchmark to execute in a loop for a minimum of two seconds, to ensure that sampling of execution time and performance counters was not significantly affected by operating system noise.
-
-Our philosophy for the benchmark suite is that firstly, it "must" run on all devices, and secondly, it "should" run well on them.
-To this end, we removed hardware specific optimizations from codes that would either diminish performance, or crash the application entirely when executed on other devices.
-Instead, we added autotuning support to achieve a comparable performance whilst retaining the general purpose nature which is critical to a benchmark suite.
-Configuration parameters for the benchmarks, such as local workgroup size, were incorporated into EOD using the OpenTuner[@ansel:pact:2014] auto-tuning library.
+The K-Means benchmark was originally classified as the Dense Linear Algebra Dwarf, however, we believe the algorithm to perform K-means clustering is better represented by the Map Reduce Dwarf.
+Dense Linear Algebra applications generally use unit-stride memory accesses to read data from rows and strided accesses to read data from columns, while Map Reduce calculations depend on statistical results of repeated random trials and are considered embarrassingly parallel.
+K-means is an iterative algorithm which groups a set of points into clusters, such that each point is closer to the centroid of its assigned cluster than to the centroid of any other cluster.
+Each step of the algorithm assigns each point to the cluster with the closest centroid, then relocates each cluster centroid to the mean of all points within the cluster.
+Execution terminates when no clusters change size between iterations.
+Starting positions for the centroids are determined randomly.
+The algorithm and its implementation is further discussed in [Section @sec:kmeans].
+As such, we moved K-Means to the Map Reduce dwarf in EOD.
 
 For the Spectral Methods dwarf, the original OpenDwarfs version of the FFT benchmark was complex, with several code paths that were not executed for the default problem size, and returned incorrect results or failures on some combinations of platforms and problem sizes we tested.
 We replaced it with a simpler high-performance FFT benchmark created by Eric Bainville [@bainville2010fft], which worked correctly in all our tests.
 We have also added a 2-D discrete wavelet transform from the Rodinia suite [@che2009rodinia] -- with modifications to improve portability.
+The final coverage of all the dwarfs and their benchmarks is presented in Table \ref{table:applications-and-dwarf}.
+
+\begin{table}
+\centering
+\caption{List of Extended OpenDwarfs Applications and their respective dwarfs.}
+\label{table:applications-and-dwarf}
+\begin{adjustbox}{max width=0.7\textwidth}
+\begin{tabular}{@{}ll@{}}
+\hline {Dwarf} & {Extended OpenDwarfs Application}\\\hline
+
+Dense Linear Algebra & LU Decomposition\\
+Sparse Linear Algebra & Compressed Sparse Row\\
+Spectral Methods & DWT2D, FFT\\
+N-Body Methods & Gemnoui\\
+Structured Grid & Speckle Reducing Anisotropic Diffusion\\
+Unstructured Grid & Computational Fluid Dynamics\\
+Map Reduce & K-Means\\
+Combinational Logic & Cyclic-Redundancy Check\\
+Graph Traversal & Breadth First Search\\
+Dynamic Programming & Smith-Waterman\\
+Backtrack and Branch and Bound & N-Queens\\
+Graphical Methods & Hidden Markov Models\\
+Finite State Machines & Temporal Data Mining\\
+\hline
+
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+
+Marjanović et al. [@marjanovic2016hpc] argue that the selection of problem size for HPC benchmarking critically affects which hardware properties are relevant.
+We have observed this to be true across a wide range of accelerators, therefore we have enhanced the OpenDwarfs benchmark suite to support running different problem sizes for each benchmark.
+EOD supports four problem sizes based on the working memory footprint of each benchmark in execution.
+These are tiny, small, medium and large, and were selected in accordance to the levels the CPU memory hierarchy -- which is the type of accelerator most affected by size.
+In enabling multiple problem sizes, we needed to need to: i)  generate input sets for multiple problem sizes, ii) fix issues with code that has been developed on GPU but show memory violations on the CPU, and, iii) determine which parameters could be fixed and which need to be adjusted to have a different working memory footprint.
+
+We also add python scripts with these fixed parameters to allow the rapid collection of performance results on new accelerators.
+To improve reproducibility of results, we also modified each benchmark to execute in a loop for a minimum of two seconds, to ensure that sampling of execution time and performance counters was not significantly affected by operating system noise.
+
+Our philosophy for the benchmark suite is that firstly, it "must" run on all devices, and secondly, it "should" run well on them.
+To this end, we removed hardware specific optimizations from codes that would either diminish performance, or crash the application entirely when executed on other devices.
+We decided that retaining the general-purpose nature is critical to a benchmark suite.
 
 To understand benchmark performance, it is useful to be able to collect hardware performance counters associated with each timing segment.
 LibSciBench is a performance measurement tool which allows high precision timing events to be collected for statistical analysis [@hoefler2015scientific].
@@ -83,6 +138,8 @@ Through PAPI modules such as Intel's Running Average Power Limit (RAPL) and Nvid
 \end{table*}
 
 The experiments were conducted on a varied set of 15 hardware platforms: three Intel CPU architectures, five Nvidia GPUs, six AMD GPUs, and one MIC (Intel Knights Landing Xeon Phi).
+The selection of hardware was largely determined by availability of these systems.
+CPU, Consumer GPU, HPC/Scientific GPUs -- the K20m, K40m and FirePro GPUs --  and MIC type accelerators are included and span 6 years of microarchitecture changes.
 Key characteristics of the test platforms are presented in Table \ref{tbl:hardware}.
 The L1 cache size should be read as having both an instruction size cache and a data cache size of equal values as those displayed. 
 For Nvidia GPUs, the L2 cache size reported is the size L2 cache per SM multiplied by the number of SMs.
@@ -128,41 +185,18 @@ For each benchmark we also measured memory transfer times between host and devic
 
 Energy measurements were taken on Intel platforms using the RAPL PAPI module, and on Nvidia GPUs using the NVML PAPI module.
 
-### Setting Sizes{#sec:setting_sizes}
+## Methodology {#sec:setting_sizes}
+
+This section outlines the choice of problem size, defines the “tiny”, “small”, “medium” and “large” sizes and describes how they are influenced by cache size.
+A discussion around each benchmark, how it operates and how it was extended is presented.
+This section concludes with the arguments to reproduce our selected problem sizes for the EOD benchmarks.
 
 For each benchmark, four different problem sizes were selected, namely **tiny**, **small**, **medium** and **large**.
 These problem sizes are based on the memory hierarchy of the Skylake CPU.
 Specifically, **tiny** should just fit within L1 cache, on the Skylake this corresponds to \SI{32}{\kibi\byte} of data cache, **small** should fit within the \SI{256}{\kibi\byte} L2 data cache, **medium** should fit within \SI{8192}{\kibi\byte} of the L3 cache, and **large** must be much larger than \SI{8192}{\kibi\byte} to avoid caching and operate out of main memory.
 
 The memory footprint was verified for each benchmark by printing the sum of the size of all memory allocated on the device.
-The applications examined in this work are presented in Table\ref{table:applications-and-dwarf} alongside their representative dwarf from the Berkeley Taxonomy.
-
-\begin{table}
-\centering
-\caption{List of Extended OpenDwarfs Applications and their respective dwarfs.}
-\label{table:applications-and-dwarf}
-\begin{adjustbox}{max width=0.7\textwidth}
-\begin{tabular}{@{}ll@{}}
-\hline {Dwarf} & {Extended OpenDwarfs Application}\\\hline
-
-Dense Linear Algebra & LU Decomposition\\
-Sparse Linear Algebra & Compressed Sparse Row\\
-Spectral Methods & DWT2D, FFT\\
-N-Body Methods & Gemnoui\\
-Structured Grid & Speckle Reducing Anisotropic Diffusion\\
-Unstructured Grid & Computational Fluid Dynamics\\
-Map Reduce & K-Means\\
-Combinational Logic & Cyclic-Redundancy Check\\
-Graph Traversal & Breadth First Search\\
-Dynamic Programming & Smith-Waterman\\
-Backtrack and Branch and Bound & N-Queens\\
-Graphical Methods & Hidden Markov Models\\
-Finite State Machines & Temporal Data Mining\\
-\hline
-
-\end{tabular}
-\end{adjustbox}
-\end{table}
+The applications examined in this work are presented in Table \ref{table:applications-and-dwarf} alongside their representative dwarf from the Berkeley Taxonomy.
 
 For this study, problem sizes were not customized to the memory hierarchy of each platform, since the CPU is the most sensitive to cache performance.
 Also, note for these CPU systems the L1 and L2 cache sizes are identical, and since we ensure that **large** is at least $4\times$ larger than L3 cache, we are guaranteed to have last-level cache misses for the **large** problem size.
@@ -175,7 +209,7 @@ The final values presented as miss results are presented as a percentage, and we
 
 The methodology to determine the appropriate size parameters is demonstrated on the k-means benchmark.
 
-#### kmeans
+### kmeans{#sec:kmeans}
 K-means is an iterative algorithm which groups a set of points into clusters, such that each point is closer to the centroid of its assigned cluster than to the centroid of any other cluster.
 Each step of the algorithm assigns each point to the cluster with the closest centroid, then relocates each cluster centroid to the mean of all points within the cluster.
 Execution terminates when no clusters change size between iterations.
@@ -205,20 +239,20 @@ The **large** problem size is at least four times the size of the last-level cac
 For brevity, cache miss results are not presented in this chapter but were used to verify the selection of suitable problem sizes for each benchmark.
 The procedure to select problem size parameters is specific to each benchmark, but follows a similar approach to k-means.
 
-#### lud, fft, srad, crc, nw
+### lud, fft, srad, crc, nw
 The LU-Decomposition `lud`, Fast Fourier Transform `fft`, Speckle Reducing Anisotropic Diffusion `srad`, Cyclic Redundancy Check `crc` and Needleman-Wunsch `nw` benchmarks did not require additional data sets.
 Where necessary these benchmarks were modified to generate the correct solution and run on modern architectures.
 Correctness was examined either by directly comparing outputs against a serial implementation of the codes (where one was available), or by adding utilities to compare norms between the experimental outputs.
 
 
-#### dwt
+### dwt
 Two-Dimensional Discrete Wavelet Transform is commonly used in image compression.
 It has been extended to support loading of Portable PixMap (.ppm) and Portable GrayMap (.pgm) image format, and storing Portable GrayMap images of the resulting DWT coefficients in a visual tiled fashion.
 The input image dataset for various problem sizes was generated by using the resize capabilities of the ImageMagick application.
 The original gum leaf image is the large sample size has the ratio of $3648 \times 2736$ pixels and was down-sampled to  $80 \times 60$.
 
 
-#### gem, swat, nqueens, hmm
+### gem, swat, nqueens, hmm
 For three of the benchmarks, we were unable to generate different problem sizes to properly exercise the memory hierarchy.
 
 Gemnoui \texttt{gem} is an n-body-method based benchmark which computes electrostatic potential of biomolecular structures.
@@ -310,10 +344,12 @@ Where $\Phi$ is substituted as the argument for each benchmark, it is taken as t
 ## Results
 
 The primary purpose of including these time results is to demonstrate the benefits of the extensions made to the OpenDwarfs Benchmark suite.
+We use the benchmarks to assess and compare performance across the chosen hardware systems.
 The use of LibSciBench allowed high resolution timing measurements over multiple code regions.
 To demonstrate the portability of the Extended OpenDwarfs benchmark suite, we present results from 11 varied benchmarks running on 15 different devices representing four distinct classes of accelerator.
 For eight of the benchmarks, we measured multiple problem sizes and observed distinctly different scaling patterns between devices.
 This underscores the importance of allowing a choice of problem size in a benchmarking suite.
+The Primary analysis is for time, but energy results over two devices is also presented.
 
 ### Time {#sec:chapter-3-results-time}
 
@@ -444,8 +480,16 @@ In future this will be addressed by balancing the amount of computation required
 All the benchmarks use more energy on the CPU, with the exception of `crc` which as previously mentioned has low floating-point intensity and so is not able to make use of the GPU's greater floating-point capability. 
 Variance with respect to energy usage is larger on the CPU, which is consistent with the execution time results.
 
-
 ## Discussion
+
+In this chapter we present EOD which places a strong focus on the robustness of applications, curation of additional benchmarks with an increased emphasis on correctness of results and choice of problem size.
+Other improvements focus on adding additional benchmarks to better represent each Dwarf along with supporting a range of 4 problem sizes for each application.
+The rationale for the latter is to survey the range of applications over a diverse set of HPC accelerators across increasing amounts of work, which allows for a deeper analysis of the memory subsystem on each of these devices.
+Having a common back-end in the form of OpenCL allows a direct comparison of identical code across diverse architectures.
+We improved coverage of spectral methods by adding a new Discrete Wavelet Transform benchmark, and replacing the previous inadequate fft benchmark.
+
+Older hardware was used in this evaluation, this was due to availability, but having a greater diversity between generations of microarchitecture could be useful when examining the general purpose nature of the predictive mode in Chapter 5.
+Minimal energy results were able to be collected, since we lacked sudo access on many of these systems, however we have proposed a methodology that can easily be applied to collect additional energy results on the next generation of hardware.
 
 The work presented in this chapter does not address the optimality of the OpenCL programming language for accelerator devices, nor does it need to, instead, it presents the culmination of ground work and the associated considerations required to evaluate the performance of heterogeneous devices from a shared language -- OpenCL.
 The introduced benchmarking suite  -- EOD -- and the corresponding execution times on the full range of accelerators are used in the remainder of this thesis.
@@ -453,7 +497,7 @@ Working on EOD led to the consideration of developing a tool to examine the limi
 Comparing the runtimes of all kernels and examining the architectural effects on so 15 systems encouraged the development of AIWC -- presented in the next Chapter.
 While performance on a kernel-by-kernel basis could be manually performed over EOD -- collecting results on an abstract OpenCL device via simulation of these kernel codes has enabled a largely automated approach to compare feature-spaces and their suitability / mapping to accelerators.
 
-Additionally, the recorded EOD runtimes from this chapter are used as a test-bed for the predictive model presented in Chapter 5.
+Additionally, the recorded EOD runtimes from this chapter are used as a testbed for the predictive model presented in Chapter 5.
 It serves as a platform which is essential to perform workload scheduling of scientific workloads on accelerator devices which will be common to next-generation scientific HPC nodes.
 
 In general, the results of this chapter identify a few major points.
