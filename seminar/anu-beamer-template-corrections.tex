@@ -1,0 +1,89 @@
+\titlegraphic{\includegraphics[width=5cm]{assets/anu-logo-colour}}
+
+\usetheme{metropolis}
+\usepackage{color}
+\definecolor{headergrey}{rgb}{.1640625,.16015625,.17578125}
+\definecolor{alertblue}{rgb}{0.5703125,0.69921875,0.8359375}
+\setbeamercolor{normal text}{fg=headergrey}
+\setbeamercolor{alerted text}{fg=alertblue}
+\setbeamerfont{title}{size=\fontsize{16}{20}\bfseries}
+\setbeamerfont{subtitle}{size=\fontsize{12}{16}\bfseries}
+
+\usepackage{tikz}
+\usepackage{pdfrender}
+
+\usetikzlibrary{shapes,arrows}
+
+\setbeamertemplate{title page}{%
+    \begin{tikzpicture}[remember picture,overlay]
+        \fill[headergrey]
+        ([yshift=15pt]current page.west) rectangle (current page.north east);
+        \node[anchor=east] 
+        at ([yshift=-50pt]current page.north east) (title)
+        {\parbox[t]{.75\paperwidth}{\raggedleft%
+                \usebeamerfont{title}\textcolor{white}{%
+                    \textpdfrender{
+                        TextRenderingMode=FillStroke,
+                        FillColor=white,
+        }{\inserttitle}}}};
+        \node[anchor=east] 
+        at ([yshift=-95pt]current page.north east) (title)
+        {\parbox[t]{.75\paperwidth}{\raggedleft%
+                \usebeamerfont{subtitle}\textcolor{white}{%
+                    \textpdfrender{
+                        TextRenderingMode=FillStroke,
+                        FillColor=white,
+        }{\insertsubtitle}}}};
+        \node[anchor=west] 
+        at (current page.west) (logo)
+        {\parbox[t]{.19\paperwidth}{\raggedleft%
+        \usebeamercolor[fg]{titlegraphic}\inserttitlegraphic}};
+
+        \node[anchor=north east] 
+        at ([yshift=90pt]current page.south east) (author)
+        {\parbox[t]{.78\paperwidth}{\raggedleft%
+        \usebeamerfont{author}\textcolor{black}{\insertauthor}}};
+        
+        \node[anchor=north east] 
+        at ([yshift=50pt]current page.south east) (institute)
+        {\parbox[t]{.78\paperwidth}{\raggedleft%
+        \usebeamerfont{institute}\textcolor{black}{\insertinstitute}}};
+
+        \node[anchor=north east] 
+        at ([yshift=75pt]current page.south east) (date)
+        {\parbox[t]{.78\paperwidth}{\raggedleft%
+        \usebeamerfont{institute}\textcolor{black}{Panel: Josh Milthorpe, Greg Falzon and Alistair Rendell}}};
+
+        \node[anchor=north east] 
+        at ([yshift=25pt]current page.south east) (date)
+        {\parbox[t]{.78\paperwidth}{\raggedleft%
+        \usebeamerfont{date}\textcolor{black}{\insertdate}}};
+
+    \end{tikzpicture}
+}
+
+%\let\otp\titlepage
+%\renewcommand{\titlepage}{\otp\addtocounter{framenumber}{-1}}
+\newenvironment{figure*} {\begin{figure}} {\end{figure}}
+\newenvironment{table*} {\begin{table}} {\end{table}}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{xargs}
+\usepackage{marginnote}
+\usepackage[binary-units]{siunitx}
+\usepackage{threeparttable}
+\usepackage{MnSymbol}
+\usepackage{adjustbox}
+\usepackage{etoolbox}
+\usepackage[noend,ruled]{algorithm2e}
+\usepackage[T1]{fontenc}
+\usepackage[colorinlistoftodos,prependcaption,textsize=small,color=yellow]{todonotes}
+\usepackage{graphicx}
+\usepackage{relsize}
+\usepackage{url}
+\usepackage{minted}
+\usepackage{subcaption}
+\usepackage{textpos}
+\usepackage{adjustbox}
+

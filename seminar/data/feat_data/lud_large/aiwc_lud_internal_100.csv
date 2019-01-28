@@ -1,0 +1,32 @@
+metric,count
+opcode,8
+total instruction count,2146489600
+workitems,6150400
+operand sum,2.14649e+09
+total # of barriers hit,0
+min instructions to barrier,349
+max instructions to barrier,349
+median instructions to barrier,349
+max simd width,1
+mean simd width,1
+stdev simd width,0
+granularity,4.65877e-10
+barriers per instruction,4.65877e-10
+instructions per operand,1
+total memory footprint,3134720
+90% memory footprint,56048
+global memory address entropy,16
+local memory address entropy -- 1 LSBs skipped,16.7058
+local memory address entropy -- 2 LSBs skipped,16.7058
+local memory address entropy -- 3 LSBs skipped,15.4497
+local memory address entropy -- 4 LSBs skipped,14.4972
+local memory address entropy -- 5 LSBs skipped,13.4832
+local memory address entropy -- 6 LSBs skipped,12.4481
+local memory address entropy -- 7 LSBs skipped,11.8949
+local memory address entropy -- 8 LSBs skipped,11.3693
+local memory address entropy -- 9 LSBs skipped,10.8554
+local memory address entropy -- 10 LSBs skipped,10.3079
+total unique branch instructions,1
+90% branch instructions,1
+branch entropy (yokota),4
+branch entropy (average linear),0.117647
