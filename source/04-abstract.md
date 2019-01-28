@@ -4,7 +4,7 @@ The next-generation of supercomputers will feature a diverse mix of accelerator 
 The increase in heterogeneity is explained by the nature of these devices -- certain accelerators offer acceleration, or a shorter time to completion, for particular programs.
 Characteristics of these programs are fixed and impose fundamental limitations on the workloads regardless of which accelerator is used for the computation; for instance, a graph traversal program always exhibits the same high-branch and low-computation properties of graph traversal regardless of what device is used to execute it.
 To support efficient scheduling on High Performance Computing (HPC) systems it is necessary to make accurate performance predictions for workloads on varied compute devices, which is challenging due to diverse computation, communication and memory access characteristics which result in varying performance between devices.
-On HPC systems a single node may feature a GPU, CPU, and an FPGA or MIC.
+On HPC systems a single node may feature a Graphics Processing Unit (GPU), Central Processing Unit (CPU), and an Field-Programmable Gate Array (FPGA) or Many Integrated Core (MIC).
 This work presents a device independent predictor -- a methodology to use device-independent characteristics of scientific codes to select the optimal accelerator device with regard to execution time or energy expenditure.
 
 Open Compute Language (OpenCL) is a programming model designed to facilitate the development of application codes capable of running on multiple different devices.
