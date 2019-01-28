@@ -81,7 +81,7 @@ We present an extended and enhanced version of the Open- Dwarfs OpenCL benchmark
 
 # Thesis Statement
 
-"Scientific high performance computer systems are becoming increasingly heterogeneous because certain applications are more suitable to particular accelerators. The characteristics of a program are sufficient to predict its performance which will allow the efficient scheduling of work to the most appropriate accelerator."
+"Scientific high performance computer systems are becoming increasingly heterogeneous because certain applications are more suitable to particular accelerators. The architecture-independent characteristics of a program are sufficient to predict its performance which will allow the efficient scheduling of work to the most appropriate accelerator."
 
 # Talk Structure
 
@@ -128,8 +128,7 @@ statistical results of repeated random trials and are considered embarrassingly 
 
 # OpenDwarfs Deficiencies
 
-* Architecture specific optimizations
-* Hard-coded device specific parameters
+* Architecture specific hard-coded optimizations -- both structural and parameters
 * Fixed problem sizes
 
 # EOD Extensions
@@ -140,14 +139,14 @@ statistical results of repeated random trials and are considered embarrassingly 
 * Selected according to levels of cache
     - **tiny** : < 32 KiB L1
     - **small**: < 256 KiB L2
-    - **medium**: < 8192 L3
-    - **large**: > 8192 L3
+    - **medium**: < 8192 KiB L3
+    - **large**: > 8192 KiB L3
 
 # EOD Extensions II
 
 * Diverse:
     - 4 different problem sizes per application
-    - Added `dwt` and `fft` applications -- currently 11 and 37 kernels
+    - Added `dwt` and `fft` applications -- currently 11 benchmarks and 37 kernels
     - Real scientific applications
 * Reproducible: Minimum of 2 sec runs per benchmark
 * Precise:
@@ -244,7 +243,7 @@ Finite State Machines & Temporal Data Mining\\
 * Similar breakdown of 37 kernels
 * 15 devices
 * Time, performance events and energy (x50)
-* Many more results and discussions presented in the paper
+* Many more results and discussions presented in the thesis
 
 # What now?
 
@@ -517,7 +516,7 @@ large   & 19.6{ }       & 69300{ }{ }   & $\approx$3540$\times$             & 20
 
 * num.trees=500, mtry=32, and min.node.size=9 look good
 * train on a random selection of N kernels and test on remainder
-* see paper for details but final values are num.trees = 505, mtry = 30 and min.node.size = 9
+* see thesis for details but final values are num.trees = 505, mtry = 30 and min.node.size = 9
 
 # Increased Training Data
 
@@ -533,7 +532,7 @@ large   & 19.6{ }       & 69300{ }{ }   & $\approx$3540$\times$             & 20
 \item Prediction error across all benchmarks for models trained with varying numbers of kernels.
 \item How many kernels to add for training -- what's enough?
 \item Another study performed to see how error changes w.r.t. number of kernels in training
-\item Uses random selection for each random count -- again see paper for full details
+\item Uses random selection for each random count -- again see thesis for full details
 \item Error tapers off for more kernels!
 \item gradient still significant at 37 kernels $\rightarrow$ could still benefit from more.
 %<!--item However, the model proposed is a proof of concept and suggests that a general purpose model is attainable and may not require many more kernels. -->
@@ -622,15 +621,17 @@ If predictions deviate significantly from the measured performance, can fall bac
 * Presented Architecture-Independent Workload Characterization tool:
     + Supports the collection of architecture-independent features of OpenCL application kernels.
     + First workload characterization tool to support multi-threaded and/or parallel workloads.
+* AIWC metrics generate a comprehensive feature-space representation $\rightarrow$ permits cluster analysis and comparison with the dwarf taxonomy.
+
+# Future Work -- AIWC
+
+\smaller
+
 * Features can be used to:
     + predict the most suitable device for a particular kernel -- for scheduling,
     + or to determine the limiting factors for performance,
     + allows developers to try alternative implementations (e.g. by reorganizing branches, eliminating intermediate variables ...).
     + inform accelerator designers & integrators of a scientific workloads -- ensures compute architectures are suitable for intended workloads.
-* AIWC metrics generate a comprehensive feature-space representation $\rightarrow$ permits cluster analysis and comparison with the dwarf taxonomy.
-
-# Future Work -- AIWC
-
 * Large working memory fix -- write traces to disk instead of linked-list on RAM
 * Prune features -- redundancy good for random-forests but bad for developers
 * Guide a developer to assess:
@@ -638,6 +639,8 @@ If predictions deviate significantly from the measured performance, can fall bac
     + performance portability
     + predicting execution time without having access to these systems (or time to test)
 * Language-Agnostic and Architecture-Independent Workload Characterization
+
+\larger
 
 # Conclusions -- Prediction
 
@@ -654,9 +657,9 @@ If predictions deviate significantly from the measured performance, can fall bac
 
 # Thesis Statement Revisited
 
-"Scientific high performance computer systems are becoming increasingly heterogeneous because certain applications are more suitable to particular accelerators. The characteristics of a program are sufficient to predict its performance which will allow the efficient scheduling of work to the most appropriate accelerator."
+"Scientific high performance computer systems are becoming increasingly heterogeneous because certain applications are more suitable to particular accelerators. The architecture-independent characteristics of a program are sufficient to predict its performance which will allow the efficient scheduling of work to the most appropriate accelerator."
 
-# Open Questions and Next Steps
+# Open Questions, Potential Collaborations and Next Steps
 
 * Do you have unusual/real-world applications:
     + that you think we've missed?
@@ -668,7 +671,7 @@ If predictions deviate significantly from the measured performance, can fall bac
 * What does this mean for FPGAs?
 * Interested in OpenMP, OpenACC or SYCL evaluation or extensions for AIWC?
 
-# Open Questions and Next Steps -- Continued.
+# Open Questions, Potential Collaborations and Next Steps -- Continued.
 
 * Have suggestions for more/better AIWC metrics -- or think we've missed some?
 * Interested in presenting a reduced feature space?
