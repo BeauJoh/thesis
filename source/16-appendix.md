@@ -9,9 +9,9 @@
 #Time Results{#appendix:time-results}
 
 The primary purpose of including these time results is to demonstrate the benefits of the extensions made to the OpenDwarfs Benchmark suite.
-In this appendix we present all runtime results collected from EOD and use the benchmarks to assess and compare performance across the chosen hardware systems.
-The use of LibSciBench allowed high resolution timing measurements over multiple code regions.
-To demonstrate the portability of the Extended OpenDwarfs benchmark suite, we present results from 12 benchmarks running on 15 different devices representing four distinct classes of accelerator.
+In this appendix, we present all runtime results collected from EOD and use the benchmarks to assess and compare performance across the chosen hardware systems.
+The use of LibSciBench allowed high-resolution timing measurements over multiple code regions.
+To demonstrate the portability of the Extended OpenDwarfs benchmark suite, we present results from 12 benchmarks running on 15 different devices representing four distinct classes of an accelerator.
 For eight of the benchmarks, we measured multiple problem sizes and observed distinctly different scaling patterns between devices.
 This underscores the importance of allowing a choice of problem size in a benchmarking suite.
 The remaining four benchmarks only support one fixed problem size and are included in Figure \ref{fig:time3}.
@@ -31,7 +31,7 @@ From Figures\ \ref{fig:tiny-and-small-time} and \ref{fig:medium-and-large-time} 
 Finally, Figure \ref{fig:time3} presents results for the four applications with restricted problem sizes and only one problem size is shown.
 The N-body Methods dwarf is represented by (\texttt{gem}) and the results are shown in Figure \ref{fig:time3}\ (a), the Backtrack \& Branch and Bound dwarf is represented by the (\texttt{nqueens}) application in Figure \ref{fig:time3}\ (b), (\texttt{hmm}) results from Figure \ref{fig:time3}\ (c) represent the Graphical Models dwarf and (\texttt{swat}) from Figure \ref{fig:time3}\ (d) also depicts the Dynamic Programming dwarf.
 
-The results are colored according to accelerator type: purple for CPU devices, blue for consumer GPUs, green for HPC GPUs, and yellow for the KNL MIC.
+The results are coloured according to the accelerator type: purple for CPU devices, blue for consumer GPUs, green for HPC GPUs, and yellow for the KNL MIC.
 Examining the transition from tiny to large problem sizes in Figures \ref{fig:tiny-and-small-time2}\ (b) and \ref{fig:medium-and-large-time2}\ (b) shows the performance gap between CPU and GPU architectures widening for \texttt{srad} -- indicating codes representative of structured grid dwarfs are well suited to GPUs.
 
 In contrast, \texttt{nw} -- (b) from Figures\ \ref{fig:tiny-and-small-time2} and\ \ref{fig:medium-and-large-time2} -- shows that the Intel CPUs and NVIDIA GPUs perform comparably for all problem sizes, whereas all AMD GPUs exhibit worse performance as size increases. This suggests that performance for this Dynamic Programming problem cannot be explained solely by considering accelerator type and may be tied to micro-architecture or OpenCL runtime support.
@@ -56,7 +56,7 @@ Execution times for \texttt{crc} are lowest on CPU-type architectures, probably 
 In general, the performance on the Xeon Phi 7210 MIC is poor due to the lack of support for wide vector registers in Intel's OpenCL SDK.
 The low clock frequency and inability to exploit sufficient levels of parallelism on tiny and small problem sizes usually means it is the worst performer on these sized benchmarks.
 As we move onto larger problem sizes the MIC outperforms the AMD GPUs on the largest \texttt{lud} and \texttt{nw} benchmarks.
-Similarly for the large \texttt{srad} the MIC bests most of the CPUs.
+Similarly, for the large \texttt{srad} benchmark the MIC bests most of the CPUs.
 The \texttt{crc} benchmark is a standout in benchmarks for the MIC; It is one of the only applications where the MIC is competitive with the performance on the whole mix of accelerators. Starting with the tiny size, it experiences comparable performance to all of the older GPUs, for the small size it offers similar performance to the latest Nvidia GPUs, and for the medium and large problem sizes it is almost the best performing device rivalling the CPU accelerators.
 
 For the fixed problem sized benchmarks, presented in Figure \ref{fig:time3}, the per kernel invocation is relatively low regardless of device selected for the (a) \texttt{gem} or (b) \texttt{nqueens} benchmark.
@@ -67,10 +67,10 @@ The \texttt{hmm} benchmark shows the CPU and modern Nvidia GPUs performing equal
 Finally, \texttt{swat} had the modern Nvidia GPUs as the fastest devices at $\approx5$ms and ranged up to 40ms on the MIC which was the slowest device for this benchmark.
 
 Predicted application properties for the various Berkeley Dwarfs are evident in the measured runtime results.
-For example, Asanović et al. [@asanovic2006landscape] state that applications from the Spectral Methods dwarf is memory latency limited.
+For example, Asanović et al. [@asanovic2006landscape] state that applications from the Spectral Methods dwarf are memory latency limited.
 If we examine \texttt{dwt} and \texttt{fft} -- the applications which represent Spectral Methods -- in Figure \ref{fig:medium-and-large-time}\ (d) and Figure\ \ref{fig:medium-and-large-time2}\ (a) respectively, we see that for medium problem sizes the execution times match the higher memory latency of the L3 cache of CPU devices relative to the GPU counterparts.
 The trend only increases with problem size: the large size shows the CPU devices frequently accessing main memory while the GPUs' larger memory ensures a lower memory access latency.
-It is expected if had we extended this study to an even larger problem size that would not fit on GPU global memory, much higher performance penalties would be experienced over GPU devices, since the PCI-E interconnect has a higher latency than a memory access to main memory from the CPU systems.
+It is expected if had we extended this study to an even larger problem size that would not fit on GPU global memory, much higher performance penalties would be experienced over GPU devices since the PCI-E interconnect has a higher latency than memory access to main memory from the CPU systems.
 As a further example, Asanović et al. [@asanovic2006landscape] state that the Structured Grid dwarf is memory bandwidth limited.
 The Structured Grid dwarf is represented by the \texttt{srad} benchmark shown in Figure\ \ref{fig:medium-and-large-time2} (b).
 GPUs exhibit lower execution times than CPUs, which would be expected in a memory bandwidth-limited code as GPU devices offer higher bandwidth than a system interconnect.
@@ -116,17 +116,17 @@ GPUs exhibit lower execution times than CPUs, which would be expected in a memor
 A brief overview of the diversity analysis conducted is presented in this appendix.
 Features from AIWC are used as the predictor variables in the random forest model -- presented in Chapter 5.
 This model was trained from the combined results of all application kernels and all problem sizes.
-In this section the predictor variables are examined independently to evaluate the variances between kernels and problem sizes in the AIWC feature-space.
+In this section, the predictor variables are examined independently to evaluate the variances between kernels and problem sizes in the AIWC feature-space.
 
 Evaluation uses dimensionality reduction techniques, from Principal Component Analysis (PCA) and t-Distributed Stochastic Neighbor Embedding (t-SNE).
-The feature-space reduction methods allows the determination of the loading, or relative contributions, of each component metric.
-t-SNE is a machine learning visualization algorithm used to find the optimal projection of high dimensional data into two dimensional point by a way that similar objects are modeled by nearby points and dissimilar objects are modeled by distant points with high probability.
+The feature-space reduction methods allow the determination of the loading, or relative contributions, of each component metric.
+t-SNE is a machine learning visualization algorithm used to find the optimal projection of high dimensional data into two-dimensional point by a way that similar objects are modelled by nearby points and dissimilar objects are modelled by distant points with high probability.
 On the t-SNE visualization use k-means clustering to present the grouping between features.
 
-From the PCA biplot in Figure\ \ref{fig:pca-biplot} we can determine that Total Memory Footprint, any of the branch entropy metrics and one of the memory address entropy variables are the 3 most principal components to be used when forming a predictive model.
-The proportion of variance of each principal component is presented in Figure\ \ref{fig:pca-variance} and shows these 3 principal components can cover 95\% of the contributions of difference in a 19 dimensional AIWC feature-space, 5 principal components represent \~98\% variance in the data and 6 variables cover more than 99\%.
+From the PCA biplot in Figure\ \ref{fig:pca-biplot}, we can determine that Total Memory Footprint, any of the branch entropy metrics and one of the memory address entropy variables are the 3 most principal components to be used when forming a predictive model.
+The proportion of variance of each principal component is presented in Figure\ \ref{fig:pca-variance} and shows these 3 principal components can cover 95\% of the contributions of difference in a 19-dimensional AIWC feature-space, 5 principal components represent \~98\% variance in the data and 6 variables cover more than 99\%.
 Similarly, the t-SNE clustering, from Figure \ref{fig:tsne-kmeans}, tell a similar story, namely, 5-6 features convey a majority of the information.
-There is clearly a cluster structure in the manifold -- which is good news for prediction -- but there is also 2 interesting linear strings structures (correlations) – which suggests that one method of regression or prediction will not suffice.
+There is clearly a cluster structure in the manifold -- which is good news for prediction -- but there are also 2 interesting linear strings structures (correlations) – which suggests that one method of regression or prediction will not suffice.
 The visualization and the same methodology can be used to justify the inclusion of a new benchmark, for instance, if an application kernel extends the coverage in the projection.
 
 \begin{figure*}[t]
