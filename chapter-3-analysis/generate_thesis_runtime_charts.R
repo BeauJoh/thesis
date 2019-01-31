@@ -128,13 +128,42 @@ for(a in applications){
         }
 
         #only include "size" as a title on these applications
-        if(a %in% c("crc","kmeans","fft")){
+        if(a %in% c("kmeans","fft")){
             p <- p + ggtitle(s_title)
         }
 
         print(p)
         dev.off()
         assign(paste("plot.",a,".",s,sep=""),p)
+    }
+}
+
+#generate a plot for crc with all 4 sizes
+for(a in 'crc'){
+    print(paste("saving ",a,"...",sep=''))
+    for(s in sizes){
+        pdf(paste('./single-plots/',a,"_with_sizes_",s,'.pdf',sep=''))
+        x <- data.all[data.all$application == a & data.all$size == s,]
+
+        #drop phi except for listed applications
+        if(drop_phi & a %!in% c("crc")){
+            x <- subset(x,device != "Xeon Phi 7210")
+        }
+
+        p <- ggplot(x, aes(x=factor(device), y=total_time*0.001,colour=accelerator_type)) +
+            geom_boxplot(outlier.alpha = 0.1,varwidth=TRUE)+
+            labs(colour="accelerator type",y='time (ms)',x='')+
+            scale_y_continuous(limit = c(0, max(x$total_time*0.001)*1.05)) +
+            scale_color_viridis(discrete=TRUE,end=1) + theme_bw() + 
+            theme(axis.text.x = element_text(size=10, angle = 45, hjust = 1),
+                  title = element_text(size=10, face="bold"),
+                  plot.margin = unit(c(0,0,0,0), "cm"))
+
+        p <- p + ggtitle(s)
+
+        print(p)
+        dev.off()
+        assign(paste("plot.",a,".standalone.",s,sep=""),p)
     }
 }
 single.figures <- data.frame()
@@ -145,10 +174,76 @@ legends <- get_legend(plot.crc.tiny)+theme(legend.title=element_text(face="bold"
 
 #crc results
 print("saving crc_row_bandwplot.pdf")
-crc_row <- plot_grid(plot.crc.tiny  +theme(legend.position = "none"),
-                     plot.crc.small +theme(legend.position = "none"),
-                     plot.crc.medium+theme(legend.position = "none"),
-                     plot.crc.large +theme(legend.position = "none"),
+crc_row <- plot_grid(plot.crc.standalone.tiny  +theme(legend.position = "none"),
+                     plot.crc.standalone.small +theme(legend.position = "none"),
+                     plot.crc.standalone.medium+theme(legend.position = "none"),
+                     plot.crc.standalone.large +theme(legend.position = "none"),
+                     ncol=2,nrow=2)
+legend_crc <- get_legend(plot.crc.tiny + theme(legend.title=element_text(face="bold"),
+                                             legend.position="bottom",legend.justification="right"))#"center"))
+p <- plot_grid(crc_row, legend_crc, ncol = 1, rel_heights = c(1, .05))
+pdf('../figures/chapter-3/crc.pdf',width=8,height=8)
+print(p)
+dev.off()
+
+#generate a plot for kmeans with all 4 sizes
+for(a in 'kmeans'){
+    print(paste("saving ",a,"...",sep=''))
+    for(s in sizes){
+        pdf(paste('./single-plots/',a,"_with_sizes_",s,'.pdf',sep=''))
+        x <- data.all[data.all$application == a & data.all$size == s,]
+
+        #drop phi except for listed applications
+        x <- subset(x,device != "Xeon Phi 7210")
+        x$accelerator_type <- factor(x$accelerator_type)
+
+        p <- ggplot(x, aes(x=factor(device), y=total_time*0.001,colour=accelerator_type)) +
+            geom_boxplot(outlier.alpha = 0.1,varwidth=TRUE)+
+            labs(colour="accelerator type",y='time (ms)',x='')+
+            scale_y_continuous(limit = c(0, max(x$total_time*0.001)*1.05)) +
+            scale_color_viridis(discrete=TRUE,end=0.75) + theme_bw() + 
+            theme(axis.text.x = element_text(size=10, angle = 45, hjust = 1),
+                  title = element_text(size=10, face="bold"),
+                  plot.margin = unit(c(0,0,0,0), "cm"))
+        if (s == 'tiny'){
+            p <- p + scale_y_continuous(limit = c(0.0, 1.8))
+
+        }
+        p <- p + ggtitle(s)
+
+        print(p)
+        dev.off()
+        assign(paste("plot.",a,".standalone.",s,sep=""),p)
+    }
+}
+
+#kmeans results
+print("saving kmeans_row_bandwplot.pdf")
+kmeans_row <- plot_grid(plot.kmeans.standalone.tiny  +theme(legend.position = "none"),
+                        plot.kmeans.standalone.small +theme(legend.position = "none"),
+                        plot.kmeans.standalone.medium+theme(legend.position = "none"),
+                        plot.kmeans.standalone.large +theme(legend.position = "none"),
+                        ncol=2,nrow=2)
+legend_crc <- get_legend(plot.kmeans.tiny + theme(legend.title=element_text(face="bold"),
+                                             legend.position="bottom",legend.justification="right"))#"center"))
+p <- plot_grid(kmeans_row, legend_crc, ncol = 1, rel_heights = c(1, .05))
+pdf('../figures/chapter-3/kmeans.pdf',width=8,height=8)
+print(p)
+dev.off()
+
+
+single.figures <- data.frame()
+
+legends <- get_legend(plot.crc.tiny)+theme(legend.title=element_text(face="bold"),
+                                           legend.position="top",
+                                           legend.justification="left")
+
+#crc results
+print("saving crc_row_bandwplot.pdf")
+crc_row <- plot_grid(plot.crc.standalone.tiny  +theme(legend.position = "none"),
+                     plot.crc.standalone.small +theme(legend.position = "none"),
+                     plot.crc.standalone.medium+theme(legend.position = "none"),
+                     plot.crc.standalone.large +theme(legend.position = "none"),
                      ncol=2,nrow=2)
 legend_crc <- get_legend(plot.crc.tiny + theme(legend.title=element_text(face="bold"),
                                              legend.position="bottom",legend.justification="right"))#"center"))
@@ -186,6 +281,10 @@ plots <- align_plots(plot.kmeans.tiny  +theme(legend.position = "none"),
                      plot.srad.small +theme(legend.position = "none"),
                      plot.srad.medium+theme(legend.position = "none"),
                      plot.srad.large +theme(legend.position = "none"),
+                     plot.crc.tiny  +theme(legend.position = "none"),
+                     plot.crc.small +theme(legend.position = "none"),
+                     plot.crc.medium+theme(legend.position = "none"),
+                     plot.crc.large +theme(legend.position = "none"),
                      plot.nw.tiny  +theme(legend.position = "none"),
                      plot.nw.small +theme(legend.position = "none"),
                      plot.nw.medium+theme(legend.position = "none"),
@@ -204,10 +303,11 @@ ts_one <- plot_grid(plots[[1]],  plots[[2]],
 ts_two <- plot_grid(plots[[17]], plots[[18]],
                     plots[[21]], plots[[22]],
                     plots[[25]], plots[[26]],
-                    ncol=2,nrow=3,
-                    labels=c("(a) fft",'',"(b) srad",'', "(c) nw",''),
-                    label_x = c(0.06,0,0.035,0,0.051,0), #adjust x offset of each row label
-                    label_y = c(1.0,1.0,1.085,1.0,1.085,1.0)) #adjust y offset of each row label
+                    plots[[29]], plots[[30]],
+                    ncol=2,nrow=4,
+                    labels=c("(a) fft",'',"(b) srad",'', "(c) crc",'',"(d) nw",''),
+                    label_x = c(0.06,0,0.035,0,0.051,0,0.05,0), #adjust x offset of each row label
+                    label_y = c(1.0,1.0,1.085,1.0,1.085,1.0,1.085,1.0)) #adjust y offset of each row label
 
 ml_one <- plot_grid(plots[[3]],  plots[[4]],
                     plots[[7]],  plots[[8]],
@@ -215,16 +315,17 @@ ml_one <- plot_grid(plots[[3]],  plots[[4]],
                     plots[[15]], plots[[16]],
                     ncol=2,nrow=4,
                     labels=c("(a) kmeans",'',"(b) lud",'', "(c) csr",'',"(d) dwt",''),
-                    label_x = c(0,0,0.05,0,0.051,0,0.045,0), #adjust x offset of each row label
-                    label_y = c(1.0,1.0,1.085,1.0,1.085,1.0,1.08,1.0)) #adjust y offset of each row label
+                    label_x = c(0,0,0.05,0,0.051,0,0.045,0,0.04,0), #adjust x offset of each row label
+                    label_y = c(1.0,1.0,1.085,1.0,1.085,1.0,1.085,1.0)) #adjust y offset of each row label
 
 ml_two    <- plot_grid(plots[[19]], plots[[20]],
                        plots[[23]], plots[[24]],
                        plots[[27]], plots[[28]],
-                       ncol=2,nrow=3,
-                       labels=c("(a) fft",'',"(b) srad",'', "(c) nw",''),
-                       label_x = c(0.06,0,0.035,0,0.051,0), #adjust x offset of each row label
-                       label_y = c(1.0,1.0,1.085,1.0,1.085,1.0)) #adjust y offset of each row label
+                       plots[[31]], plots[[32]],
+                       ncol=2,nrow=4,
+                       labels=c("(a) fft",'',"(b) srad",'', "(c) crc",'', "(d) nw",''),
+                       label_x = c(0.06,0,0.035,0,0.051,0,0.05,0), #adjust x offset of each row label
+                       label_y = c(1.0,1.0,1.085,1.0,1.085,1.0,1.085,1.0)) #adjust y offset of each row label
 
 p <- plot_grid(ts_one, #add plots
                legend_generic,#add legend
@@ -394,8 +495,8 @@ for(device in devices){
 }
 
 #remove knl from results
-data.procswat <- data.procswat[data.procswat$device!='Xeon Phi 7210',]
-data.procswat$accelerator_type <- factor(data.procswat$accelerator_type)
+#data.procswat <- data.procswat[data.procswat$device!='Xeon Phi 7210',]
+#data.procswat$accelerator_type <- factor(data.procswat$accelerator_type)
 
 library(ggplot2)
 library(cowplot)
@@ -406,7 +507,7 @@ p <- ggplot(data.procswat, aes(x=factor(device), y=time*0.001,colour=accelerator
         geom_boxplot(outlier.alpha = 0.1,varwidth=TRUE)+
             labs(colour="accelerator type",y='time (ms)',x='')+
                 scale_y_continuous(limit = c(0, max(x$time*0.001)*1.05)) +
-                    scale_color_viridis(discrete=TRUE,end=0.75) + theme_bw() +
+                    scale_color_viridis(discrete=TRUE,end=1.0) + theme_bw() +
                         theme(axis.text.x = element_text(size=10, angle = 45, hjust = 1),
                                         title = element_text(size=10, face="bold"),
                                                   plot.margin = unit(c(0,0,0,0), "cm"))
@@ -438,11 +539,12 @@ dev.off()
 
 #generate a plot for each application with just the medium problem size
 sizes <- c("medium")
-a_letters <- c("(a)","(b)","(c)","(d)","(e)","(f)","(g)","(h)")
-al <- 1
+a_letters <- c("(a)","(b)","(c)","(d)","(e)","(f)","(g)","(h)","(h)")
+al <- 0
 for(a in applications){
     print(paste("saving ",a,"...",sep=''))
     for(s in sizes){
+        al <- al+1
         #don't generate plots for these medium and large sized problems for these applications
         if(a %in% c("gem","nqueens","hmm") & s %in% c("medium","large")){
             next
@@ -492,7 +594,6 @@ for(a in applications){
         print(p)
         dev.off()
         assign(paste("plot.",a,".",s,sep=""),p)
-        al <- al+1
     }
 }
 single.figures <- data.frame()

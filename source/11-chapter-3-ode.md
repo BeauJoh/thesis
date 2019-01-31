@@ -21,7 +21,7 @@ The problems with OpenDwarf is that the current release:
 In this chapter, we show enhancements made to OpenDwarfs to remedy these issues; and present the Extended OpenDwarfs benchmark suite (EOD) to provide a testbed of representative codes required for the bulk of this thesis.
 First we review the existing OpenDwarf Benchmark Suite, we then discuss our enhancements.
 The experimental setup, methodology and results are then reported and culminates with a conclusion and discussions on future work.
-The work presented in this chapter will be later used for workload characterization, performance prediction and ultimately scheduling, but these sophisticated studies first need simple empirical data.
+The benchmarks and the associated runtimes presented in this chapter will be later used for workload characterization, performance prediction and ultimately scheduling, but these sophisticated studies first need simple empirical data.
 However, methodologies to acquire these results -- in the form of execution times -- must first be presented.
 Additionally, for reproducibility and assurances of realistic scientific applications, the codes, settings and range of heterogeneous accelerator devices must be disclosed.
 Results and analysis are reported for eight benchmark codes on a diverse set of architectures -- three Intel CPUs, five Nvidia GPUs, six AMD GPUs and a Xeon Phi.
@@ -353,6 +353,81 @@ The Primary analysis is for time, but energy results over two devices is also pr
 
 ### Time {#sec:chapter-3-results-time}
 
+The distribution of execution times require to execute each of the benchmarks over all available hardware is presented in Figures \ref{fig:time-medium} and \ref{fig:time-fixed}.
+Only the medium problem size is presented in Figure \ref{fig:time-medium}, and these are for the benchmark applications which support four different problem sizes, while Figure \ref{fig:time-fixed} presents execution times for the four benchmarks with one fixed problem size.
+The results are colored according to accelerator type: purple for CPU devices, blue for consumer GPUs, green for HPC GPUs, and yellow for the KNL MIC.
+
+Some benchmarks execute more than one kernel on the accelerator device; the reported iteration time is the sum of all compute time spent on the accelerator for all kernels.
+Each benchmark corresponds to a particular dwarf: 
+From Figure\ \ref{fig:medium_apps} (a) (\texttt{kmeans}) represents the MapReduce dwarf,
+(b) (\texttt{lud}) represents the Dense Linear Algebra dwarf,
+(c) (\texttt{csr}) represents Sparse Linear Algebra, (d) (\texttt{fft}) and (e) (\texttt{dwt}) represent Spectral Methods, (f) (\texttt{srad}) represents the Structured Grid dwarf and (g) (\texttt{crc}) is from the Combinational Logic dwarf, and (h) (\texttt{nw}) represents Dynamic Programming.
+Comparing the medium problem size between all the dwarfs, we see individual devices with significantly longer execution times than the others, these large differences in execution times hide many of the finer differences in detail between accelerators with similar good performance and identifies the penalties when selecting a suboptimal accelerator device.
+The Xeon Phi 7210 MIC is 2.5$\times$ slower than the next worse accelerator in the \texttt{kmeans} benchmark, the rest of the accelerators all have average execution times less than 18ms.
+It was had the worst execution times for \texttt{csr} and \texttt{nw} benchmarks being 2-4$\times$ slower than the other accelerators.
+The i5-3550 performed 6$\times$ worse than the MIC on the \texttt{lud} benchmark which on average take $\approx$1ms.
+Similarly, the i5-3550 CPU was the poorest choice of accelerator for \texttt{dwt} and \texttt{srad} benchmarks, being on average 6$\times$ and 5$\times$ slower, respectively, than the other accelerators.
+The Xeon Phi and i5-3550 were equally poor on the \texttt{fft} benchmark, taking 12ms per run, despite the other non-CPU accelerators taking less than 2ms.
+Finally, the GPUs performed worse on the \texttt{crc} benchmark, with the K20m taking 100ms, compared to the CPU and MIC taking <5ms.
+These large differences in execution times show the importance in selecting an optimal accelerator by highlighting large difference between the good performance of accelerators on average and the poorest device for a dwarf -- it results in a 2-100$\times$ longer execution time.
+
+Figure \ref{fig:gem_nqueens_hmm_and_swat} presents results for the four applications with restricted problem sizes.
+The N-body Methods dwarf is represented by (\texttt{gem}) and the results are shown in Figure \ref{fig:time-fixed}\ (a), the Backtrack \& Branch and Bound dwarf is represented by the (\texttt{nqueens}) application in Figure \ref{fig:time-fixed}\ (b), (\texttt{hmm}) results in Figure \ref{fig:time-fixed}\ (c) represent the Graphical Models dwarf and (\texttt{swat}) from Figure \ref{fig:time-fixed}\ (d) also depicts the Dynamic Programming dwarf.
+
+When considering the fixed problem sizes in Figure \ref{fig:time-fixed}, the per kernel invocation is relatively low regardless of device selected for the (a) \texttt{gem} or (b) \texttt{nqueens} benchmark.
+The newer Nvidia GPUs collectively tended to be the best performed accelerator on \texttt{gem} taking $\approx110\mu$s while the MIC saw the worst performance at 0.85 ms.
+The \texttt{nqueens} benchmark saw the i7-6700K and i5-3550 CPUs finish the kernel in $\approx80\mu$s to $\approx100\mu$s per invocation, respectively, again the MIC had the worst performance at $900\mu$s on average.
+Figures (c) \texttt{hmm} and (d) \texttt{swat} are more computationally intensive and took longer to complete.
+The \texttt{hmm} benchmark shows the CPU and modern Nvidia GPUs performing equally well < 1ms, the older AMD and HPC GPUs ranged from 1-3ms, and the MIC averaged 7.5ms per run.
+Finally, \texttt{swat} had the modern Nvidia GPUs as the fastest devices at $\approx5$ms and ranged up to 40ms on the MIC which was the slowest device for this benchmark.
+
+Two of these benchmarks are now presented in further detail to examine the performance properties as the amount work increases over each of the four problem sizes.
+We selected the \texttt{crc} and \texttt{kmeans} benchmarks for the detailed analysis, since the former experiences exceptionally good performance on the KNL MIC, while the latter typifies the benchmarks suitability to GPU architectures as problem size increases.
+
+The KNL system appears to perform well on the \texttt{crc} benchmark and the affect of problem size on this application is presented as Figure \ref{fig:time-crc}.
+Examining the good performance of the KNL system only only we present execution time measurements for the Cyclic Redundancy Check \texttt{crc} benchmark which represents the Combinational Logic dwarf, and is probably due to the low floating-point intensity of the crc computation[@joshi2016thesis].
+The \texttt{crc} benchmark is a standout in benchmarks for the MIC; It is one of the only applications where the MIC is competitive with the performance on the whole mix of accelerators. Starting with the tiny size, it experiences comparable performance to all of the older GPUs, for the small size it offers similar performance to the latest Nvidia GPUs, and for the medium and large problem sizes it is almost the best performing device rivalling the CPU accelerators.
+
+We have omitted the KNL MIC platform from the \texttt{kmeans} results in Figure \ref{time:kmeans} because they are typically an order of magnitude worse than the other devices in an attempt to preserve the details between the runtimes of the other accelerators.
+They are also presented unaltered with the MIC device in Appendix \ref{appendix:time-results}.
+The devices can be considered grouped in this analysis, CPU devices (1-3) presented as purple comprise a group, the high performance GPUs designed for scientific workloads form  a accelerator device group (devices 7-9) and are presented in green, the modern Nvidia GPUs in blue to the left of green HPC GPUs are another group of devices (4-6), and the last group consists of the older AMD GPUs (devices 10-14) and are blue to the right of the green results.
+In general as problem size increases general trends emerge, for instance, the order of devices in a group rarely changes and the magnitude of differences only increases with problem size.
+The CPU accelerator group performs worse as the problem size increases, this is because performance is tightly bound to the level of the cache hierarchy used.
+The modern Nvidia GPU was the 2nd fastest set of devices in the tiny problem size, and this performance improved under demand of larger workloads, and culminates in being 2-5$\times$ faster than the CPU devices.
+HPC GPUs had average performance over the increasing problem sizes, and the HD7970 GPU suffered worse runtimes relative to the rest of the AMD gaming GPUs as problem size increased.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{figures/chapter-3/medium_apps}
+    \caption{Kernel execution times for the medium problem sized benchmarks on the full range of accelerators.}
+    \label{fig:time-medium}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{figures/chapter-3/gem_nqueens_hmm_and_swat}
+    \caption{Kernel execution times for the single problem sized benchmarks on the full range of accelerators.}
+    \label{fig:time-fixed}
+\end{figure}
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{figures/chapter-3/crc}
+    \caption{Kernel execution times for the {\bf crc} benchmark on different hardware platforms}
+    \label{fig:time-crc}
+\end{figure*}
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{figures/chapter-3/kmeans}
+    \caption{Kernel execution times for the {\bf kmeans} benchmark on different hardware platforms}
+    \label{fig:time-kmeans}
+\end{figure*}
+
+Figure\ \ref{fig:time-crc} shows the execution times for the \texttt{crc} benchmark over 50 iterations on each of the target architectures, including the KNL MIC.
+The entire set of results and a detailed discussion is presented in Appendix \ref{appendix:time-results}.
+
+<!--
 We first present execution time measurements for each benchmark, starting with the Cyclic Redundancy Check \texttt{crc} benchmark which represents the Combinational Logic dwarf.
 
 \begin{figure*}[t]
@@ -447,7 +522,7 @@ As a further example, Asanović et al. [@asanovic2006landscape] state that the S
 The Structured Grid dwarf is represented by the \texttt{srad} benchmark shown in Figure\ \ref{fig:medium-and-large-time2} (b).
 GPUs exhibit lower execution times than CPUs, which would be expected in a memory bandwidth-limited code as GPU devices offer higher bandwidth than a system interconnect.
 
-
+-->
 
 ### Energy
 

@@ -10,7 +10,8 @@ date: 29 January, 2019 #\today
 * Used in computationally intensive tasks and are a critical component in current scientific research.
 * Essential in simulations for quantum mechanics, weather forecasting, climate research, oil and gas exploration and molecular modeling, etc.
 * However require huge amounts of electricity to operate – the Summit, currently number one in the TOP500, requires 8.8 MW to power, which is in the capacity of a small coal power plant.
-* To reduce this large energy footprint supercomputers are becoming increasingly heterogeneous.
+* To reduce this large energy footprint supercomputers are becoming increasingly heterogeneous -- by using accelerators.
+* Accelerators: dedicated hardware which can accelerate particular classes of problems.
 
 #Trends in Supercomputing -- A view from the Top500
 
@@ -36,9 +37,7 @@ date: 29 January, 2019 #\today
 \item As of June 2018
 \item 7 / 10 use accelerators
 \item Newest is Summit -- based on IBM Power9 with NVLINK and CAPI
-\item All devices have an OpenCL runtime
-\item Reliance on accelerators is increasing
-\item Scheduling to the most appropriate device is an open problem
+\item Reliance on accelerators is currently high
 \end{itemize}
 \end{column}
 \end{columns}
@@ -69,15 +68,16 @@ We present an extended and enhanced version of the Open- Dwarfs OpenCL benchmark
 # Schedulers and the Importance of Prediction
 
 * Increasingly heterogeneous at a node level.
+* Scheduling work to the most appropriate device is an open problem!
 * Schedulers responsible for choosing the right tool for the job.
 * Accelerator aware schedulers include StarPU \footnote{C. Augonnet, S. Thibault, R. Namyst, and P.-A. Wacrenier, “StarPU: A unified platform for task scheduling on heterogeneous multicore architectures,” Concurrency and Computation: Practice and Experience, vol. 23, no. 2, pp. 187–198, 2011.}, Ompss \footnote{A. Duran et al., “Ompss: A proposal for programming heterogeneous multi-core architectures,” Parallel Processing Letters, vol. 21, no. 02, pp. 173–193, 2011.} and CoreTSAR \footnote{T. R. Scogland, W.-c. Feng, B. Rountree, and B. R. de Supinski, “Coretsar: Adaptive worksharing for heterogeneous systems,” in International supercomputing conference, 2014, pp. 172–186.}.
 
 # The Problem
 
-* Schedulers track dependencies within tasks and schedule to minimize, compute time/energy, compute bandwidth and latency.
+* Schedulers track dependencies within tasks and schedule to minimize compute time/energy, compute bandwidth and latency.
 * Scheduling work to the most appropriate accelerator at the granularity of function call level or the work inside a single parallel region.
 * Better manage resources of supercomputers by keeping codes running on the best accelerator.
-* *But* current approaches run every new code on all available accelerators to determine initial performance $\rightarrow$ wasteful!
+* **But** current approaches run every new code on all available accelerators to determine initial performance $\rightarrow$ wasteful!
 
 # Thesis Statement
 
@@ -95,7 +95,7 @@ We present an extended and enhanced version of the Open- Dwarfs OpenCL benchmark
 
 * Open Computing Language (OpenCL) is an open standard.
 * Allows computationally intensive codes -- kernels -- to be written once and run on any compliant accelerator.
-* Most vendors are compliant to basic standards.
+* Most vendors are compliant to basic standards -- most devices in the TOP500.
 * Application code can be written directly in OpenCL, and
 * Can be used as a back-end for higher level languages -- OpenMP runtime implemented for TI Keystone II DSP architecture\footnote{Mitra, G. et al. 2014. Implementation and optimization of the OpenMP accelerator model for the TI Keystone II architecture. International workshop on openmp (2014), 202–214.}.
 * Increased relevancy for FPGA programming
@@ -531,11 +531,9 @@ large   & 19.6{ }       & 69300{ }{ }   & $\approx$3540$\times$             & 20
 \begin{itemize}
 \item Prediction error across all benchmarks for models trained with varying numbers of kernels.
 \item How many kernels to add for training -- what's enough?
-\item Another study performed to see how error changes w.r.t. number of kernels in training
 \item Uses random selection for each random count -- again see thesis for full details
 \item Error tapers off for more kernels!
-\item gradient still significant at 37 kernels $\rightarrow$ could still benefit from more.
-%<!--item However, the model proposed is a proof of concept and suggests that a general purpose model is attainable and may not require many more kernels. -->
+\item Gradient still significant at 37 kernels $\rightarrow$ could still benefit from more.
 \end{itemize}
 \end{column}
 \end{columns}
@@ -613,8 +611,7 @@ If predictions deviate significantly from the measured performance, can fall bac
 # Future Work -- EOD
 
 * Autotuner integration -- others \footnote{N. Chaimov, B. Norris, and A. Malony, “Toward multi-target autotuning for accelerators,” ICPADS, 2014, pp. 534–541.} \footnote{C. Nugteren and V. Codreanu, “CLTune: A generic auto-tuner for OpenCL kernels,” MCSoC, 2015, pp. 195–202.} \footnote{J. Price and S. McIntosh-Smith, “Analyzing and improving performance portability of opencl applications via auto-tuning,” IWOCL, 2017, p. 14.} have shown good performance. 
-* What does that mean for the scheduling workflow?
-* Use the predictive model for synthetic benchmark study
+* What does autotuning mean for the scheduling workflow?
 
 # Conclusions -- AIWC
 
@@ -647,10 +644,10 @@ If predictions deviate significantly from the measured performance, can fall bac
 * Presented highly accurate model for predicting execution times of OpenCL kernels.
 * The predictions are highly accurate, differing from the measured experimental run-times by an average of only 1.2%
 * Correspond to execution time mispredictions of 9 $\mu$s to 1 sec according to problem size.
-* Previously unseen code can be instrumented once, AIWC metrics embedded for quick performance prediction.
+* Previously unencountered code can be instrumented once, AIWC metrics embedded for quick performance prediction.
 * Same methodology could be applied to energy usage and hardware events.
 
-# Future Work -- Scheduling
+# Future Work -- Prediction
 
 * Scheduler integration -- StarPU, Ompss, CoreTsar or AutoMatch?
 * Potential to be more prescriptive than the Berkeley Dwarf Taxonomy
@@ -661,24 +658,23 @@ If predictions deviate significantly from the measured performance, can fall bac
 
 # Open Questions, Potential Collaborations and Next Steps
 
+* Language Agnostic Architecture Independent Workload Characterization
+* Use the predictive model for synthetic benchmark study
+* What does this mean for FPGAs?
+* Building a prototype scheduler using our predictions
+
+# Open Questions, Potential Collaborations and Next Steps -- Continued.
+
+* Are you interested in:
+    - presenting a reduced feature space?
+    - OpenMP, OpenACC or SYCL evaluation or extensions for AIWC?
+* Have suggestions for more/better AIWC metrics -- or think we've missed some?
+* Think this descriptive tool to guide developers would be useful? Your input would be appreciated!
 * Do you have unusual/real-world applications:
     + that you think we've missed?
     + large applications that could benefit from predictions?
     + where you think the predictions will fail? 
-* Quickly test with Docker & Jupyter artefact.
-* Building a prototype scheduler using our predictions?
-* Access/Interest in other hardware?
-* What does this mean for FPGAs?
-* Interested in OpenMP, OpenACC or SYCL evaluation or extensions for AIWC?
-
-# Open Questions, Potential Collaborations and Next Steps -- Continued.
-
-* Have suggestions for more/better AIWC metrics -- or think we've missed some?
-* Interested in presenting a reduced feature space?
-* Think this descriptive tool to guide developers would be useful? Your input would be appreciated!
-* Have applications with weird optimization results? Will changes in metrics show this?
-* Anyone an expert in OpenACC back-end -- translation to OpenCL kernels for Oclgrind?
-* We should collaborate!
+* We should collaborate! (Ask me for docker & jupyter artefacts)
 
 # Publications
 \begin{itemize}

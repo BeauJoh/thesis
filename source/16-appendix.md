@@ -4,28 +4,34 @@
 \appendixtitleon
 \appendixtitletocon
 
-\begin{appendices}
-\chapter{Time Results}
+\appendix
 
-The results are colored according to accelerator type: purple for CPU devices, blue for consumer GPUs, green for HPC GPUs, and yellow for the KNL MIC.
-Execution times for \texttt{crc} are lowest on CPU-type architectures, probably due to the low floating-point intensity of the CRC computation\[Ch. 6\][@joshi2016thesis].
-Excluding \texttt{crc}, all the other benchmarks perform best on GPU type accelerators; furthermore, the performance on the KNL is poor due to the lack of support for wide vector registers in Intel's OpenCL SDK.
-We, therefore, omit results for KNL for the remaining benchmarks.
+#Time Results{#appendix:time-results}
 
-Figures\ \ref{fig:tiny-and-small-time},\ \ref{fig:medium-and-large-time},\ \ref{fig:tiny-and-small-time2} and\ \ref{fig:medium-and-large-time2} shows the distribution of kernel execution times for the remaining benchmarks.
-The **tiny** and **small** sizes for the `kmeans`, `lud`, `csr` and `dwt` benchmarks are presented in Figure\ \ref{fig:tiny-and-small-time} results, the **medium** and **large** problem sizes are presented in Figure\ \ref{fig:medium-and-large-time}.
-Similarly, the final three applications which support multiple problem sizes -- \texttt{fft}, \texttt{srad} and \texttt{nw} -- display the time results for **tiny** and **small** in Figure\ \ref{fig:tiny-and-small-time2}, and **medium** and **large** times are shown in Figure\ \ref{fig:medium-and-large-time2}.
+The primary purpose of including these time results is to demonstrate the benefits of the extensions made to the OpenDwarfs Benchmark suite.
+In this appendix we present all runtime results collected from EOD and use the benchmarks to assess and compare performance across the chosen hardware systems.
+The use of LibSciBench allowed high resolution timing measurements over multiple code regions.
+To demonstrate the portability of the Extended OpenDwarfs benchmark suite, we present results from 12 benchmarks running on 15 different devices representing four distinct classes of accelerator.
+For eight of the benchmarks, we measured multiple problem sizes and observed distinctly different scaling patterns between devices.
+This underscores the importance of allowing a choice of problem size in a benchmarking suite.
+The remaining four benchmarks only support one fixed problem size and are included in Figure \ref{fig:time3}.
+
+Figures\ \ref{fig:tiny-and-small-time},\ \ref{fig:medium-and-large-time},\ \ref{fig:tiny-and-small-time2} and\ \ref{fig:medium-and-large-time2} shows the distribution of kernel execution times for the benchmarks with multiple problem sizes.
+The **tiny** and **small** sizes for the \texttt{kmeans}, \texttt{lud}, \texttt{csr} and \texttt{dwt} benchmarks are presented in Figure\ \ref{fig:tiny-and-small-time} results, the **medium** and **large** problem sizes are presented in Figure\ \ref{fig:medium-and-large-time}.
+Similarly, the remaining four applications which support multiple problem sizes -- \texttt{fft}, \texttt{srad}, \texttt{crc} and \texttt{nw} -- display the time results for **tiny** and **small** in Figure\ \ref{fig:tiny-and-small-time2}, and **medium** and **large** times are shown in Figure\ \ref{fig:medium-and-large-time2}.
+
 Some benchmarks execute more than one kernel on the accelerator device; the reported iteration time is the sum of all compute time spent on the accelerator for all kernels.
 Each benchmark corresponds to a particular dwarf: 
 From Figures\ \ref{fig:tiny-and-small-time} and \ref{fig:medium-and-large-time} (a) (\texttt{kmeans}) represents the MapReduce dwarf,
 (b) (\texttt{lud}) represents the Dense Linear Algebra dwarf,
 (c) (\texttt{csr}) represents Sparse Linear Algebra, 
-(d)  (\texttt{dwt}) and from Figures\ \ref{fig:tiny-and-small-time2}\ (a) and \ref{fig:medium-and-large-time2}\ (a) (\texttt{fft}) represent Spectral Methods,
-(b) (\texttt{srad}) represents the Structured Grid dwarf and (c) (\texttt{nw}) represents Dynamic Programming.
+(d)  (\texttt{dwt}) and from Figures\ \ref{fig:tiny-and-small-time2}\ (a) and \ref{fig:medium-and-large-time2}\ (a) (\texttt{fft}) represents Spectral Methods,
+(b) (\texttt{srad}) represents the Structured Grid dwarf,  (c) (\texttt{crc}) represents Combinational Logic and (d) (\texttt{nw}) represents Dynamic Programming.
 
 Finally, Figure \ref{fig:time3} presents results for the four applications with restricted problem sizes and only one problem size is shown.
 The N-body Methods dwarf is represented by (\texttt{gem}) and the results are shown in Figure \ref{fig:time3}\ (a), the Backtrack \& Branch and Bound dwarf is represented by the (\texttt{nqueens}) application in Figure \ref{fig:time3}\ (b), (\texttt{hmm}) results from Figure \ref{fig:time3}\ (c) represent the Graphical Models dwarf and (\texttt{swat}) from Figure \ref{fig:time3}\ (d) also depicts the Dynamic Programming dwarf.
 
+The results are colored according to accelerator type: purple for CPU devices, blue for consumer GPUs, green for HPC GPUs, and yellow for the KNL MIC.
 Examining the transition from tiny to large problem sizes in Figures \ref{fig:tiny-and-small-time2}\ (b) and \ref{fig:medium-and-large-time2}\ (b) shows the performance gap between CPU and GPU architectures widening for \texttt{srad} -- indicating codes representative of structured grid dwarfs are well suited to GPUs.
 
 In contrast, \texttt{nw} -- (b) from Figures\ \ref{fig:tiny-and-small-time2} and\ \ref{fig:medium-and-large-time2} -- shows that the Intel CPUs and NVIDIA GPUs perform comparably for all problem sizes, whereas all AMD GPUs exhibit worse performance as size increases. This suggests that performance for this Dynamic Programming problem cannot be explained solely by considering accelerator type and may be tied to micro-architecture or OpenCL runtime support.
@@ -45,6 +51,20 @@ However, the older i5-3550 CPU has a smaller L3 cache and exhibits worse perform
 
 Increasing problem size also hinders the performance in certain circumstances for GPU devices.
 For example, (b) from Figures\ \ref{fig:tiny-and-small-time2} and \ref{fig:medium-and-large-time2} shows a widening performance gap over each increase in problem size between AMD GPUs and the other devices.
+
+Execution times for \texttt{crc} are lowest on CPU-type architectures, probably due to the low floating-point intensity of the CRC computation [@joshi2016thesis].
+In general, the performance on the Xeon Phi 7210 MIC is poor due to the lack of support for wide vector registers in Intel's OpenCL SDK.
+The low clock frequency and inability to exploit sufficient levels of parallelism on tiny and small problem sizes usually means it is the worst performer on these sized benchmarks.
+As we move onto larger problem sizes the MIC outperforms the AMD GPUs on the largest \texttt{lud} and \texttt{nw} benchmarks.
+Similarly for the large \texttt{srad} the MIC bests most of the CPUs.
+The \texttt{crc} benchmark is a standout in benchmarks for the MIC; It is one of the only applications where the MIC is competitive with the performance on the whole mix of accelerators. Starting with the tiny size, it experiences comparable performance to all of the older GPUs, for the small size it offers similar performance to the latest Nvidia GPUs, and for the medium and large problem sizes it is almost the best performing device rivalling the CPU accelerators.
+
+For the fixed problem sized benchmarks, presented in Figure \ref{fig:time3}, the per kernel invocation is relatively low regardless of device selected for the (a) \texttt{gem} or (b) \texttt{nqueens} benchmark.
+The newer Nvidia GPUs collectively tended to be the best performed accelerator on \texttt{gem} taking $\approx110\mu$s while the MIC saw the worst performance at 0.85 ms.
+The \texttt{nqueens} benchmark saw the i7-6700K and i5-3550 CPUs finish the kernel in $\approx80\mu$s to $\approx100\mu$s per invocation, respectively, again the MIC had the worst performance at $900\mu$s on average.
+Figures (c) \texttt{hmm} and (d) \texttt{swat} are more computationally intensive and took longer to complete.
+The \texttt{hmm} benchmark shows the CPU and modern Nvidia GPUs performing equally well < 1ms, the older AMD and HPC GPUs ranged from 1-3ms, and the MIC averaged 7.5ms per run.
+Finally, \texttt{swat} had the modern Nvidia GPUs as the fastest devices at $\approx5$ms and ranged up to 40ms on the MIC which was the slowest device for this benchmark.
 
 Predicted application properties for the various Berkeley Dwarfs are evident in the measured runtime results.
 For example, Asanović et al. [@asanovic2006landscape] state that applications from the Spectral Methods dwarf is memory latency limited.
@@ -84,8 +104,14 @@ GPUs exhibit lower execution times than CPUs, which would be expected in a memor
     \label{fig:medium-and-large-time2}
 \end{figure*}
 
-\chapter{Diversity Analysis}
-\label{appendix:diversity-analysis}
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{figures/chapter-3/gem_nqueens_hmm_and_swat}
+    \caption{Single problem sized benchmarks of kernel execution times on different hardware platforms}
+    \label{fig:time3}
+\end{figure*}
+
+#Diversity Analysis{#appendix:diversity-analysis}
 
 A brief overview of the diversity analysis conducted is presented in this appendix.
 Features from AIWC are used as the predictor variables in the random forest model -- presented in Chapter 5.
@@ -124,14 +150,14 @@ The visualization and the same methodology can be used to justify the inclusion 
     \label{fig:tsne-kmeans}
 \end{figure*}
 
+<!--
 %\begin{figure*}[t]
 %    \centering
 %    \includegraphics[width=\textwidth,keepaspectratio]{figures/appendix/show_hierarchical_result-1.pdf}
 %    \caption{The t-SNE with hierarchical clustering to show Principal Components.}
 %    \label{fig:tsne-hierarchical}
 %\end{figure*}
-
-\end{appendices}
+-->
 
 <!--
 \appendix
