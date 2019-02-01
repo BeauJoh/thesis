@@ -301,6 +301,7 @@ The bioinformatics subset of applications from the extended OpenDwarfs benchmark
 Finally, the MapReduce dwarf features the `kmeans` benchmark, which can be used directly in both pattern identification and gene similarity comparisons.
 Figures\ \ref{fig:aiwc} and \ref{fig:aiwc-hmm} present radar/Kiviat diagrams of architecture-independent characteristics collected for each of the bioinformatics benchmarks.
 All results are presented over a single **small** problem size, and show the multiple kernels required to compute each benchmark application as superimposed plots in the same diagram.
+The **small** size was selected since `hmm`, `gem` and `swat` benchmarks are from the fixed benchmarks -- they only offer one size -- however the execution times typify those seen in the **small** sized `nw` and `kmeans` applications.
 
 \begin{figure*}
     \centering
@@ -456,11 +457,4 @@ AIWC was also used to evaluate the performance bottlenecks of bioinformatics cod
 When also coupled with the runtime performance results of Chapter 3, it is interesting to note that optimal accelerators are typically GPU based, given the high available thread parallelism and high barrier synchronization counts of many sequencing analysis applications.
 However, the bioinformatics applications examined contain few kernels with higher branch and memory access entropies, interspersed with the GPU suited workloads, which suggests that CPUs are critical to achieving good performance on these systems.
 Indeed, partitioning applications by scheduling kernel to their optimal accelerator may generally provide better performance for HPC bioinformatics applications.
-
-<!-- OpenCL Performance Prediction using Architecture-Independent Features HPCS-DRSN -->
-Recently, AIWC has been used for predictive modelling on a set of 15 compute devices including CPUs, GPUs and MIC.
-The AIWC metrics generated from the full set of Extended OpenDwarfs kernels were used as input variables in a regression model to predict kernel execution time on each device [@johnston2018opencl].
-The model predictions differed from the measured experimental results by an average of 1.1%, which corresponds to actual execution time mispredictions of 8 $\mu$s to 1 second according to problem size.
-From the accuracy of these predictions, we can conclude that while our choice of AIWC metrics is not necessarily optimal, they are sufficient to characterize the behaviour of OpenCL kernel codes and identify the optimal execution device for a particular kernel.
-This is discussed in detail in the next chapter.
 

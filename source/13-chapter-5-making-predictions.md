@@ -1,4 +1,6 @@
 # Making Performance Predictions for Scheduling {#sec:chapter-5-accelerator-predictions}
+
+\todo[inline]{mention AIWC used as inputs into predictor model}
 \todo{How starPU could use these metrics}
 The OpenCL programming framework is well-suited heterogeneous computing environments, as a single OpenCL code may be executed on multiple different device types including most CPU, GPU and FPGA devices.
 Predicting the performance of a particular application on a given device is challenging due to complex interactions between the computational requirements of the code and the capabilities of the target device.
@@ -336,6 +338,11 @@ Additionally, the `lud_diagonal` kernel suffers from systematic under-prediction
 As such, the proposed model provides sufficiently accurate execution time predictions to be useful for scheduling to heterogeneous compute devices on supercomputers.
 
 ##Discussion
+
+
+The AIWC metrics generated from the full set of Extended OpenDwarfs kernels are used as input variables in a regression model to predict kernel execution time on each device [@johnston2018opencl].
+From the accuracy of these predictions, we can conclude that while our choice of AIWC metrics is not necessarily optimal, they are sufficient to characterize the behaviour of OpenCL kernel codes and identify the optimal execution device for a particular kernel.
+The model predictions differed from the measured experimental results by an average of 1.1%, which corresponds to actual execution time mispredictions of 8 $\mu$s to 1 second according to problem size.
 
 If the predictive model were used in a real-world setting -- say on a HPC node -- the final metrics collected by AIWC could be embedded as a comment at the beginning of each kernel code.
 This would follow the use-case for AIWC as a plugin to the OpenCL debugger Oclgrind.
