@@ -2,7 +2,7 @@
 #Conclusions and Future Directions
 
 This thesis demonstrates that architecture-independent features are sufficient to characterize codes and to predict performance so as to schedule the optimal device.
-We proposed an extended benchmark suite which supports diverse accelerators, and demonstrated the performance of these devices over a large number of codes / kernels.
+We proposed an extended benchmark suite which supports diverse accelerators and demonstrated the performance of these devices over a large number of codes/kernels.
 We developed the Architecture-Independent Workload Characterization Tool (AIWC) to examine the structural characteristics, the degree of optimization and constraints of the implementation of kernels to offer an understanding of the algorithm without having to consider the hardware.
 Finally, we used these AIWC metrics to identify the most suitable device using a predictive regression model.
 
@@ -11,7 +11,7 @@ Reproducible results can be generated quickly and over a range of heterogeneous 
 A full set of execution times and other performance metrics were generated using 15 devices over 12 benchmarks and 42 kernels.
 The energy and hardware events metrics allowed direct performance evaluations to be made between devices.
 
-Examining the performance of the benchmark suite over a range of devices allowed a direct comparison to be made between these devices on a per application basis.
+Examining the performance of the benchmark suite over a range of devices allowed a direct comparison to be made between these devices on a per-application basis.
 The exploration of the differences in codes was used to explain the performance differences on heterogeneous devices.
 To this end, the AIWC is capable of identifying the fundamental characteristics of programs free from any specific device.
 AIWC allowed extraction of a set of pre-defined features or characteristics for analysis of kernels.
@@ -24,7 +24,7 @@ We showed that AIWC and the predictive model support a methodology to achieve be
 Fine-grained scheduling decisions could be supported with the high accuracy of predictions.
 This is the obvious next step for the work presented in this thesis and will hopefully become a significant addition to device selection in HPC workload scheduling.
 The contents of this thesis fall into the areas of benchmarking, workload characterization, high-performance computing, predictive modelling, software engineering and performance evaluation.
-Its main goal, is however, improving the performance of large HPC systems by providing useful scheduling information of scientific applications to the most appropriate accelerator.
+Its main goal is, however, improving the performance of large HPC systems by providing useful scheduling information of scientific applications to the most appropriate accelerator.
 We hope this work will modestly contribute to the increasing interaction between domain sciences and high-performance computing.
 As tool builders for domain sciences, computer scientists face a challenging task imposed by increasingly complex computer architectures.
 
@@ -33,26 +33,26 @@ The contributions of each Chapter are now discussed in greater detail, concludin
 ## Extended OpenDwarfs -- EOD
 
 We have performed essential curation of the OpenDwarfs benchmark suite in Chapter 3.
-OpenDwarfs was the selected benchmark suite on which to apply our extensions as it:
+OpenDwarfs was the selected benchmark suite on which our extensions were applied, as it:
 
 1) solely focused on an OpenCL implementation, which avoids the fragmentation and different optimizations between language codes common to the SHOC and Rodinia Suites,
 2) existing benchmarks had already been classified according to the Dwarf Taxonomy to justify each addition, and,
 3) this work was current with the latest use as an evaluation of OpenCL for FPGA devices [@krommydas2016opendwarfs].
 
-We removed hardware specific optimizations from codes that would either diminish performance, or crash the application on other devices, these optimizations adversely affect the general-purpose nature which is critical to a benchmark suite.
-We improved coverage of spectral methods by adding a new Discrete Wavelet Transform benchmark, and replacing the previous inadequate `fft` benchmark.
+We removed hardware specific optimizations from codes that would either diminish performance or crash the application on other devices, these optimizations adversely affect the general-purpose nature which is critical to a benchmark suite.
+We improved coverage of spectral methods by adding a new Discrete Wavelet Transform benchmark and replacing the previous inadequate `fft` benchmark.
 All benchmarks were enhanced to allow multiple problem sizes; in Chapter 3 we reported results for four different problem sizes, selected according to the memory hierarchy of CPU systems as motivated by Marjanović's findings [@marjanovic2016hpc].
-These can now be easily adjusted for next generation accelerator systems using the methodology outlined in Section\ \ref{sec:setting_sizes}.
+These can now be easily adjusted for next-generation accelerator systems using the methodology outlined in Section\ \ref{sec:setting_sizes}.
 
 All of the benchmarks presented in the original OpenDwarfs [@krommydas2016opendwarfs] paper were rerun on current hardware.
 This was done for two reasons, firstly to attempt to replicate the original findings to the state-of-the-art systems and secondly to extend the usefulness of the benchmark suite.
-Re-examining the original codes on range of modern hardware showed limitations, such as the fixed problem sizes along with many platform-specific optimizations (such as local work-group size).
-In the best case, such optimizations resulted in sub-optimal performance for newer systems (many problem sizes favored the original GPUs on which they were originally run).
+Re-examining the original codes on a range of modern hardware showed limitations, such as the fixed problem sizes along with many platform-specific optimizations (such as local work-group size).
+In the best case, such optimizations resulted in sub-optimal performance for newer systems (many problem sizes favoured the original GPUs on which they were originally run).
 In the worst case, they resulted in failures when running on untested platforms or changed execution arguments.
 We fixed these issues in the Extended OpenDwarfs Benchmark suite to support multiple devices, over multiple problem sizes -- so it can be applied to embedded systems as well as top end
 scientific processors -- and added the DWT and a stable FFT implementation to allow the benchmarks to span as many of the Dwarfs as possible.
 
-Finally a major contribution of this work was to integrate LibSciBench into the benchmark suite, which add high precision timing and support for statistical analysis and visualization.
+Finally, a major contribution of this work was to integrate LibSciBench into the benchmark suite, which adds high precision timing and support for statistical analysis and visualization.
 This has allowed collection of PAPI, energy and high resolution (sub-microsecond) time measurements at all stages of each benchmark.
 The use of LibSciBench has also increased the reproducibility of timing data for both the current study and on new architectures in the future.
 
@@ -65,10 +65,10 @@ We have presented the Architecture-Independent Workload Characterization tool (A
 These features can be used to predict the most suitable device for a particular kernel, or to determine the limiting factors for performance on a particular device, allowing OpenCL developers to try alternative implementations of a program for the available accelerators -- for instance, by reorganizing branches, eliminating intermediate variables et cetera.
 The additional architecture independent characteristics of a scientific workload will be beneficial to both accelerator designers and computer engineers responsible for ensuring a suitable accelerator diversity for scientific codes on supercomputer nodes.
 
-Each OpenCL kernel presented in the Chapter 3 in EOD was been inspected using AIWC.
-Analysis using AIWC helps understand how the structure of kernels contributes to the varying runtime characteristics between devices, it is envisaged that this will be of greater importance in the future.
+Each OpenCL kernel presented in Chapter 3 of EOD was been inspected using AIWC.
+Analysis using AIWC helps to understand how the structure of kernels contributes to the varying runtime characteristics between devices, it is envisaged that this will be of greater importance in the future.
 
-The coverage of characteristics and the suitability of AIWC metrics was assessed in Chapter 5, where metrics -- from the collection over all EOD kernels and over all problem sizes -- are used as predictor variables to form a model to accurately predict execution time.
+The coverage of characteristics and the suitability of AIWC metrics was assessed in Chapter 5, where metrics -- from the collection of all EOD kernels and for all problem sizes -- are used as predictor variables to form a model to accurately predict execution time.
 This could, in turn, be directly used to schedule devices in the HPC multi-accelerator node setting.
 
 <!--
@@ -78,21 +78,21 @@ The feature-space collected from AIWC is also evaluated -- if accurate model pre
 AIWC is an additional tool to be used by developers and does not attempt to replace classical device-specific instrumentation and profiling.
 It can be used with the existing workflow.
 Indeed, since AIWC is a plugin into Oclgrind which is an OpenCL device simulator, and is mostly used for debugging, the developer may check for memory leaks and race conditions in their code and use the same tool -- but with the AIWC argument -- to examine its architecture-independent workload characteristics.
-Optimization could happen based on AIWC metrics, but does not exclude the ability to use hardware performance counters, PIN events or vendor specific profiler tools.
+Optimization could happen based on AIWC metrics but does not exclude the ability to use hardware performance counters, PIN events or vendor-specific profiler tools.
 AIWC is available on Github\footnote{https://github.com/BeauJoh/Oclgrind}, there is a Jupyter artefact to demonstrate how metrics are collected on the EOD benchmark suite and how the figures are produced\footnote{https://github.com/BeauJoh/aiwc-opencl-based-architecture-independent-workload-characterization-artefact/blob/master/AIWC-figures.ipynb}, there is also a Binder version of the artefact also available.\footnote{https://mybinder.org/v2/gh/BeauJoh/aiwc-opencl-based-architecture-independent-workload-characterization-artefact/master}
 
 
 ##Performance Prediction
 
-A highly accurate model was been presented in Chapter 5, and is capable of predicting execution times of OpenCL kernels on specific devices based on the computational characteristics captured by the AIWC tool.
+A highly accurate model has been presented in Chapter 5 and is capable of predicting execution times of OpenCL kernels on specific devices based on the computational characteristics captured by the AIWC tool.
 A real-world scheduler could be developed based on the accuracy of the presented model.
 
 We do not suppose that we have used a fully representative suite of kernels -- Section 6.4.1 outlines future work to address this -- however, we have shown that this approach can be used in the supercomputer accelerator scheduling setting, and the model can be extended/augmented with additional training kernels using the methodology presented in Chapter 5.
 
 To use this predictive model in a real-world setting, the final metrics collected by AIWC could be embedded as a comment at the beginning of each kernel code.
-This approach would allow the high accuracy of the predictive model without any significant overhead -- metrics are only generated and embedded once each kernel was written and could be done automatically with AIWC once a developer was happy that a code was ready to be shipped.
+This approach would allow the high accuracy of the predictive model without any significant overhead -- metrics are only generated and embedded once each kernel was written and could be done automatically with AIWC once a developer was ready for a code to be shipped.
 Separately, the training of the model would only need to occur when the HPC system is updated, such that, a new accelerator device is added, or the drivers, or compiler updated.
-The extent of model training is also largely automatic, and is based on the measured bias from the recorded runtimes -- if the node were updated the EOD suite would need be rerun over updated devices and the performance runtimes provided into a newly trained regression model.
+The extent of model training is also largely automatic and is based on the measured bias from the recorded runtimes -- if the node were updated the EOD suite would need to be rerun over updated devices and the performance runtimes provided into a newly trained regression model.
 The runtime results from EOD could also be saved in an online corpus/database with the corresponding devices name allowing the automatic training of one large shared model.
 
 Using the same predictive model for run-times generated over 6 years of different hardware and four processor generations shows both, that OpenCL has reached a position of maturity and stability, and also that the methodology of prediction is sound.
@@ -115,9 +115,9 @@ Adding autotuning support for kernel compiler level optimizations, such as level
 -->
 
 ### EOD
-The original goal of this research was to discover methods for choosing the best device for a particular computational task, for example to support scheduling decisions under time and/or energy constraints.
+The original goal of this research was to discover methods for choosing the best device for a particular computational task, for example, to support scheduling decisions under time and/or energy constraints.
 Until now, we found the available OpenCL benchmark suites were not rich enough to adequately characterize performance across the diverse range of applications and computational devices of interest.
-EOD and the work presented in Chapter 3 resulted in a flexible benchmark suite with results that could can be generated quickly and reliably on a range of accelerators, and formed a foundation for testing AIWC and the predictive model.
+EOD and the work presented in Chapter 3 resulted in a flexible benchmark suite with results that could be generated quickly and reliably on a range of accelerators, and formed a foundation for testing AIWC and the predictive model.
 We started to use the OpenTuner[@ansel:pact:2014] autotuning library to achieve the optimal performance of each device on all the benchmarks in EOD but realised that it is beyond the scope of this thesis.
 Others [@du2012cuda], [@spafford2010maestro], [@chaimov2014toward], [@nugteren2015cltune], [@Filipovic:2017:AOK:3152821.3152877], [@price2017analyzing] have shown that autotuners offer good performance for configuring OpenCL kernel parameters -- such as local workgroup size -- for the different accelerators and could be readily incorporated into EOD in a consistent manner.
 However, the presented execution times do not change the presented methodologies around workload characterization and prediction, individual features and the predictions may change with different tuning arguments but the use case is the same.
@@ -127,7 +127,6 @@ Schedulers will need to take autotuning and optimization into account but our pr
 In addition to comparing performance between devices, we would also like to develop some notion of "ideal" performance for each combination of benchmark and device, which would guide efforts to improve performance portability.
 This upper-bound for performance could arise from the AIWC analysis on each benchmark.
 Additional architectures such as FPGA, DSP and Radeon Open Compute based APUs will be considered.
-
 
 <!-- AIWC future work -->
 ### AIWC
@@ -140,7 +139,7 @@ We expect that the additional AIWC metrics will generate a comprehensive feature
 
 A major limitation of running large applications under AIWC is the high memory footprint -- as discussed in Chapter\ \ref{chapter4-aiwc-limitations}.
 Memory access entropy scores require a full recorded trace of every memory access during a kernel's execution.
-However, a graceful degradation in performance is preferable to an abrupt crash in AIWC if virtual memory is exhausted.
+However, graceful degradation in performance is preferable to an abrupt crash in AIWC if virtual memory is exhausted.
 For this reason, work is currently being undertaken for an optional build of AIWC with low memory usage by writing these traces to disk.
 
 ### Predictions
@@ -148,21 +147,27 @@ We expect that a similar model could be constructed to predict energy or power c
 However, we have not yet collected the energy measurements required to construct such a model.
 
 We have not examined which AIWC features added the most value to the predictive model since the random forest algorithm is good at handling redundancy.
-However presenting a subset of the metrics may eliminate complexity if the developer wished to directly examine the kiviat diagrams and how that impacted the performance of their code -- having fewer dimensions and showing only the most important data may be more descriptive for the developer when making these considerations.
+However, presenting a subset of the metrics may eliminate complexity if the developer wished to directly examine the kiviat diagrams and how that impacted the performance of their code -- having fewer dimensions and showing only the most important data may be more descriptive for the developer when making these considerations.
 Principal component analysis of these features was considered when evaluating potential modelling approaches, and is included in Appendix B, however presenting the most relevant subset of AIWC metrics for modelling and for viewing will be performed in greater depth the future.
 
+Kumar et al. [@Kumar:2016:PPE:2925426.2926269] provide an interesting and different use of Shao's [@shao2013isa] ISA-independent features.
+They develop Peruse, a tool to characterize the features of loops at an IR level to guide a programmer's efforts in locating loops suitable for parallel execution.
+In different to ours, they use machine-learning algorithms directly on ISA metrics to predict the accelerability of loops.
+The model they present predicts the speedup of loops with an accuracy of 79%.
+It is interesting and promising that a similar methodology has been developed based on the same intuition and common set of tools, and is exciting to see if both our works could be cobbled together in the form of scheduling abstract for-loops instead of OpenCL kernels.
+This would allow a general language approach to accelerator scheduling -- say on C codes instead of depending on OpenCL specifically.
 
 Following the work presented in this thesis, five additional research topics have become apparent and will be pursued. 
 They fall outside of the original scope of this thesis but are nonetheless important.
 
 ### Finding holes in benchmarks: Evaluating the coverage and corresponding performance predictions for conventional vs synthetic benchmarking
-While the focus on extending the OpenDwarfs Benchmark suite for this thesis was on the development of a testbed that can be used to evaluate approaches to prediction for scheduling, now that the prediction methodology has been presented it can be used to evaluate the coverage/diversity of the benchmarks included in the EOD benchmark suite.
+While the focus on extending the OpenDwarfs Benchmark suite for this thesis was on the development of a testbed that can be used to evaluate approaches to the prediction for scheduling, now that the prediction methodology has been presented it can be used to evaluate the coverage/diversity of the benchmarks included in the EOD benchmark suite.
 This work is currently focused on augmenting EOD with synthetic benchmarks.
 The predictive model is used to make predictions on previously unseen codes against the trained set of EOD runtime results.
 These unseen codes are randomly generated using the Machine-Learning OpenCL kernel generation framework (CLgen) by Cummins et al. [@cummins2017a] with a training corpus of all OpenCL applications available on GitHub.
 The previous success of this model to predict execution times simultaneously across many devices with high accuracy has led us to believe that the Extended OpenDwarfs Benchmark Suite is a good platform for training – it adequately covers the feature space for many scientific problems typical of the HPC setting.
 We expect that testing the model with synthetic benchmarking may identify gaps in the coverage provided by the existing suite of benchmarks, which would manifest as poor predictions on particular synthetic kernels.
-These poorly predicted kernels could be added back into the EOD benchmark suite -- thus better encompassing work expected to be run on these accelerator devices.
+These poorly predicted kernels could be added back into the EOD benchmark suite -- thus better encompassing the work expected to be run on these accelerator devices.
 
 ### AIWC for the Masses: Towards language-agnostic architecture-independent workload characterization
 
@@ -192,8 +197,8 @@ Finally, optimization strategies could be hinted to by AIWC but this is discusse
 Porting large HPC codes from conventional CPU architectures to accelerators is intensive on the developer.
 However, many codes currently run on supercomputer systems are legacy and as these systems increasingly utilize accelerators, more of this porting work will be required.
 Many of these codes were written in OpenMP and OpenACC making them a suitable target for the language-agnostic architecture-independent workload characterization.
-In addition to supporting scheduling as presented in this thesis, AIWC and the predictive model could be used to identify primary characteristics of codes run on supercomputers.
-For instance, if the supercomputing center knows which codes are likely to be frequently executed, by identifying the characteristics of these codes and the most suitable accelerators they can design nodes with the optimal accelerator configurations.
+In addition to supporting scheduling as presented in this thesis, AIWC and the predictive model could be used to identify the primary characteristics of codes run on supercomputers.
+For instance, if the supercomputing centre knows which codes are likely to be frequently executed, by identifying the characteristics of these codes and the most suitable accelerators they can design nodes with the optimal accelerator configurations.
 This can be used to suggest optimal configurations of accelerators for the next-generation of supercomputers.
 Additionally, the AIWC metrics can be used to identify application kernels with the greatest potential to benefit from architecture specific optimization.
 
@@ -212,7 +217,7 @@ This is outside the scope of this thesis but pursuing this work increases the re
 ### Faster FPGA development with AIWC and the Predictive Model
 
 Finally, complicated OpenCL codes can take many hours -- if not days -- to compile for FPGA devices.
-This makes the trial-and-error approach commonly taken when optimizing a code for a device untenable.
+This makes the trial-and-error approach commonly taken when optimizing code for a device untenable.
 Given the accuracy of the predictive model, there is a use-case for AIWC to augment this workflow.
 Speculative optimization changes could be made to an OpenCL code, the AIWC metric regenerated and predictive model queried, if the predicted device execution result is better it could indicate a suitable optimization.
 This would potentially take seconds instead of the long compile times when evaluating FPGA performance.
@@ -221,6 +226,6 @@ The inherent difficulty of predicting application performance on a reconfigurabl
 ## Closing Remarks
 
 We hope the work presented in this thesis will serve as the basis for the scheduling of HPC workloads as accelerator usage becomes more prevalent in this space.
-Our next goal is to incorporate our methodology with AIWC and random forest models into the StarPU accelerator scheduler, this will serve as a prototype scheduler, which we hope will become the norm on the next generation of accelerator based supercomputers.
+Our next goal is to incorporate our methodology with AIWC and random forest models into the StarPU accelerator scheduler, this will serve as a prototype scheduler, which we hope will become the norm on the next generation of accelerator-based supercomputers.
 We hope our work on benchmarking, workload characterization and prediction has made a modest contribution and that the proposed techniques may help HPC developers make sense of an increasingly complex hardware and software environment.
 

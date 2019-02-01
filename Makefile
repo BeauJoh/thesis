@@ -7,14 +7,14 @@ chapter-3-figures: chapter-3-analysis/generate_thesis_runtime_charts.R chapter-3
 survey: analysis/analysis.R
 	cd analysis; Rscript analysis.R; cd ..;
 
-grammarly: source/16-appendix.md
+grammarly: source/14-chapter-6-conclusions-and-future-work.md
 	pkill Grammarly || true #if grammarly already exists kill it
 	pandoc  --wrap=preserve \
 		--filter pandoc-crossref \
 		--filter pandoc-citeproc \
 		--number-sections \
 		-t plain \
-		-o output/grammarly.txt source/16-appendix.md #now get just the text
+		-o output/grammarly.txt source/14-chapter-6-conclusions-and-future-work.md
 	open -a Grammarly output/grammarly.txt #and open it in grammarly
 
 thesis-map.pdf: thesis-map.md
