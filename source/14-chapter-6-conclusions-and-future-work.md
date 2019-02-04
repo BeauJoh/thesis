@@ -124,6 +124,8 @@ However, the presented execution times do not change the presented methodologies
 The developer needs to instrument a kernel before it is shipped and the most accurate predictions will come from instrumenting under a realistic setting -- tuning arguments included.
 Schedulers will need to take autotuning and optimization into account but our prediction methodology offers a good initial performance estimate without having to perform the historic approach of running the same kernel on all the devices.
 
+In the future we would also like the same extension methodology to be applied to the `cfd`, `bfs` and `tdm` benchmarks, however due to the unavailability of external software to generate the different size datasets -- following our range of problem sizes -- this will require a large amount of software engineering to reverse engineer the standards and is outside the scope of this thesis.
+
 In addition to comparing performance between devices, we would also like to develop some notion of "ideal" performance for each combination of benchmark and device, which would guide efforts to improve performance portability.
 This upper-bound for performance could arise from the AIWC analysis on each benchmark.
 Additional architectures such as FPGA, DSP and Radeon Open Compute based APUs will be considered.

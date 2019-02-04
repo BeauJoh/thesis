@@ -16,7 +16,7 @@ Consideration is given both to execution time and energy usage.
 
 The first focus of this work is to present a comprehensive benchmark suite for OpenCL in the heterogeneous HPC setting: an extended and enhanced version of the OpenDwarfs OpenCL benchmark suite.
 Our extensions improves the portability and robustness of the applications, the correctness of results and the choice of problem size, and increases the diversity through the coverage of additional application patterns.
-This work manifests in performance measurements on a set 15 devices and over 11 applications.
+This work manifests in performance measurements on a set 15 devices and over 12 applications.
 
 We next present our Architecture Independent Workload Characterization (AIWC) tool which characterizes OpenCL kernels according to a set of architecture-independent features.
 Features are measured by counting target characteristics which are collected during program execution in a simulator.
