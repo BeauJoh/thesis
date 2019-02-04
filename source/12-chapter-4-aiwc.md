@@ -283,13 +283,20 @@ The **lud** benchmark application comprises three major kernels, **diagonal**, *
 The AIWC metrics for each of these kernels are presented -- superimposed over all problem sizes -- in [Figure @fig:kiviat] A) B) and [Figure @fig:kiviat2] A) respectively.
 Comparing the kernels, it is apparent that the diagonal and perimeter kernels have a large number of branch instructions with high branch entropy, whereas the internal kernel has few branch instructions and low entropy.
 This is borne out through inspection of the OpenCL source code: the internal kernel is a single loop with fixed bounds, whereas diagonal and perimeter kernels contain doubly-nested loops over triangular bounds and branches which depend on thread id.
-Comparing between problem sizes (moving across the page), the large problem size shows higher values than the tiny problem size for all of the memory metrics, with little change in any of the values.
+Comparing between problem sizes, the large problem size shows higher values than the tiny problem size for all of the memory metrics, with little change in any of the values.
 
 The visual representation provided from the Kiviat diagrams allows the characteristics of OpenCL kernels to be readily assessed and compared.
+It allows developers to be able to quickly evaluate AIWC features.
+Which may allow the effectiveness of vectorization to be evaluated or to gauge the baseline predictability of memory access and branch behaviour.
+For instance, reordering a for-loop would change both the branching and memory access entropy scores.
+Additionally, the bottlenecks when vectorizing codes can be evaluated by examining the mean vectorization in the kiviat diagrams.
+This change would allow suitability of code for a range of expected data sets to be tested between AIWC runs.
 
 Finally, we examine the local memory access entropy (LMAE) presented in the Kiviat diagrams in greater detail.
 [Figure @fig:kiviat2] B) presents a sample of the local memory access entropy, in this instance of the LUD Perimeter kernel collected over the tiny problem size.
 The kernel is launched 4 separate times during a run of the tiny problem size, this is application specific and in this instance, each successive invocation operates on a smaller data set per iteration.
+This corresponds to repeatedly performing elimination in order to solve the lower and upper matrices, this iterative method results in solving intermediate and incrementally smaller matrices.
+Computing the memory access entropy with AIWC for each of these intermediate results shows increasingly smaller memory accesses, this is intuitive since smaller matrices will require more localised memory accesses.
 Note there is a steady decrease in starting entropy, and each successive invocation of the LU Decomposition Perimeter kernel the lowers the starting entropy.
 However, the descent in entropy -- which corresponds to more bits being skipped, or bigger the strides or the more localized the memory access -- shows that the memory access patterns are the same regardless of actual problem size.
 In general, for cache-sensitive workloads -- such as LU-Decomposition -- a steeper descent between increasing LMAE distances indicates more localized memory accesses, and this corresponds to better cache utilisation when these applications are run on physical OpenCL devices.
