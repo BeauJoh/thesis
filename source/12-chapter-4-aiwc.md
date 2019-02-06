@@ -1,6 +1,6 @@
 #AIWC: OpenCL based Architecture Independent Workload Characterization
 
-In this chapter we present the Architecture Independent Workload Characterization (AIWC) tool.
+In this chapter, we present the Architecture Independent Workload Characterization (AIWC) tool.
 AIWC simulates the execution of OpenCL kernels to collect architecture-independent features that characterize each code, which may also be used in performance prediction.
 
 AIWC verifies the architecture independent metrics since they are collected on a toolchain and in a language actively executed on a wide range of accelerators -- the OpenCL runtime supports execution on CPU, GPU, DSP, FPGA, MIC and ASIC hardware architectures.
@@ -19,7 +19,7 @@ However, since AIWC metrics do not vary between runs, this is still a shorter ex
 
 AIWC is run on full application codes, but it is difficult to present an entire summary due to the nature of OpenCL.
 Computationally intensive kernels are simply selected regions of the full application codes and are invoked separately for device execution.
-As such, the AIWC metrics can either be shown per kernel run on a device, or as the summation of all metrics for a kernel for a full application at a given problem size -- we chose the latter.
+As such, the AIWC metrics can either be shown per kernel run on a device or as the summation of all metrics for a kernel for a full application at a given problem size -- we chose the latter.
 Additionally, given the number of kernels we present in this chapter, we believe AIWC will generalize to full codes in other domains.
 
 Another difference between executing kernels natively on hardware and with the Oclgrind simulator is the AIWC metrics collected with the simulator are deterministic.
@@ -31,18 +31,18 @@ Oclgrind OpenCL kernel debugging tool is one of the most adopted OpenCL debuggin
 
 
 Application codes differ in resource requirements, control structure and available parallelism.
-Similarly, compute devices differ in number and capabilities of execution units, processing model, and available resources.
+Similarly, accelerator devices differ in number and capabilities of execution units, processing model, and available resources.
 Given performance measurements for particular combinations of codes and devices, it is difficult to generalize to novel combinations.
 Hardware designers and HPC integrators would benefit from accurate and systematic performance prediction, for example, in designing an HPC system, to choose a mix of accelerators that are well-suited to the expected workload.
 
-Measuring performance-critical characteristics of application workloads is important both for developers, who must understand and optimize the performance of codes, as well as designers and integrators of HPC systems, who must ensure that compute architectures are suitable for the intended workloads.
+Measuring performance-critical characteristics of application workloads is important both for developers, who must understand and optimize the performance of codes, as well as designers and integrators of HPC systems, who must ensure that accelerator architectures are suitable for the intended workloads.
 However, if these workload characteristics are tied to architectural features that are specific to a particular system, they may not generalize well to alternative or future systems.
 
 An architecture-independent method ensures an accurate characterization of inherent program behaviour, without bias due to architecture-dependent features that vary widely between different types of accelerators.
 
 AIWC is the first workload characterization tool to support multi-threaded or parallel workloads, which it achieves by collecting metrics that indicate both instruction and thread-level parallelism.
 We demonstrate the use of AIWC to characterize a variety of codes in the Extended OpenDwarfs Benchmark Suite [@johnston18opendwarfs] -- presented in chapter 3.
-We begin with an introduction of the metrics collected by AIWC, we then discuss how AIWC was implemented and demonstrate its usage on the \texttt{lud}, `nw`, `swat`, `gem`, `kmeans` and `hmm` benchmarks.
+We begin with an introduction of the metrics collected by AIWC, we then discuss how AIWC was implemented and demonstrate its usage on the `lud`, `nw`, `swat`, `gem`, `kmeans` and `hmm` benchmarks.
 Finally, we conclude with a summary of what AIWC and the associated metrics provide to prediction.
 A majority of this Chapter was published in the LLVM-HPC workshop proceedings as part of the 30th International Conference for High Performance Computing, Networking, Storage, and Analysis (SC18) 2018 [@aiwc2018].
 <!--
@@ -74,9 +74,9 @@ Compute                  & Opcode                       & Unique Opcodes require
 \end{table*}
 
 Shao and Brooks [@shao2013isa] proposed metrics to represent the characteristics of workloads independent of Instruction Set Architectures (ISA) -- these are provided in Table \ref{tbl:wiica-metrics}.
-The selection of these metrics were considered to characterize the workload, however, they were focused on micro-architecture independence and were evaluated on x86 CPUs.
-It is the focus of our work to collect metrics that are a higher level of abstraction and to this end present an larger set of metrics to characterize the workload in an architecture independent way.
-The full list of our AIWC metrics are presented in Table \ref{tbl:aiwc-metrics}.
+The selection of these metrics was considered to characterize the workload, however, they were focused on micro-architecture independence and were evaluated on x86 CPUs.
+It is the focus of our work to collect metrics that are a higher level of abstraction and to this end, we present a larger set of metrics which are more comprehensive in order to characterize the workload in an architecture independent way.
+The full list of our AIWC metrics is presented in Table \ref{tbl:aiwc-metrics}.
 The original choice of metrics do not consider parallel codes, but since this is critical for modern accelerators and the OpenCL framework it was the largely the focus of our work.
 In this Section, we discuss each metric and what they represent for workload characterization.
 In particular, we added a new category of metric, called *parallelism*, where we present metrics for Granularity, Barriers Per Instruction, Instructions per Operand and Load Imbalance.
@@ -86,9 +86,8 @@ To this end, the OpenCL device is architecture-independent -- no final register 
 A secondary contribution of our work is that we facilitate the collection of our metrics directly in Oclgrind.
 Whereas Shao collected metrics from static traces using a JIT compiler which emitted ISA-independent instructions, we collect metrics on-the-fly during OpenCL device simulator runs.
 These live traces are evaluated before each kernel terminates, the statistics computed and metrics presented at the end of each kernels execution.
-None of these metrics were previously available in Oclgrind and they are a direct contribution of the AIWC tool.
-
-Each of our metrics are described in greater detail in the remainder of this Section and how they are collected is described the next Section (\ref{sec:implmentation}) during a discussion of the implementation of the AIWC plugin.
+None of these metrics was previously available in Oclgrind and they are a direct contribution of the AIWC tool.
+Each of our metrics is described in greater detail in the remainder of this Section while the methodology around their collection is the focus for the next Section (\ref{sec:implmentation}).
 
 
 \begin{table*}[t]
@@ -142,10 +141,10 @@ Exploitable coarse-grained parallelism is measured by counting the number of wor
 Instructions To Barrier (ITB) and Instructions per Thread (IPT) can be used to indicate workload irregularity or imbalance.
 
 The **Opcode**, **total memory footprint** and **90% memory footprint** measures are simple counts.
-Likewise, **total instruction count** is the number of instructions achieved during a kernel execution.
+Likewise, **total instruction count** is the number of instructions achieved during a kernels execution.
 The **global memory address entropy** is a positive real number that corresponds to the randomness of memory addresses accessed.
-The **local memory address entropy** is computed as 10 separate values according to increasing number of Least Significant Bits (LSB), or low order bits, omitted in the calculation.
-The number of bits skipped ranges from 1 to 10, and a steeper drop in entropy with increasing number of bits indicates greater spatial locality in the address stream.
+The **local memory address entropy** is computed as 10 separate values according to an increasing number of Least Significant Bits (LSB), or low order bits, omitted in the calculation.
+The number of bits skipped ranges from 1 to 10, and a steeper drop in entropy with an increasing number of bits indicates greater spatial locality in the address stream.
 
 Both **unique branch instructions** and the associated **90% branch instructions** are counts indicating the count of logical control flow branches encountered during kernel execution.
 **Yokota branch entropy** ranges between 0 and 1, and offers an indication of a program's predictability as a floating point entropy value. [@yokota2007introducing] 
@@ -178,16 +177,18 @@ They are computed by storing read and write memory accesses separately and are l
 ## Implementation{#sec:implmentation}
 
 
-AIWC is implemented as a plugin for Oclgrind, which simulates kernel execution on an ideal compute device.
+AIWC is implemented as a plugin for Oclgrind, which simulates kernel execution on an abstract compute device.
 OpenCL kernels are executed in series, and Oclgrind generates notification events which AIWC handles to populate data structures for each workload metric.
 Once each kernel has completed execution, AIWC performs statistical summaries of the collected metrics by examining these data structures.
+The entire AIWC plugin is $\approx 1000$ lines of `C++` code and collects the metrics based on the relative callbacks triggered during Oclgrind kernel execution.
+The remainder of this section outlines some of the logic required to collect these metrics.
 
 The **Opcode** diversity metric updates a counter on an unordered map during each \texttt{workItemBegin} event, the type of operation is determined by examining the opcode name using the LLVM Instruction API.
 
 The number of **work-items** is computed by incrementing a global counter -- accessible by all work-item threads -- once a \texttt{workItemBegin} notification event occurs.
 
 TLP metrics require barrier events to be instrumented within each thread.
-Instructions To Barrier **ITB** metrics require each thread to increment a local counter once every \texttt{instructionExecuted} has occurred, this counter is added to a vector and reset once the work-item encounters a barrier.
+Instructions To Barrier **ITB** metrics require each thread to increment a local counter once each \texttt{instructionExecuted} has occurred, this counter is added to a vector and reset once the work-item encounters a barrier.
 The **Total Barriers Hit** counter also increments on the same condition.
 Work-items are executed sequentially within all work-items in a work-group.
 If a barrier is hit the queue moves onto all other available work-items in a ready state.
@@ -197,14 +198,14 @@ ILP **SIMD** metrics examine the size of the result variable provided from the \
 
 **Total Memory Footprint** **90% Memory Footprint** and Local Memory Address Entropy **LMAE** metrics require the address accessed to be stored during kernel execution and occurs during the \texttt{memoryLoad}, \texttt{memoryStore}, \texttt{memoryAtomicLoad} and \texttt{memoryAtomicStore} notifications.
 
-Branch entropy measurements require a check during \texttt{instructionExecuted} event on whether the instruction is a branch instruction, if so a flag indicating a branch operation has occurred is set and both LLVM IR labels -- which correspond to branch targets -- are recorded.
+Branch entropy measurements require a check during the \texttt{instructionExecuted} event on whether the instruction is a branch instruction, if so a flag indicating a branch operation has occurred is set and both LLVM IR labels -- which correspond to branch targets -- are recorded.
 On the next \texttt{instructionExecuted} the flag is queried and reset while the current instruction label is compared against which of the two targets were taken, the result is stored in the branch history trace.
 The implementation of this is shown in Listing \ref{lst:instructionExecuted}.
 Note the `instructionExecuted` callback is propagated from Oclgrind during every OpenCL kernel instruction -- emulated in LLVM IR.
 This function also updates variables to track instruction diversity by counting the occurrences of each instruction, instructions to barrier and other parallelism metrics by running a counter until a barrier is hit, finally, the vectorization -- as part of the parallelism metrics -- are updated by recording the width of executed instructions.
 The `m_state` variable is shared between all work-items in a work-group and these are stored into a global set of variables using a mutex lock once the work-group has completed execution.
 
-The branch metrics are then computed by evaluating the full history of combined branch's taken and not-taken.
+The branch metrics are then computed by evaluating the full history of the combined branches taken and not-taken.
 
 \begin{lstlisting}[float=tp,language=C++, caption={The Instruction Executed callback function collects specific program metrics and adds them to a history trace for later analysis.},label={lst:instructionExecuted},linewidth=\columnwidth,numbers=left, numberstyle=\small, numbersep=8pt, frame = single, breaklines=true]
 void WorkloadCharacterisation::instructionExecuted(...,  const llvm::Instruction *instruction, ...){
@@ -258,7 +259,7 @@ The source code is available at the GitHub Repository [@beau_johnston_2017_11341
 ## Demonstration
 
 We now demonstrate the use of AIWC on several scientific application kernels selected from the Extended OpenDwarfs Benchmark Suite [@johnston18opendwarfs].
-The details of suite is described in Chapter 3.
+The details of the suite is described in Chapter 3.
 Our selection of benchmarks run with AIWC is not intended to be exhaustive, rather, it is meant to illustrate how key properties of the codes are reflected in the metrics collected by AIWC.
 
 We present metrics for the four different problem sizes, and all 11 different application codes (37 kernels) from EOD, as described in Chapter 3.
@@ -269,8 +270,19 @@ One metric was chosen from each of the main categories, namely, Opcode, Barriers
 Each category has also been segmented by colour: blue results represent *compute* metrics, green represent metrics that indicate *parallelism*, yellow represents *memory* metrics and purple bars represent *control* metrics.
 Median results are presented for each metric -- while there is no variation between invocations of AIWC, certain kernels are iterated multiple times and over differing domains/data sets.
 Each of the 4 sub-figures shows all kernels over the 4 different problem sizes.
+The x-axis shows different kernels but due to the unavailability of kernels on larger problem sizes the bottom half (4 metric) is unrelated to the top half.
 
-For almost all benchmarks the global memory address entropy increases with problem size, whereas the other metrics do not increase.
+The top-left quadrant displays each of the four chosen metrics on the tiny problem size.
+The linear average branch entropy (purple) between tiny kernels the `bfs_kernel2` has the largest, and thus least predictable branching behaviour, which we expect for sorting algorithms where the behaviour around swapping values depends on the ordering of the data.
+Some kernels display irregular branching while a majority of the tiny kernels are predictable.
+The diversity in opcodes ranges from 7-15 unique instructions on the tiny problem sized kernels, with the `srad` kernels using the most unique opcodes and some initialization kernels using the least.
+Barriers per instruction (shown in green) on the tiny problem size shows that most of the kernels in EOD have few barriers, `srad` has a small barrier relative to the total number of instructions executed.
+18% of instructions in the `lud_diagonal` kernel will hit a barrier -- and is slightly less balanced given the unequal distribution of work for different starting locations of the decomposition.
+The `nw` and `crc` kernels frequently block, with many barriers comprising 40% of the instructions encountered, this dependency between other work-items indicate these benchmarks are less able to benefit from Single-Instruction Multiple-Thread (SIMT) parallelism.
+The top-right quadrant displays the four chosen metrics on the small problem size, while the bottom-left quadrant present the same metrics on the medium problem size and the bottom-right quadrant shows the large sized EOD problems.
+
+Notice the change in scale for global memory address entropy.
+Almost all benchmarks show this metric increases with problem size, whereas the other metrics do not.
 Notably, memory entropy is low for \texttt{lud\_diagonal}, reflecting memory access with constant strides of diagonal matrix elements, and \texttt{cl\_fdt53Kernel}, again reflecting regular strides generated by downsampling in the discrete wavelet transform.
 We do not present all problem sizes for the kernels corresponding to \texttt{gem}, \texttt{nqueens}, \texttt{hmm} and \texttt{swat} benchmarks, since these only operate on a fixed problem size -- as discussed in Chapter 3.
 <!--
@@ -279,10 +291,11 @@ These issues will be addressed in future work.
 -->
 
 Looking at branch entropy, \texttt{bfs\_kernel2} stands out as having by far the greatest entropy.
-This kernel is dominated by a single branch instruction based on a flag value which is entirely unpredictable, and could be expected to perform poorly on a SIMT architecture such as a GPU.
+This kernel is dominated by a single branch instruction based on a flag value which is entirely unpredictable and could be expected to perform poorly on a SIMT architecture such as a GPU.
 
-Barriers per instruction is quite low for most kernels, with the exception of \texttt{needle\_opencl\_shared\_1} and \texttt{needle\_opencl\_shared\_2} from the Needleman-Wunsch DNA sequence alignment dynamic programming benchmark.
+Barriers per instruction are quite low for most kernels, with the exception of \texttt{needle\_opencl\_shared\_1} and \texttt{needle\_opencl\_shared\_2} from the Needleman-Wunsch DNA sequence alignment dynamic programming benchmark.
 These kernels each have 0.04 barriers per instruction (i.e. one barrier per 25 instructions), as they follow a highly-synchronized wavefront pattern through the matrix representing matching pairs.
+Barriers per instruction are unchanged regardless of problem size and show that the patterns of computation are fixed and independent from the data in many of these benchmarks.
 The performance of this kernel on a particular architecture could be expected to be highly dependent on the cost of synchronization.
 
 \begin{figure*}
@@ -311,17 +324,18 @@ The performance of this kernel on a particular architecture could be expected to
 
 We now proceed with a more detailed investigation of one of the benchmarks, **lud**, which performs decomposition of a matrix into upper and lower triangular matrices.
 The AIWC metrics for a kernel are presented as a Kiviat or radar diagram, for each of the problem sizes.
-<!--We do not perform any dimensionality reduction but choose to present all collected metrics.-->
-We present a subset of the metrics\todo[inline]{how to finish this?}
+We do not perform any dimensionality reduction but choose to present all collected metrics.
+
 The ordering of the individual spokes is not chosen to reflect any statistical relationship between the metrics, however, they have been grouped into four main categories: green spokes represent metrics that indicate *parallelism*, blue spokes represent *compute* metrics, beige spokes represent *memory* metrics and purple spokes represent *control* metrics.
 For clarity of visualization, we do not present the raw AIWC metrics but instead, normalize or invert the metrics to produce a scale from 0 to 1.
-The parallelism metrics presented are the inverse values of the metrics collected by AIWC, i.e. **granularity** =  $1 / \textbf{work-items}$ ; **barriers per instruction** $= 1 / \textbf{mean ITB}$ ; **instructions per operand** $= 1 / \sum \textbf{SIMD widths}$.
 
+Values are normalized according to the maximum value measured across all kernels examined -- and on all problem sizes.
+This presentation allows a quick value judgement between kernels, as values closer to the centre (0) generally have lower hardware requirements, for example, smaller entropy scores indicate more regular memory access or branch patterns, requiring less cache or branch predictor hardware; smaller granularity indicates higher exploitable parallelism; smaller barriers per instruction indicates less synchronization; and so on.
+
+The only metrics not normalized relative to the maximum measured values are **granularity**, **barriers per instruction**, **instructions per operand** and **load imbalance**.
+Parallelism metrics presented are the inverse values of the metrics collected by AIWC, i.e. **granularity** =  $1 / \textbf{work-items}$ ; **barriers per instruction** $= 1 / \textbf{mean ITB}$ ; **instructions per operand** $= 1 / \sum \textbf{SIMD widths}$.
 Additionally, a common problem in parallel applications is load imbalance -- or the overhead introduced by unequal work distribution among threads.
 A simple measure to quantify imbalance can be achieved using a subset of the existing AIWC metrics and is included as a further derived parallelism metric by computing **load imbalance** = **max IPT** $-$ **min IPT**.
-
-All other values are normalized according to the maximum value measured across all kernels examined -- and on all problem sizes.
-This presentation allows a quick value judgement between kernels, as values closer to the centre (0) generally have lower hardware requirements, for example, smaller entropy scores indicate more regular memory access or branch patterns, requiring less cache or branch predictor hardware; smaller granularity indicates higher exploitable parallelism; smaller barriers per instruction indicates less synchronization; and so on.
 
 The **lud** benchmark application comprises three major kernels, **diagonal**, **internal** and **perimeter**, corresponding to updates on different parts of the matrix.
 The AIWC metrics for each of these kernels are presented -- superimposed over all problem sizes -- in [Figure @fig:kiviat] A) B) and [Figure @fig:kiviat2] A) respectively.
@@ -334,7 +348,7 @@ It allows developers to be able to quickly evaluate AIWC features.
 Which may allow the effectiveness of vectorization to be evaluated or to gauge the baseline predictability of memory access and branch behaviour.
 For instance, reordering a for-loop would change both the branching and memory access entropy scores.
 Additionally, the bottlenecks when vectorizing codes can be evaluated by examining the mean vectorization in the kiviat diagrams.
-This change would allow suitability of code for a range of expected data sets to be tested between AIWC runs.
+This change would allow the suitability of a code on a range of expected data sets to be tested between AIWC runs.
 
 Finally, we examine the local memory access entropy (LMAE) presented in the Kiviat diagrams in greater detail.
 [Figure @fig:kiviat2] B) presents a sample of the local memory access entropy, in this instance of the LUD Perimeter kernel collected over the tiny problem size.
@@ -354,7 +368,7 @@ The bioinformatics subset of applications from the extended OpenDwarfs benchmark
 Finally, the MapReduce dwarf features the `kmeans` benchmark, which can be used directly in both pattern identification and gene similarity comparisons.
 Figures\ \ref{fig:aiwc} and \ref{fig:aiwc-hmm} present radar/Kiviat diagrams of architecture-independent characteristics collected for each of the bioinformatics benchmarks.
 All results are presented over a single **small** problem size, and show the multiple kernels required to compute each benchmark application as superimposed plots in the same diagram.
-The **small** size was selected since `hmm`, `gem` and `swat` benchmarks are from the fixed benchmarks -- they only offer one size -- however the execution times typify those seen in the **small** sized `nw` and `kmeans` applications.
+The **small** size was selected since `hmm`, `gem` and `swat` benchmarks are from the fixed benchmarks -- they only offer one size -- however, the execution times typify those seen in the **small** sized `nw` and `kmeans` applications.
 
 \begin{figure*}
     \centering
@@ -502,7 +516,7 @@ Examples of how AIWC metrics can be used for diversity analysis and device predi
 We have presented the Architecture-Independent Workload Characterization tool (AIWC), which supports the collection of architecture-independent features of OpenCL application kernels.
 It is the first workload characterization tool to support multi-threaded or parallel workloads.
 These features can be used to predict the most suitable device for a particular kernel, or to determine the limiting factors for performance on a particular device, allowing OpenCL developers to try alternative implementations of a program for the available accelerators -- for instance, by reorganizing branches, eliminating intermediate variables et cetera.
-In addition, the architecture independent characteristics of a scientific workload will inform designers and integrators of HPC systems, who must ensure that compute architectures are suitable for the intended workloads.
+In addition, the architecture independent characteristics of a scientific workload will inform designers and integrators of HPC systems, who must ensure that accelerator architectures are suitable for the intended workloads.
 
 To identify which AIWC characteristics are the best indicators of opportunities for optimization, we are currently looking at how individual characteristics change for a particular code through the application of best-practice optimizations for CPUs and GPUs (as recommended in vendor optimization guides).
 

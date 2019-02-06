@@ -405,7 +405,7 @@ In Figure\ \ref{fig:time-medium} (a) (\texttt{kmeans}) shows applications typica
 The performance of the various GPU devices generally follows their date of manufacture.
 For instance, the Nvidia gaming devices such as the TitanX, GTX 1080 and GTX 1080 Ti are the newest devices and perform best; similar trends emerge in the AMD cards -- the RX 480 has a higher clock frequency (1120 MHz) relative to the oldest AMD device the HD7970 (925 MHz) and performance ranges between these two extremes accordingly.
 Interestingly the HPC GPUs buck this trend with a lower clock frequency (706-900MHz) and older manufacture date than many of the gaming GPUs performing at a similar level to the newer AMD gaming GPUs and only 1-2ms slower per kernel run than the newest Nvidia GPU.
-This is attributed to the larger number of threads supported on these devices and is a good match to the high-degree of parallelism in the benchmark.
+This is attributed to the larger number of threads supported on these devices and is a good match to the high degree of parallelism in the benchmark.
 The i7 is the best performer of all the CPU type accelerators, taking 6ms which is 2-3ms slower than the fastest GPU, this is expected since it has the highest clock frequency.
 <!--However, the amount of parallelism expressed at a thread level is less suited to this architecture than the GPUs.-->
 As the CPUs have fewer hardware threads they are less able to exploit the available parallelism in the benchmark than the GPUs.
@@ -443,7 +443,7 @@ By comparison, CPUs and the MIC are accelerator types which excel at this comput
 Examining the `crc` benchmark is examined in greater detail in Figure \ref{fig:time-crc} as problem size increases.
 
 Figures\ \ref{fig:time-medium} (h) (\texttt{nw}) and \ref{fig:time-fixed} (d) (\texttt{swat}) both represent Dynamic Programming.
-The order of performance results is also similar, with the newest Nvidia GPUs performing best, the different generations of CPUs falling around the older GPUs and the MIC being the worst performed by a large margin (30%).
+The order of performance results is also similar, with the newest Nvidia GPUs performing best, the different generations of CPUs falling around the older GPUs and the MIC being the worst performer by a large margin (30%).
 The ordering of performance of devices between both benchmarks is similar.
 It is equally interesting to note that \ref{fig:time-fixed} (a) (\texttt{gem}) and \ref{fig:time-fixed} (a) (\texttt{nqueens}) also have a similar ordering of fastest accelerator devices.
 

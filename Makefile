@@ -20,18 +20,6 @@ grammarly-abstract: source/04-abstract.md
 		-o output/grammarly.txt source/04-abstract.md
 	open -a Grammarly output/grammarly.txt #and open it in grammarly
 
-grammarly-conclusions: source/14-chapter-6-conclusions-and-future-work.md
-	pkill Grammarly || true #if grammarly already exists kill it
-	pandoc  --wrap=preserve \
-		--filter pandoc-crossref \
-		--filter pandoc-citeproc \
-		--number-sections \
-		-t plain \
-		-o output/grammarly.txt source/14-chapter-6-conclusions-and-future-work.md
-	open -a Grammarly output/grammarly.txt #and open it in grammarly
-
-
-
 grammarly-chapter-3: source/11-chapter-3-ode.md
 	pkill Grammarly || true #if grammarly already exists kill it
 	pandoc  --wrap=preserve \
@@ -40,6 +28,26 @@ grammarly-chapter-3: source/11-chapter-3-ode.md
 		--number-sections \
 		-t plain \
 		-o output/grammarly.txt source/11-chapter-3-ode.md
+	open -a Grammarly output/grammarly.txt #and open it in grammarly
+
+grammarly-chapter-4: source/12-chapter-4-aiwc.md
+	pkill Grammarly || true #if grammarly already exists kill it
+	pandoc  --wrap=preserve \
+		--filter pandoc-crossref \
+		--filter pandoc-citeproc \
+		--number-sections \
+		-t plain \
+		-o output/grammarly.txt source/12-chapter-4-aiwc.md
+	open -a Grammarly output/grammarly.txt #and open it in grammarly
+
+grammarly-conclusions: source/14-chapter-6-conclusions-and-future-work.md
+	pkill Grammarly || true #if grammarly already exists kill it
+	pandoc  --wrap=preserve \
+		--filter pandoc-crossref \
+		--filter pandoc-citeproc \
+		--number-sections \
+		-t plain \
+		-o output/grammarly.txt source/14-chapter-6-conclusions-and-future-work.md
 	open -a Grammarly output/grammarly.txt #and open it in grammarly
 
 grammarly: source/14-chapter-6-conclusions-and-future-work.md
