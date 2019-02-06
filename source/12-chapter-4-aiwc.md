@@ -4,7 +4,7 @@ In this chapter we present the Architecture Independent Workload Characterizatio
 AIWC simulates the execution of OpenCL kernels to collect architecture-independent features that characterize each code, which may also be used in performance prediction.
 
 AIWC verifies the architecture independent metrics since they are collected on a toolchain and in a language actively executed on a wide range of accelerators -- the OpenCL runtime supports execution on CPU, GPU, DSP, FPGA, MIC and ASIC hardware architectures.
-The intermediate representation of the OpenCL kernel code is a subset of LLVM IR known as SPIR -- Standard Portable Intermediate Representation.
+The intermediate representation (IR) of the OpenCL kernel code is a subset of LLVM IR known as SPIR -- Standard Portable Intermediate Representation.
 This IR forms a basis for Oclgrind to perform OpenCL device simulation, which interprets LLVM IR instructions.
 
 Migrating the metrics presented in the ISA-independent workload characterization paper [@shao2013isa] to the Oclgrind tool offers an accessible, high-accuracy and reproducible method to acquire these AIWC features.
@@ -50,9 +50,45 @@ Additionally, work from [Section @sec:case-study-bio] has been submitted as as S
 
 ## Metrics
 
-For each OpenCL kernel invocation, the Oclgrind simulator **AIWC** tool collects a set of metrics, which are listed in [Table @tbl:aiwc-metrics].
-Exploitable coarse-grained parallelism is measured by counting the number of work-items and barriers encountered.
-Instructions To Barrier (ITB) and Instructions per Thread (IPT) can be used to indicate workload irregularity or imbalance.
+\begin{table*}[t]
+\caption{ISA-Independent Workload Characterization metrics. \label{tbl:wiica-metrics}}
+
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{@{}cll@{}}
+\toprule
+
+{\bf Type}               & {\bf Metric}                 & {\bf Description}\\\hline
+
+Compute                  & Opcode                       & Unique Opcodes required to cover 90\% of dynamic instructions\\
+\hline
+\multirow{4}{*}{Memory}  & Total Memory Footprint       & Total number of unique memory addresses accessed\\
+                         & 90\% Memory Footprint        & Number of unique memory addresses that cover 90\% of memory accesses\\
+                         & Global Memory Address Entropy& Measure of the randomness of memory addresses\\
+                         & Local Memory Address Entropy & Measure of the spatial locality of memory addresses\\
+\hline
+\multirow{2}{*}{Control} & Unique Branch Instructions   & Total number of unique branch instructions\\
+                         & Branch Entropy               & Measure of the randomness of branch behavior, representing branch predictability\\
+\hline
+\end{tabular}}
+\end{table*}
+
+Shao and Brooks [@shao2013isa] proposed metrics to represent the characteristics of workloads independent of Instruction Set Architectures (ISA) -- these are provided in Table \ref{tbl:wiica-metrics}.
+The selection of these metrics were considered to characterize the workload, however, they were focused on micro-architecture independence and were evaluated on x86 CPUs.
+It is the focus of our work to collect metrics that are a higher level of abstraction and to this end present an larger set of metrics to characterize the workload in an architecture independent way.
+The full list of our AIWC metrics are presented in Table \ref{tbl:aiwc-metrics}.
+The original choice of metrics do not consider parallel codes, but since this is critical for modern accelerators and the OpenCL framework it was the largely the focus of our work.
+In this Section, we discuss each metric and what they represent for workload characterization.
+In particular, we added a new category of metric, called *parallelism*, where we present metrics for Granularity, Barriers Per Instruction, Instructions per Operand and Load Imbalance.
+
+The Oclgrind simulator is a free and open source tool to debug OpenCL codes and is achieved by simulating on LLVM SPIR instructions.
+To this end, the OpenCL device is architecture-independent -- no final register allocation or ISA has been selected at this level of execution (directly on the IR).
+A secondary contribution of our work is that we facilitate the collection of our metrics directly in Oclgrind.
+Whereas Shao collected metrics from static traces using a JIT compiler which emitted ISA-independent instructions, we collect metrics on-the-fly during OpenCL device simulator runs.
+These live traces are evaluated before each kernel terminates, the statistics computed and metrics presented at the end of each kernels execution.
+None of these metrics were previously available in Oclgrind and they are a direct contribution of the AIWC tool.
+
+Each of our metrics are described in greater detail in the remainder of this Section and how they are collected is described the next Section (\ref{sec:implmentation}) during a discussion of the implementation of the AIWC plugin.
 
 
 \begin{table*}[t]
@@ -63,43 +99,47 @@ Instructions To Barrier (ITB) and Instructions per Thread (IPT) can be used to i
 \begin{tabular}{@{}cll@{}}
 \toprule
 
-{Type} & {Metric} & {Description}\\\hline
+{\bf Type}                      & {\bf Metric} & {\bf Description}\\\hline
 
-Compute & Opcode & total \# of unique opcodes required to cover 90\% of dynamic
-instructions\\
-Compute & Total Instruction Count & total \# of instructions executed\\
-Parallelism & Work-items & total \# of work-items or threads executed\\
-Parallelism & Total Barriers Hit & total \# of barrier instructions\\
-Parallelism & Min ITB & minimum \# of instructions executed until a barrier\\
-Parallelism & Max ITB & maximum \# of instructions executed until a barrier\\
-Parallelism & Median ITB & median \# of instructions executed until a barrier\\
-Parallelism & Min IPT & minimum \# of instructions executed per thread\\
-Parallelism & Max IPT & maximum \# of instructions executed per thread\\
-Parallelism & Median IPT & median \# of instructions executed per thread\\
-Parallelism & Max SIMD Width & maximum \# of data items operated on during an instruction\\
-Parallelism & Mean SIMD Width & mean \# of data items operated on during an instruction\\
-Parallelism & SD SIMD Width & standard deviation across \# of data items affected\\
-Memory & Total Memory Footprint & total \# of unique memory addresses accessed\\
-Memory & 90\% Memory Footprint & \# of unique memory addresses that cover 90\% of memory accesses\\
-Memory & Unique Reads & total \# of unique memory addresses read\\
-Memory & Unique Writes & total \# of unique memory addresses written\\
-Memory & Unique Read/Write Ratio & indication of workload being (unique reads / unique writes) \\
-Memory & Total Reads & total \# of memory addresses read\\
-Memory & Total Writes & total \# of memory addresses written\\
-Memory & Reread Ratio & indication of memory reuse for reads (unique reads/total reads)\\
-Memory & Rewrite Ratio & indication of memory reuse for writes (unique writes/total writes)\\
-Memory & Global Memory Address Entropy & measure of the randomness of memory addresses\\
-Memory & Local Memory Address Entropy & measure of the spatial locality of memory addresses\\
-Control & Total Unique Branch Instructions & total \# of unique branch instructions\\
-Control & 90\% Branch Instructions & \# of unique branch instructions that cover 90\%
-of branch instructions\\
-Control & Yokota Branch Entropy & branch history entropy using Shannon's information entropy\\
-Control & Average Linear Branch Entropy & branch history entropy score using the
-average linear branch entropy\\
+\multirow{2}{*}{Compute}        & Opcode & total \# of unique opcodes required to cover 90\% of dynamic instructions\\
+                                & Total Instruction Count & total \# of instructions executed\\
+\hline
+\multirow{11}{*}{Parallelism}   & Work-items & total \# of work-items or threads executed\\
+                                & Total Barriers Hit & total \# of barrier instructions\\
+                                & Min ITB & minimum \# of instructions executed until a barrier\\
+                                & Max ITB & maximum \# of instructions executed until a barrier\\
+                                & Median ITB & median \# of instructions executed until a barrier\\
+                                & Min IPT & minimum \# of instructions executed per thread\\
+                                & Max IPT & maximum \# of instructions executed per thread\\
+                                & Median IPT & median \# of instructions executed per thread\\
+                                & Max SIMD Width & maximum \# of data items operated on during an instruction\\
+                                & Mean SIMD Width & mean \# of data items operated on during an instruction\\
+                                & SD SIMD Width & standard deviation across \# of data items affected\\
+\hline
+\multirow{11}{*}{Memory}        & Total Memory Footprint & total \# of unique memory addresses accessed\\
+                                & 90\% Memory Footprint & \# of unique memory addresses that cover 90\% of memory accesses\\
+                                & Unique Reads & total \# of unique memory addresses read\\
+                                & Unique Writes & total \# of unique memory addresses written\\
+                                & Unique Read/Write Ratio & indication of workload being (unique reads / unique writes) \\
+                                & Total Reads & total \# of memory addresses read\\
+                                & Total Writes & total \# of memory addresses written\\
+                                & Reread Ratio & indication of memory reuse for reads (unique reads/total reads)\\
+                                & Rewrite Ratio & indication of memory reuse for writes (unique writes/total writes)\\
+                                & Global Memory Address Entropy & measure of the randomness of memory addresses\\
+                                & Local Memory Address Entropy & measure of the spatial locality of memory addresses\\
+\hline
+\multirow{4}{*}{Control}        & Total Unique Branch Instructions & total \# of unique branch instructions\\
+                                & 90\% Branch Instructions & \# of unique branch instructions that cover 90\% of branch instructions\\
+                                & Yokota Branch Entropy & branch history entropy using Shannon's information entropy\\
+                                & Average Linear Branch Entropy & branch history entropy score using the average linear branch entropy\\
 \hline
 \end{tabular}
 }
 \end{table*}
+
+For each OpenCL kernel invocation, the Oclgrind simulator **AIWC** tool collects a set of metrics, which are listed in [Table @tbl:aiwc-metrics].
+Exploitable coarse-grained parallelism is measured by counting the number of work-items and barriers encountered.
+Instructions To Barrier (ITB) and Instructions per Thread (IPT) can be used to indicate workload irregularity or imbalance.
 
 The **Opcode**, **total memory footprint** and **90% memory footprint** measures are simple counts.
 Likewise, **total instruction count** is the number of instructions achieved during a kernel execution.
@@ -135,7 +175,7 @@ The **unique read/write ratio** shows that the workload is balanced, read intens
 They are computed by storing read and write memory accesses separately and are later combined, to compute the **global memory address entropy** and **local memory address entropy** scores.
 
 
-## Implementation
+## Implementation{#sec:implmentation}
 
 
 AIWC is implemented as a plugin for Oclgrind, which simulates kernel execution on an ideal compute device.
@@ -232,8 +272,11 @@ Each of the 4 sub-figures shows all kernels over the 4 different problem sizes.
 
 For almost all benchmarks the global memory address entropy increases with problem size, whereas the other metrics do not increase.
 Notably, memory entropy is low for \texttt{lud\_diagonal}, reflecting memory access with constant strides of diagonal matrix elements, and \texttt{cl\_fdt53Kernel}, again reflecting regular strides generated by downsampling in the discrete wavelet transform.
+We do not present all problem sizes for the kernels corresponding to \texttt{gem}, \texttt{nqueens}, \texttt{hmm} and \texttt{swat} benchmarks, since these only operate on a fixed problem size -- as discussed in Chapter 3.
+<!--
 Note, we do not present **medium** and **large** problem sizes for some kernels due to various issues including: a lack of input datasets, failure of AIWC in tracing large numbers of memory and branch operations for entropy calculations.
 These issues will be addressed in future work.
+-->
 
 Looking at branch entropy, \texttt{bfs\_kernel2} stands out as having by far the greatest entropy.
 This kernel is dominated by a single branch instruction based on a flag value which is entirely unpredictable, and could be expected to perform poorly on a SIMT architecture such as a GPU.
@@ -267,8 +310,9 @@ The performance of this kernel on a particular architecture could be expected to
 ## Detailed Analysis of LU Decomposition Benchmark
 
 We now proceed with a more detailed investigation of one of the benchmarks, **lud**, which performs decomposition of a matrix into upper and lower triangular matrices.
-Following Shao and Brooks [@shao2013isa], we present the AIWC metrics for a kernel as a Kiviat or radar diagram, for each of the problem sizes.
-Unlike Shao and Brooks, we do not perform any dimensionality reduction but choose to present all collected metrics.
+The AIWC metrics for a kernel are presented as a Kiviat or radar diagram, for each of the problem sizes.
+<!--We do not perform any dimensionality reduction but choose to present all collected metrics.-->
+We present a subset of the metrics\todo[inline]{how to finish this?}
 The ordering of the individual spokes is not chosen to reflect any statistical relationship between the metrics, however, they have been grouped into four main categories: green spokes represent metrics that indicate *parallelism*, blue spokes represent *compute* metrics, beige spokes represent *memory* metrics and purple spokes represent *control* metrics.
 For clarity of visualization, we do not present the raw AIWC metrics but instead, normalize or invert the metrics to produce a scale from 0 to 1.
 The parallelism metrics presented are the inverse values of the metrics collected by AIWC, i.e. **granularity** =  $1 / \textbf{work-items}$ ; **barriers per instruction** $= 1 / \textbf{mean ITB}$ ; **instructions per operand** $= 1 / \sum \textbf{SIMD widths}$.
