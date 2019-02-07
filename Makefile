@@ -40,6 +40,16 @@ grammarly-chapter-4: source/12-chapter-4-aiwc.md
 		-o output/grammarly.txt source/12-chapter-4-aiwc.md
 	open -a Grammarly output/grammarly.txt #and open it in grammarly
 
+grammarly-chapter-5: source/13-chapter-5-making-predictions.md
+	pkill Grammarly || true #if grammarly already exists kill it
+	pandoc  --wrap=preserve \
+		--filter pandoc-crossref \
+		--filter pandoc-citeproc \
+		--number-sections \
+		-t plain \
+		-o output/grammarly.txt source/13-chapter-5-making-predictions.md
+	open -a Grammarly output/grammarly.txt #and open it in grammarly
+
 grammarly-conclusions: source/14-chapter-6-conclusions-and-future-work.md
 	pkill Grammarly || true #if grammarly already exists kill it
 	pandoc  --wrap=preserve \

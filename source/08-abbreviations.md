@@ -16,6 +16,39 @@
 \textbf{SoC} \= \textbf{S}ystem-\textbf{o}n-a-\textbf{C}hip\\
 \textbf{ISA} \= \textbf{I}nstruction \textbf{S}et \textbf{A}rchitecture\\
 \textbf{PCA} \= \textbf{P}rincipal \textbf{C}omponent \textbf{A}nalysis\\
+\textbf{AIWC} \= \textbf{A}rchitecture \textbf{I}ndependent \textbf{W}orkload \textbf{C}haracterization\\
+\textbf{EOD} \= \textbf{E}xtended \textbf{O}pen \textbf{D}warfs Benchmark Suite\\
+\textbf{PAPI} \= \textbf{P}erformance \textbf{A}pplication \textbf{P}rogramming \textbf{I}nterface\\
+\textbf{ILP} \= \textbf{I}nstruction \textbf{L}evel \textbf{P}arallelism\\
+\textbf{TLP} \= \textbf{T}hread \textbf{L}evel \textbf{P}arallelism\\
+\textbf{SIMD} \= \textbf{S}ingle \textbf{Instruction} \textbf{M}ultiple \textbf{D}ata\\
+\textbf{CLgen} \= Open\textbf{CL} kernel \textbf{gen}eration framework\\
+\textbf{PCA} \= \textbf{P}rincipal \textbf{C}omponent \textbf{A}nalysis\\
+\textbf{RAM} \= \textbf{R}andom \textbf{A}ccess \textbf{M}emory\\
+\textbf{t-SNE} \= \textbf{t}-Distributed \textbf{S}tochastic \textbf{N}eighbor \textbf{E}mbedding\\
+\textbf{RAPL} \= \textbf{R}unning \textbf{A}verage \textbf{P}ower \textbf{L}imit\\
+\textbf{NVML} \= \textbf{Nv}idia \textbf{M}anagement \textbf{L}ibrary \\
+\textbf{AVX} \= \textbf{A}dvanced \textbf{V}ector \textbf{E}xtensions\\
+\textbf{IPC} \= \textbf{I}nstructions \textbf{P}er \textbf{C}ycle\\
+\textbf{TLB} \= \textbf{T}ranslation \textbf{L}ook-aside \textbf{B}uffer\\
+\textbf{PDB} \= \textbf{P}rotein \textbf{D}ata \textbf{B}ank format\\
+\textbf{MPE} \= Management Processing Elements\\
+
+CPE \= low-powered Computer Processing Elements\\
+RISC \= Reduced Instruction-Set Computers\\
+SIMT \= Single Instruction Multiple Thread\\
+TPU \= Tensor Processing Units\\
+HCC \= Heterogeneous Compute Compiler\\
+PARSEC \= Princeton Application Repository for Shared-Memory Computers\\
+SHOC \= Scalable Heterogeneous Computing benchmark suite\\
+OpenDwarfs \= OpenCL and the 13 Dwarfs
+SPIR \= Standard Portable Intermediate Representation\\
+MICA \= microarchitecture-independent workload characteristics
+ITB \= Instructions To Barrier
+HASS \= Heterogeneity-Aware Signature-Supported scheduler
+SPIR \= Standard Portable Intermediate Representation
+LSB \= Least Significant Bits
+LMAE \= Local Memory Address Access Entropy
 \end{tabbing}
 
 \setcounter{page}{1}

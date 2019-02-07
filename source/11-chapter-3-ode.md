@@ -410,6 +410,7 @@ The i7 is the best performer of all the CPU type accelerators, taking 6ms which 
 <!--However, the amount of parallelism expressed at a thread level is less suited to this architecture than the GPUs.-->
 As the CPUs have fewer hardware threads they are less able to exploit the available parallelism in the benchmark than the GPUs.
 The Xeon Phi 7210 MIC is $\approx10-20\times$ slower than the other accelerators, we believe this is due to the lack of vectorization of the kernel.
+Indeed, many of the kernels lack vectorization and explain much of the poor performance on the KNL MIC.
 
 Figure\ \ref{fig:time-medium} (b) (\texttt{lud}) from the Dense Linear Algebra dwarf shows similar trends.
 It is largely well suited to GPUs however is less suited to the HPC scientific cards and the MIC performs better.
