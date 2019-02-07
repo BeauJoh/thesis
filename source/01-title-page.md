@@ -1,7 +1,7 @@
 <!-- 
 This is the Latex-heavy title page. 
 -->
-
+\frontmatter
 \begin{titlepage}
     \begin{center}
 

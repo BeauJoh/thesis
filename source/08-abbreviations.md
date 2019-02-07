@@ -1,5 +1,5 @@
-
-\chapter*{Abbreviations}
+<!--
+\chapter{Abbreviations}
 
 \begin{tabbing}
 \textbf{AIWC} \= \textbf{A}rchitecture \textbf{I}ndependent \textbf{W}orkload \textbf{C}haracterization\\
@@ -50,4 +50,4 @@
 \end{tabbing}
 
 \let\cleardoublepage\clearpage
-
+-->

@@ -27,4 +27,5 @@ include-before:
     - \renewcommand{\@todonotes@drawMarginNoteWithLine}{\begin{tikzpicture}[remember picture, overlay, baseline=-0.75ex] \node [coordinate] (inText) {};\end{tikzpicture}\marginnote[{\@todonotes@drawMarginNote\@todonotes@drawLineToLeftMargin}]{\@todonotes@drawMarginNote \@todonotes@drawLineToRightMargin}}
     - \makeatother
     - \bibliographystyle{anuthesis}
+    - \makeatletter
 ---
