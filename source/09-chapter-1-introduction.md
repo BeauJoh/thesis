@@ -1,5 +1,8 @@
 # Introduction
 
+\setcounter{page}{1}
+\renewcommand{\thepage}{\arabic{page}}
+
 <!-- 
 For italic, add one * on either side of the text
 For bold, add two * on either side of the text
@@ -10,12 +13,12 @@ For bold and italic, add _** on either side of the text
 
 Supercomputers are used in computationally intensive tasks and are a critical component in current scientific research.
 They are essential in simulations for quantum mechanics, weather forecasting, climate research, oil and gas exploration and molecular modeling.
-However the largest supercomputers are requiring huge amounts of electricity to operate, for example the current worlds fastest supercomputer, Summit \todo[inline]{TOP500 reference}, requires 8.8 MW to power, which is in the terms of the average Australian home (13.7 kWh per day) could power 15500 homes.
+However the largest supercomputers are requiring huge amounts of electricity to operate, for example the current worlds fastest supercomputer, Summit [@top500_2018], requires 8.8 MW to power, which is in the terms of the average Australian home (13.7 kWh per day) could power 15500 homes.
 To reduce this large energy footprint supercomputers are becoming increasingly heterogeneous.
 At an individual node, there is a trend towards specialised hardware -- known as accelerators -- which can expedite the computation of codes from particular classes of scientific workloads.
 The use of accelerators for certain programs offers a shorter time to completion, and less energy expenditure, when compared to a conventional CPU architecture.
-The next generation of these systems has been designed to incorporate a greater number of accelerators, and of varying types per node.
-For instance, the CAPI and NVLINK technologies included in the latest IBM POWER9 processor offers a high-speed interconnect which allows the rapid movement data between processor and accelerator --  where NVIDIA Graphical Processing Unit (GPU) use NVLink, whereas other accelerator devices such as Altera Field-Programmable Gate Array (FPGA), Digital Signal Processors (DSPs), Intel Many-Integrated-Core (MIC) devices, and both Intel and AMD Central Processing Unit (CPU) and AMD GPU devices can utilise the CAPI interconnect.
+The next generation of supercomputers has been designed to incorporate a greater number of accelerators, and of varying types per node.
+For instance, the CAPI [@stuecheli2018ibm] and NVLINK [@foley2017ultra] technologies included in the latest IBM POWER9 [@sadasivam2017ibm] processor offers a high-speed interconnect which allows the rapid movement data between processor and accelerator --  where NVIDIA Graphical Processing Unit (GPU) use NVLink, whereas other accelerator devices such as Altera Field-Programmable Gate Array (FPGA), Digital Signal Processors (DSPs), Intel Many-Integrated-Core (MIC) devices, and both Intel and AMD Central Processing Unit (CPU) and AMD GPU devices can utilise the CAPI interconnect.
 The support from hardware vendors for a greater mix of heterogeneous devices indicates this is the new direction of supercomputing.
 However, this development is recent, and as such the scheduling of workloads to the most suitable accelerator is a new problem.
 The cost of exascale computing and their corresponding energy efficiency will be prohibitive without significant improvements in effectively using accelerators on the emerging generation of supercomputers.

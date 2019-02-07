@@ -1,9 +1,10 @@
+
 # Abbreviations {.unnumbered}
 
 \begin{tabbing}
 \textbf{AIWC} \= \textbf{A}rchitecture \textbf{I}ndependent \textbf{W}orkload \textbf{C}haracterization\\
 \textbf{ASIC} \= \textbf{A}pplication-\textbf{S}pecific \textbf{I}ntegrated \textbf{C}ircuit\\
-\textbf{AVX} \= \textbf{A}dvanced \textbf{V}ector \textbf{E}xtensions\\
+\textbf{AVX} \= \textbf{A}dvanced \textbf{V}ector E\textbf{x}tensions\\
 \textbf{CLgen} \= Open\textbf{CL} kernel \textbf{gen}eration framework\\
 \textbf{CPE} \= \textbf{C}omputer \textbf{P}rocessing \textbf{E}lements\\
 \textbf{CPU} \= \textbf{C}entral \textbf{P}rocessing \textbf{U}nit\\
@@ -38,7 +39,7 @@
 \textbf{SHOC} \= \textbf{S}calable \textbf{H}eter\textbf{o}geneous \textbf{C}omputing benchmark suite\\
 \textbf{SIMD} \= \textbf{S}ingle \textbf{Instruction} \textbf{M}ultiple \textbf{D}ata\\
 \textbf{SIMT} \= \textbf{S}ingle \textbf{I}nstruction \textbf{M}ultiple \textbf{T}hread\\
-\textbf{SMaC} \= \textbf{S}calable \textbf{M}any \textbf{C}ore\\
+\textbf{SMaC} \= \textbf{S}calable \textbf{Ma}ny \textbf{C}ore\\
 \textbf{SoC} \= \textbf{S}ystem-\textbf{o}n-a-\textbf{C}hip\\
 \textbf{SPIR} \= \textbf{S}tandard \textbf{P}ortable \textbf{I}ntermediate \textbf{R}epresentation\\
 \textbf{TLB} \= \textbf{T}ranslation \textbf{L}ook-aside \textbf{B}uffer\\
@@ -47,8 +48,6 @@
 \textbf{t-SNE} \= \textbf{t}-Distributed \textbf{S}tochastic \textbf{N}eighbor \textbf{E}mbedding\\
 \textbf{VPU} \= \textbf{V}ector \textbf{P}rocessing \textbf{U}nit\\
 \end{tabbing}
-
+\todo[inline]{fix this}
 \let\cleardoublepage\clearpage
 
-\setcounter{page}{1}
-\renewcommand{\thepage}{\arabic{page}}

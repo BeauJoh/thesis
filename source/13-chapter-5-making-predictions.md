@@ -395,4 +395,5 @@ EOD is run over updated devices and the performance runtimes provided into a new
 
 AIWC and the prediction methodology could also be used to guide system designers on the optimal mix of accelerators for future supercomputers.
 For instance, the range of codes expected to run on the machine can be examined with AIWC before any hardware is purchased and the performance of potential accelerators estimated.
+Additionally, the predictive model can be trained by the hardware vendor using EOD (or other benchmark suites) and the trained model can be used by a HPC facility owner to perform predictions on their own suite of codes, without the need to provide the characteristics of these codes to the vendor.
 

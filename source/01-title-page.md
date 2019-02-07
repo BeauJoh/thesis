@@ -18,7 +18,7 @@ This is the Latex-heavy title page.
         Beau Johnston
         
         \vspace{1.3cm}
-        January 2019
+        February 2019
         \vspace{1.3cm}
 
         \normalsize

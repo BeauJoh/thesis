@@ -465,7 +465,7 @@ large   & 19574.41      & 203756                    & 69305608      & 2213208 \\
 
 
 \begin{table*}[t]
-\caption{Overhead of the \textbf{AIWC} tool on the {\tt fft} benchmark and the Intel i7-6700K CPU. \label{tbl:aiwc-overhead}}
+\caption{Overhead of the AIWC tool on the {\tt fft} benchmark and the Intel i7-6700K CPU. \label{tbl:aiwc-overhead}}
 \centering
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{ |l|r|r|r|r|r|r| }
