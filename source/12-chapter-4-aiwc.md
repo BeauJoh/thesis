@@ -134,15 +134,13 @@ Each of our metrics is described in greater detail in the remainder of this Sect
 \end{table*}
 
 For each OpenCL kernel invocation, the Oclgrind simulator AIWC tool collects a set of 28 metrics, which are listed in [Table @tbl:aiwc-metrics].
-Exploitable coarse-grained parallelism is measured by counting the number of work-items and barriers encountered.
-Instructions To Barrier (ITB) and Instructions per Thread (IPT) can be used to indicate workload irregularity or imbalance.
-
+<!--Exploitable coarse-grained parallelism is measured by counting the number of work-items and barriers encountered.
+Instructions To Barrier (ITB) and Instructions per Thread (IPT) can be used to indicate workload irregularity or imbalance.-->
 The **Opcode**, **total memory footprint** and **90% memory footprint** measures are simple counts.
 Likewise, **total instruction count** is the number of instructions achieved during a kernels execution.
 The **global memory address entropy** is a positive real number that corresponds to the randomness of memory addresses accessed.
 The **local memory address entropy** is computed as 10 separate values according to an increasing number of Least Significant Bits (LSB), or low order bits, omitted in the calculation.
 The number of bits skipped ranges from 1 to 10, and a steeper drop in entropy with an increasing number of bits indicates greater spatial locality in the address stream.
-
 Both **unique branch instructions** and the associated **90% branch instructions** are counts indicating the count of logical control flow branches encountered during kernel execution.
 **Yokota branch entropy** ranges between 0 and 1, and offers an indication of a program's predictability as a floating point entropy value. [@yokota2007introducing] 
 The **average linear branch entropy** metric is proportional to the miss rate in program execution; $p=0$ for branches always taken or not-taken but $p=0.5$ for the most unpredictable control flow.
