@@ -203,6 +203,8 @@ The memory footprint was verified for each benchmark by printing the sum of the 
 The applications examined in this work are presented in Table \ref{table:applications-and-dwarf} alongside their representative dwarf from the Berkeley Taxonomy.
 
 For this study, problem sizes were not customized to the memory hierarchy of each platform, since the CPU is the most sensitive to cache performance.
+CPUs hide memory access latency through a large and deep cache hierarchy, while GPUs solve the same problem by having a larger number of threads which can be quickly swapped out while waiting on memory operations.
+For this reason, GPUs are less impacted by problem size -- as long as it fits on device memory -- and therefore GPU cache size was not considered while setting problem sizes.
 Also, note for these CPU systems the L1 and L2 cache sizes are identical, and since we ensure that **large** is at least $4\times$ larger than L3 cache, we are guaranteed to have last-level cache misses for the **large** problem size.
 
 <!--

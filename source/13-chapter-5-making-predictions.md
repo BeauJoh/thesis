@@ -57,7 +57,7 @@ Our data comprises of 2200+ unique mean runtime entries but when coupled with th
 ### Constructing the Random Forest Performance Model
 
 The random forest model is used to estimate the execution times based on the 28 AIWC metrics for all 64k observations.
-This regression model uses the measured execution times from EOD as the response and AIWC metrics as a predictor variables.
+This regression model uses the measured execution times from EOD as the response and AIWC metrics as predictor variables.
 Other predictive models such as linear regression, Principal component regression, generalised linear models, vectorized generalised additive models, however, were discarded due to their multivariate outcomes.
 K-nearest neighbours were also considered but the dimensionality of the search-space was too high.
 Feed-forward general networks with multiple hidden layers were considered but the sample size was insufficient to ensure valid convergence of the learning function and also the network structure was too simple for the complicated manifold induced by the data.
@@ -343,7 +343,7 @@ In almost all cases, the relative order is preserved using our model.
 In other words, our model will correctly predict the fastest device in all cases -- with one exception, the `kmeansPoint` kernel.
 For this kernel, the predicted time of the fiji-furyx is lower than the hawaii-r9-290x, however the measured times between the two shows the furyx completing the task in a shorter time.
 For all other device pairs, the relative order for the `kmeansPoint` kernel is correct.
-Additionally, the `lud_diagonal` kernel suffers from systematic under-prediction of execution times on AMD GPU devices, however the relative ordering is still correct.
+Additionally, the `lud_diagonal` kernel suffers from systematic under-prediction of execution times on AMD GPU devices, however, the relative ordering is still correct.
 As such, the proposed model provides sufficiently accurate execution time predictions to be useful for scheduling to heterogeneous compute devices on supercomputers.
 
 ### Predictions for Good
@@ -378,9 +378,9 @@ Namely, if you have different kernels then you are going to need to collect lots
 This is not very efficient to have to re-train but if you don't then there is a strong risk of poor prediction.
 Other approaches are more robust to this situation.
 
-Another potential critique of using the random forest for this problem, include the potential for comparatively large model storage as dimensionality increases and that there is no feedback from the model as to why a particular device choice is optimal. The metrics used in the assessment are quite limited and more detailed error investigation analysis could include a confidence scores or uncertainty on the predictions based on a more comprehensive error analysis which explores the levels of prediction uncertainty associated with each kernel.
+Another potential critique of using the random forest for this problem, include the potential for comparatively large model storage as dimensionality increases and that there is no feedback from the model as to why a particular device choice is optimal. The metrics used in the assessment are quite limited and more detailed error investigation analysis could include confidence scores or uncertainty on the predictions based on a more comprehensive error analysis which explores the levels of prediction uncertainty associated with each kernel.
 
-If the predictive model were used in a real-world setting -- say on a HPC node -- the final metrics collected by AIWC could be embedded as a comment at the beginning of each kernel code.
+If the predictive model were used in a real-world setting -- say on an HPC node -- the final metrics collected by AIWC could be embedded as a comment at the beginning of each kernel code.
 This would follow the use-case for AIWC as a plugin to the OpenCL debugger Oclgrind.
 The developer would first use Oclgrind to debug, optimize and confirm functionality of a kernel, then, enable the AIWC plugin to generate the metrics for the final kernel code with the program settings that will be used at runtime.
 Our proposed solution uses AIWC as a plugin to the Oclgrind tool, which is already widely used by OpenCL developers.
@@ -393,4 +393,6 @@ Separately, the training of the model would only need to occur when the HPC syst
 The extent of model training is also largely automatic following the methodology presented in this thesis.
 EOD is run over updated devices and the performance runtimes provided into a newly trained regression model -- by following the approach outlined in this chapter.
 
+AIWC and the prediction methodology could also be used to guide system designers on the optimal mix of accelerators for future supercomputers.
+For instance, the range of codes expected to run on the machine can be examined with AIWC before any hardware is purchased and the performance of potential accelerators estimated.
 

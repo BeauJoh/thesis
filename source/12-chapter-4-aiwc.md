@@ -425,10 +425,10 @@ None of the bioinformatics benchmarks is vectorized (instructions per operand = 
 We believe that AIWC will be useful to diversity analysis, to this end, this Section presents information about using the tool.
 The AIWC plugin is only $\approx1000$ lines of code and  it is available as a fork of Oclgrind and can be publicly found on GitHub\footnote{\url{https://github.com/BeauJoh/Oclgrind}}.
 To use AIWC over the command line it is passed the appropriate `--aiwc` argument immediately after calling the oclgrind program.
-An example of its usage on the tiny kmeans application is shown below:
+An example of its usage on the kmeans application is shown below:
 
 ```
-    oclgrind --aiwc ./kmeans -p 0 -d 0 -t 0 -- -g -p 256 -f 30
+    oclgrind --aiwc ./kmeans [args]
 ```
 
 The collected metrics are logged as text in the command line interface during execution and also in a csv file, stored separately for each kernel and invocation.
