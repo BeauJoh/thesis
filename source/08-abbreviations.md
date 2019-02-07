@@ -1,5 +1,5 @@
 
-# Abbreviations {.unnumbered}
+\chapter*{Abbreviations}
 
 \begin{tabbing}
 \textbf{AIWC} \= \textbf{A}rchitecture \textbf{I}ndependent \textbf{W}orkload \textbf{C}haracterization\\
@@ -48,6 +48,6 @@
 \textbf{t-SNE} \= \textbf{t}-Distributed \textbf{S}tochastic \textbf{N}eighbor \textbf{E}mbedding\\
 \textbf{VPU} \= \textbf{V}ector \textbf{P}rocessing \textbf{U}nit\\
 \end{tabbing}
-\todo[inline]{fix this}
+
 \let\cleardoublepage\clearpage
 

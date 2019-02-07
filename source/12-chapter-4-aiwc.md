@@ -41,7 +41,7 @@ AIWC is the first workload characterization tool to support multi-threaded or pa
 We demonstrate the use of AIWC to characterize a variety of codes in the Extended OpenDwarfs Benchmark Suite [@johnston18opendwarfs] -- presented in chapter 3.
 We begin with an introduction of the metrics collected by AIWC, we then discuss how AIWC was implemented and demonstrate its usage on the `lud`, `nw`, `swat`, `gem`, `kmeans` and `hmm` benchmarks.
 Finally, we conclude with a summary of what AIWC and the associated metrics provide to prediction.
-A majority of this chapter was published in the LLVM-HPC workshop proceedings as part of the 30th International Conference for High Performance Computing, Networking, Storage, and Analysis (SC18) 2018 [@aiwc2018].
+A majority of this chapter was published in the LLVM-HPC workshop proceedings as part of the 30^th^ International Conference for High Performance Computing, Networking, Storage, and Analysis (SC18) 2018 [@aiwc2018].
 <!--
 Additionally, work from [Section @sec:case-study-bio] has been submitted as as Special Issue paper in the International Journal of High Performance Computing Applications (IJHPCA) and is currently under review.-->
 
@@ -362,7 +362,7 @@ The bioinformatics subset of applications from the extended OpenDwarfs benchmark
 `nw` and `swat` applications from the Dynamic-Programming dwarf are both directly used in sequence analysis, `gem` from the N-Body-Methods dwarf to cover biophysics computations, `hmm` from the Graphical-Models dwarf considers both sequence analysis and gene expression.
 Finally, the MapReduce dwarf features the `kmeans` benchmark, which can be used directly in both pattern identification and gene similarity comparisons.
 Figures\ \ref{fig:aiwc} and \ref{fig:aiwc-hmm} present radar/Kiviat diagrams of architecture-independent characteristics collected for each of the bioinformatics benchmarks.
-All results are presented over a single **small** problem size, and show the multiple kernels required to compute each benchmark application as superimposed plots in the same diagram.
+All results are presented over a single **small** problem size and show the multiple kernels required to compute each benchmark application as superimposed plots in the same diagram.
 The **small** size was selected since `hmm`, `gem` and `swat` benchmarks are from the fixed benchmarks -- they only offer one size -- however, the execution times typify those seen in the **small** sized `nw` and `kmeans` applications.
 
 \begin{figure*}

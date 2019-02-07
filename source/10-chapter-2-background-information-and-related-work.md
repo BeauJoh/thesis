@@ -95,7 +95,7 @@ There has been an active effort to migrate applications from less suited dwarfs,
 Efforts are primarily algorithmic, such as reordering of operations and the padding of shared memory, and have been used with various success on GPU architectures [@springer2011berkeley].
 Avoiding bank-conflicts and non-coalesced memory accesses thus increasing the use of private and shared memory are critical to performance of these dwarfs on GPUs.
 They are the most common type of accelerator in supercomputer systems.
-The recent adoption of the NVIDIA Volta GV100 GPU as the primary accelerator into the Summit and Sierra supercomputers [@markidis2018nvidia] is attributed to its performance [@tomov2010towards] and energy efficiency [@abdelfattah2018analysis] on workloads fundamental to scientific computing.
+The recent adoption of the Nvidia Volta GV100 GPU as the primary accelerator into the Summit and Sierra supercomputers [@markidis2018nvidia] is attributed to its performance [@tomov2010towards] and energy efficiency [@abdelfattah2018analysis] on workloads fundamental to scientific computing.
 
 Many Integrated Core (MIC) architectures are an Intel Corporation specific accelerator.
 Xeon Phi formerly known as Knights Landing (KNL) is the last series of the MIC accelerators, and was discontinued in July 2018.
@@ -313,7 +313,7 @@ We considered Rodinia, OpenDwarfs and SHOC as the potential basis for our extend
 
 Che et al. [@che2009rodinia] proposed the Rodinia benchmark suite to cover a wide range of parallel communication patterns to examine the performance of heterogeneous platforms free from language and device specific optimizations.
 The benchmarks were selected following the Berkeley Dwarf Taxonomy and are from real world high performance computing applications.
-The diversity between selected benchmarks was shown by measuring execution times, communications overheads and energy usage of running each benchmark on an NVIDIA GTX 280 GPU and an Intel Core 2 Extreme CPU.
+The diversity between selected benchmarks was shown by measuring execution times, communications overheads and energy usage of running each benchmark on an Nvidia GTX 280 GPU and an Intel Core 2 Extreme CPU.
 Across the suite: speedups in execution times ranged from 5.5x to 80.8x, communication overheads varied from 2-76% and GPU power consumption overheads ranged from 38-83 Watts, illustrating important architectural differences between the CPU and GPU.
 The Rodinia Benchmark suite originally consisted of nine applications; namely, Leukocyte Tracking, Speckle Reducing Anisotropic Diffusion, HotSpot, Back Propagation, Needleman-Wunsch, K-means, Stream Cluster, Breadth-First Search and Similarity Score, but it has since been extended [@che2010characterization].
 This extension features a subset of the dwarfs, namely, Structured Grid, Unstructured Grid, Dynamic Programming, Dense Linear Algebra, MapReduce, and Graph Traversal all of which may be expected to benefit from GPU acceleration.
@@ -588,7 +588,7 @@ Their solution generates two separate models each requiring two fundamental comp
 In their method, no training takes place and the micro-benchmarks were developed with CPU memory hierarchy in mind, thus it is unsuited to a broader range of accelerator devices.
 There are also many components and tools in use, for instance, network traffic is interpreted separately and requires the communication model to be developed from a different set of network performance capabilities, which needs more micro-benchmarks.
 
-Karami et al. [@karami2013statistical] design a performance model for NVIDIA GPUs from OpenCL kernels to aid developers to locate GPU specific performance bottlenecks in their codes.
+Karami et al. [@karami2013statistical] design a performance model for Nvidia GPUs from OpenCL kernels to aid developers to locate GPU specific performance bottlenecks in their codes.
 This model depends on the collection of GPU performance counters over a range of benchmarks, these counters are then provided to a regression model with principle component analysis to develop a model to show how different GPU parameters account for applications performance bottlenecks.
 The model predicts application behaviour with good accuracy (91%) and when coupled with a larger database of collections can be used to predict their likely performance bottlenecks of unknown applications based on similarities with those previously collected.
 A caveat of this approach is that collecting performance counters as a basis for a model is microarchitecture specific -- where counters collected from a system can range wildly between generation of processor and is not portable between vendors.

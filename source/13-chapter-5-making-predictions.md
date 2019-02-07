@@ -8,21 +8,21 @@ AIWC operates on OpenCL kernels by simulating an OpenCL device and performing in
 Predicting the performance of a particular OpenCL application on a selected accelerator is challenging due to complex interactions between the computational requirements of the code and the capabilities of the target device.
 Certain classes of application are better suited to a certain type of accelerator [@che2008accelerating], and choosing the wrong device results in slower and more energy-intensive computation [@fowers2013performance].
 The penalties involved in selecting the wrong accelerator for a given code is shown in the ranges between the best and worst execution times of the Figures \ref{fig:time-medium} and \ref{fig:time-fixed} in Chapter 3.
-Thus, accurate accelerator selection is critical to making optimal scheduling decisions to achieve good performance in a heterogeneous supercomputing environment.
+Thus, accelerator selection is critical to making optimal scheduling decisions to achieve good performance in a heterogeneous supercomputing environment.
 The ability to predict which device is optimal without having to first run a new code on all devices first is desirable.
 AIWC metrics -- from Chapter 4 -- provide a good representation of the characteristics of codes; we propose that these metrics can be used directly for the prediction of execution times over various accelerators.
 In this chapter, we develop a model that employs the AIWC features to make accurate predictions over a range of current accelerators.
 The execution times from Chapter 3 are used as response variables and the AIWC metrics are used as input variables to train this model.
 This chapter discusses how the model is developed and optimized for our data, an evaluation is presented along with a discussion of its use case on predictions for scheduling.
 
-There are many current projects which attempt task scheduling on heterogeneous multicore architectures, these include, StarPU [@augonnet2011starpu], Ompss [@duran2011ompss] and CoreTSAR [@scogland2014coretsar]<!-- and AutoMatch [@helal2017automatch].-->
-Many of these schedulers track dependencies within tasks and target either compute bandwidth or latency by scheduling work to the most appropriate accelerator at the granularity of function call level or the work inside a single parallel region.
+There are many current projects which attempt task scheduling on heterogeneous multicore architectures, these include StarPU [@augonnet2011starpu], Ompss [@duran2011ompss] and CoreTSAR [@scogland2014coretsar]<!-- and AutoMatch [@helal2017automatch].-->
+Many of these schedulers track dependencies within tasks and target either compute, bandwidth or latency by scheduling work to the most appropriate accelerator at the granularity of function call level or the work inside a single parallel region.
 The history of the performance of a task is used to determine the optimal device to use in the future.
-However, by the nature of this approach means these schedulers must execute a new kernel code on all available accelerators before any scheduler smart strategies can be used --  and this is where our predictive method can be employed.
-We can provide the initial expected execution times of a kernel before it is run, if this prediction is incorrect, these schedulers can default back to their old strategy of measuring the performance on all available accelerators.
-However, in this chapter we present a highly accurate predictive framework and discuss the methodology used in its development.
-It provides the low-hanging fruit useful in energy-efficient scheduling by providing the initial estimates of execution time and prevents redundant computing work involved in the start-up of new kernels on schedulers.
-This work was published in 16th International Conference on High Performance Computing & Simulation, HPCS 2018 [@johnston2018opencl].
+However, the nature of this approach means these schedulers must execute a new kernel code on all available accelerators before any scheduler smart strategies can be used.
+Our model can predict the expected execution time of a kernel before it is run; if this prediction is incorrect, these schedulers can default back to their old strategy of measuring the performance on all available accelerators.
+<!--However, in this chapter we present a highly accurate predictive framework and discuss the methodology used in its development.
+It provides the low-hanging fruit useful in energy-efficient scheduling by providing the initial estimates of execution time and prevents redundant computing work involved in the start-up of new kernels on schedulers.-->
+This work was published in the 16^th^ International Conference on High Performance Computing & Simulation, HPCS 2018 [@johnston2018opencl].
 
 
 ## Model Development
@@ -47,12 +47,12 @@ In the remainder of this section, we outline the experimental setup, describe ho
 
 ### Experimental Setup
 
-AIWC -- from Chapter 4 -- was used to characterize a variety of codes in the OpenDwarfs Extended (EOD) Benchmark Suite -- from Chapter 3 -- and the corresponding AIWC metrics were used as predictor variables in to fit a random forest regression model.
-The metrics were generated over 4 problem sizes for each of the 12 applications -- and 37 computationally regions known as kernels in the OpenCL setting.
+AIWC -- from Chapter 4 -- was used to characterize a variety of codes in the OpenDwarfs Extended (EOD) Benchmark Suite -- from Chapter 3 -- and the corresponding AIWC metrics were used as predictor variables to fit a random forest regression model.
+The metrics were generated over 4 problem sizes for each of the 12 applications / 37 kernels.
 Response variables were collected following the same methodology outlined in Chapter 3 -- where the details for each of the applications is also presented.
 Execution times were measured for at least 50 iterations and a total runtime of at least two seconds for each combination of device and benchmark.
 Each application was run over 15 different accelerator devices and each kernel collected at four different problem sizes.
-Our data comprises of 2200+ unique mean runtime entries but when coupled with the AIWC metrics for each observation our data comprises up to 64k entries in total; we train our model with 20% (randomly selected) and use the remaining 80% for evaluation.
+Our data comprises of 2200+ unique mean runtime entries but when coupled with the AIWC metrics for each observation our data comprises up to 64k entries in total; we train our model with 20% of the data entries (randomly selected) and use the remaining 80% for evaluation.
 
 ### Constructing the Random Forest Performance Model
 
@@ -62,7 +62,7 @@ Other predictive models such as linear regression, Principal component regressio
 K-nearest neighbours were also considered but the dimensionality of the search-space was too high.
 Feed-forward general networks with multiple hidden layers were considered but the sample size was insufficient to ensure valid convergence of the learning function and also the network structure was too simple for the complicated manifold induced by the data.
 Random forests were selected since they are a well known robust performer, quick to compute and easy to store the computed object model.
-Random forests do not assume any underlying data structures -- it finds these automatically using tree pruning methods -- and are good at segmenting the data for individual regression problems and thus are well suited to our goals; building a performance prediction model that can select between various devices based solely on that kernels AIWC feature-space.
+Random forests do not assume any underlying structure in the data but rather finds these automatically using tree pruning methods -- and they are good at segmenting the data for individual regression problems and thus are well suited to our goals; building a performance prediction model that can select between various devices based solely on that kernel's AIWC feature-space.
 
 The R programming language was used to analyse the data, construct the model and analyse the results.
 In particular, the \textit{ranger} package by Wright and Ziegler [@JSSv077i01] was used for the development of the regression model. 
@@ -135,6 +135,7 @@ To show this, the model must not be over-fitted, that is to say, the random fore
 We evaluated how robust the selection of model parameters is to the choice of kernel by repeatedly retraining the model on a set of kernels, each time removing a different kernel.
 The procedure used is presented in Algorithm \ref{alg:kernel-omission}.
 For each selection of kernels, \textit{optima\_sa} was run from the same starting location -- num.trees=500, mtry=32  -- and the final optimal values were recorded. min.node.size was fixed at 9.
+The 64k entries are stored in an R data frame -- a table or a two-dimensional array-like structure.
 
 The optimal -- and final -- parameters for each omitted kernel are presented in Table \ref{tab:optimal-tuning-parameters}.
 Regardless of which kernel is omitted, the R-squared values -- or explained variance -- is very high at 0.99, indicating a good model fit.
@@ -309,10 +310,10 @@ Thus, they depict the relative error in prediction -- lighter indicates a smalle
 Four different problem sizes are presented: tiny in the top-left, small in the top-right, medium bottom-left, large bottom-right.
 The kernels (y-axis) between each of problem size do not align due to the number of supported applications, and kernels, in each problem size -- this is discussed in Chapter 3.
 
-In general, we see highly accurate predictions which on average differ from the measured experimental run-times by 1%, which correspond to actual execution time mispredictions of 8 $\mu s$ to 1 secs according to problem size.
+In general, we see highly accurate predictions which on average differ from the measured experimental run-times by 1.1%, which correspond to actual execution time mispredictions of 8 $\mu$s to 1s according to problem size.
 
 The `init_alpha_dev` kernel is the worst predicted kernel over both the tiny and small problem sizes, with mean misprediction at 7.6%.
-However, this kernel is only run once per application run -- it is used in the initialization of the Hidden Markov Model -- and as such there are fewer response variables available for model training which may lead its poorer predictions.
+However, this kernel is only run once per application run -- it is used in the initialization of the Hidden Markov Model -- and as such there are fewer samples available to influence the model, this may lead its poorer predictions.
 
 <!--
 However this could be systematic of the i5 processor having the lowest clock speed, as such the model misprediction is the same but the execution results are magnified.
@@ -332,7 +333,7 @@ However this could be systematic of the i5 processor having the lowest clock spe
 
 To demonstrate the utility of the trained model to guide scheduling choices, we focus on the accuracy of performance time prediction of individual kernels over all devices.
 The model performance in terms of real execution times is presented for four  selected kernels in Figure \ref{fig:large-predicted-vs-measured}.
-The shape denotes the type of execution time data point, a square indicates the mean measured time, and the diamond indicates the mean predicted time.
+The shape denotes the type of execution time data point, a square indicates the mean measured time, and the diamond indicates the predicted time.
 Thus, a perfect prediction occurs where the measured time -- square -- fits perfectly within the predicted -- diamond -- as shown in the legend.
 
 The purpose of showing these results is to highlight the setting in which they could be used -- on the supercomputing node.
@@ -348,10 +349,10 @@ As such, the proposed model provides sufficiently accurate execution time predic
 
 ### Predictions for Good
 
-The cost of making a prediction is $\approx 834$ms on the analysis system (i7-6700k and 16GB RAM) and is queried directly using R.
+The cost of making a prediction is $\approx 834$ms on the analysis system (i7-6700k and 16GB RAM) and is queried using \textit{R}.
+While the time taken is comparable to executing the kernel directly on a device, our strategy avoids the startup time associated with setting up the device, memory objects and kernel compilation and execution in OpenCL which is orders of magnitude slower, and avoids potential variation between runs -- a large sample size was used to predict mean execution times.
+Also, this is a prototype and the '\textit{predict}' function itself can likely be made much faster with an optimized `C` implementation instead of being called from \textit{R}.
 '\textit{predict}' is a generic function for predictions from the results of various model fitting functions.
-Predictions of elapsed execution times of any kernel on any potential accelerator are useful, that these predictions are precise and available in less than a second more so.
-
 The training is significantly more expensive to run, ranging from seconds to several minutes depending on the amount of data; thankfully, this only need be performed when new runtime data are provided -- which is only needed once a new accelerator is provided.
 It is envisaged that a pre-trained model can be shipped to HPC nodes for a scheduler to make the most appropriate predictions.
 
@@ -376,24 +377,22 @@ The model predictions differed from the measured experimental results by an aver
 There are limitations of the random forest model for extrapolation of data.
 Namely, if you have different kernels then you are going to need to collect lots of data concerning the performance of these kernels and then re-fit the random forest model again.
 This is not very efficient to have to re-train but if you don't then there is a strong risk of poor prediction.
-Other approaches are more robust to this situation.
+Other approaches are more robust in this situation.
 
-Another potential critique of using the random forest for this problem, include the potential for comparatively large model storage as dimensionality increases and that there is no feedback from the model as to why a particular device choice is optimal. The metrics used in the assessment are quite limited and more detailed error investigation analysis could include confidence scores or uncertainty on the predictions based on a more comprehensive error analysis which explores the levels of prediction uncertainty associated with each kernel.
+Other potential critiques of using the random forest for this problem include the potential for comparatively large model storage as dimensionality increases, and that there is no feedback from the model as to why a particular device choice is optimal. The metrics used in the assessment are quite limited and more detailed error investigation analysis could include confidence scores or uncertainty on the predictions based on a more comprehensive error analysis which explores the levels of prediction uncertainty associated with each kernel.
 
 If the predictive model were used in a real-world setting -- say on an HPC node -- the final metrics collected by AIWC could be embedded as a comment at the beginning of each kernel code.
 This would follow the use-case for AIWC as a plugin to the OpenCL debugger Oclgrind.
 The developer would first use Oclgrind to debug, optimize and confirm functionality of a kernel, then, enable the AIWC plugin to generate the metrics for the final kernel code with the program settings that will be used at runtime.
 Our proposed solution uses AIWC as a plugin to the Oclgrind tool, which is already widely used by OpenCL developers.
 These metrics are included as a comment into the kernel -- either in source or SPIR form.
-The scheduler extracts these metrics at runtime and evaluates them with the model to make performance predictions on the nodes available devices.
-If the runtime settings lead to substantially different AIWC features to the ones collected than the runtimes predictions may be inaccurate.
+The scheduler extracts these metrics at runtime and evaluates them with the model to make performance predictions on the node's available devices (if the runtime settings lead to substantially different AIWC features to the ones collected than the runtimes predictions may be inaccurate).
 This approach would allow the high accuracy of the predictive model without any significant overhead -- metrics are only generated and embedded once per kernel and is done largely automatically, with the guidance of the developer.
-StarPU [@augonnet2011starpu], Ompss [@duran2011ompss] and CoreTSAR [@scogland2014coretsar] schedulers could incorporate this prediction methodology to provide the initial estimate of a kernels execution time or energy usage without having to first execute it on all accelerators -- the strategy historically employed.
-Separately, the training of the model would only need to occur when the HPC system is updated, such that, a new accelerator device is added, or the drivers, or compiler updated.
-The extent of model training is also largely automatic following the methodology presented in this thesis.
-EOD is run over updated devices and the performance runtimes provided into a newly trained regression model -- by following the approach outlined in this chapter.
+StarPU [@augonnet2011starpu], Ompss [@duran2011ompss] and CoreTSAR [@scogland2014coretsar] schedulers could incorporate this prediction methodology to provide the initial estimate of a kernel's execution time or energy usage without having to first execute it on all accelerators -- the strategy historically employed.
+The training of the model would only need to occur when the HPC system is updated, such that, a new accelerator device is added, or the drivers, or compiler updated.
+The extent of model training is also largely automatic following the methodology presented in this thesis: EOD is run over updated devices and the performance runtimes provided into a newly trained regression model.
 
 AIWC and the prediction methodology could also be used to guide system designers on the optimal mix of accelerators for future supercomputers.
-For instance, the range of codes expected to run on the machine can be examined with AIWC before any hardware is purchased and the performance of potential accelerators estimated.
-Additionally, the predictive model can be trained by the hardware vendor using EOD (or other benchmark suites) and the trained model can be used by a HPC facility owner to perform predictions on their own suite of codes, without the need to provide the characteristics of these codes to the vendor.
+For instance, the range of codes expected to run on the machine can be examined with AIWC before any hardware is purchased.
+The predictive model can be trained by the hardware vendor using EOD (or other benchmark suites) and the trained model can be used by an HPC facility owner to predict the performance of their own suite of codes, without the need to provide the characteristics of these codes to the vendor.
 
