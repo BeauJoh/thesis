@@ -248,13 +248,13 @@ The **Total Unique Branch Instructions** is a count of the absolute number of un
 \texttt{workGroupComplete} events trigger the collection of the intermediate work-item and work-group counter variables to be added to the global suite, while \texttt{workGroupBegin} events reset all the local/intermediate counters.
 
 Finally, \texttt{kernelBegin} initializes the global counters and \texttt{kernelEnd} triggers the generation and presentation of all the statistics listed in [Table @tbl:aiwc-metrics].
-The source code is available at the GitHub Repository [@beau_johnston_2017_1134175].
+The AIWC source code is available at the GitHub Repository [@beau_johnston_2017_1134175].
 
 
 ## Demonstration
 
 We now demonstrate the use of AIWC on several scientific application kernels selected from the Extended OpenDwarfs Benchmark Suite [@johnston18opendwarfs].
-The details of the suite is described in Chapter 3.
+The details of the suite are described in Chapter 3.
 Our selection of benchmarks run with AIWC is not intended to be exhaustive, rather, it is meant to illustrate how key properties of the codes are reflected in the metrics collected by AIWC.
 
 We present metrics for the four different problem sizes, and all 11 different application codes (37 kernels) from EOD, as described in Chapter 3.
@@ -265,19 +265,19 @@ One metric was chosen from each of the main categories, namely, Opcode, Barriers
 Each category has also been segmented by colour: blue results represent *compute* metrics, green represent metrics that indicate *parallelism*, yellow represents *memory* metrics and purple bars represent *control* metrics.
 Median results are presented for each metric -- while there is no variation between invocations of AIWC, certain kernels are iterated multiple times and over differing domains/data sets.
 Each of the 4 sub-figures shows all kernels over the 4 different problem sizes.
-The x-axis shows different kernels but due to the unavailability of kernels on larger problem sizes the bottom half (4 metric) is unrelated to the top half.
+The x-axis shows different kernels but due to the unavailability of kernels on larger problem sizes the bottom half (4 metric) is not aligned to the top half.
 
 The top-left quadrant displays each of the four chosen metrics on the tiny problem size.
-The linear average branch entropy (purple) between tiny kernels the `bfs_kernel2` has the largest, and thus least predictable branching behaviour, which we expect for sorting algorithms where the behaviour around swapping values depends on the ordering of the data.
+The linear average branch entropy (purple) between tiny kernels the `bfs_kernel2` has the largest value, and thus least predictable branching behaviour, which we expect for sorting algorithms where the behaviour around swapping values depends on the ordering of the data.
 Some kernels display irregular branching while a majority of the tiny kernels are predictable.
 The diversity in opcodes ranges from 7-15 unique instructions on the tiny problem sized kernels, with the `srad` kernels using the most unique opcodes and some initialization kernels using the least.
-Barriers per instruction (shown in green) on the tiny problem size shows that most of the kernels in EOD have few barriers, `srad` has a small barrier relative to the total number of instructions executed.
+Barriers per instruction (shown in green) on the tiny problem size shows that most of the kernels in EOD have no internal barriers, except for `lud_diagonal`, `cl_fdwt53Kernel`, and the `nw` (`needle_opencl_shared_*`) kernels.
 18% of instructions in the `lud_diagonal` kernel will hit a barrier -- and is slightly less balanced given the unequal distribution of work for different starting locations of the decomposition.
-The `nw` and `crc` kernels frequently block, with many barriers comprising 40% of the instructions encountered, this dependency between other work-items indicate these benchmarks are less able to benefit from Single-Instruction Multiple-Thread (SIMT) parallelism.
+The `nw` kernels frequently block, with many barriers comprising 40% of the instructions encountered, this dependency between other work-items indicate these benchmarks are less able to benefit from Single-Instruction Multiple-Thread (SIMT) parallelism.
 The top-right quadrant displays the four chosen metrics on the small problem size, while the bottom-left quadrant present the same metrics on the medium problem size and the bottom-right quadrant shows the large sized EOD problems.
 
-Notice the change in scale for global memory address entropy.
-Almost all benchmarks show this metric increases with problem size, whereas the other metrics do not.
+
+Almost all benchmarks show the global memory address entropy metric increase with problem size, whereas the other metrics do not.
 Notably, memory entropy is low for \texttt{lud\_diagonal}, reflecting memory access with constant strides of diagonal matrix elements, and \texttt{cl\_fdt53Kernel}, again reflecting regular strides generated by downsampling in the discrete wavelet transform.
 We do not present all problem sizes for the kernels corresponding to \texttt{gem}, \texttt{nqueens}, \texttt{hmm} and \texttt{swat} benchmarks, since these only operate on a fixed problem size -- as discussed in Chapter 3.
 <!--
@@ -428,12 +428,11 @@ To use AIWC over the command line it is passed the appropriate `--aiwc` argument
 An example of its usage on the kmeans application is shown below:
 
 ```
-    oclgrind --aiwc ./kmeans [args]
+    oclgrind --aiwc ./kmeans <args>
 ```
 
 The collected metrics are logged as text in the command line interface during execution and also in a csv file, stored separately for each kernel and invocation.
-These files can be found in the working directory with the naming convention `aiwc_`$\alpha$`_`$\beta$`.csv`.
-Where $\alpha$ is the kernel name and $\beta$ is the invocation count -- the number of times the kernel has been executed.
+These files can be found in the working directory with the naming convention `aiwc_`$\alpha$`_`$\beta$`.csv`, where $\alpha$ is the kernel name and $\beta$ is the invocation count.
 
 <!--
         without AIWC                    with AIWC
@@ -484,7 +483,7 @@ large   & 19.6{ }       & 69300{ }{ }   & $\approx$3540$\times$             & 20
 \end{table*}
 
 
-AIWC has limitations, for illustration, we examined the overheads of using AIWC on the `fft` benchmark -- from Chapter 3.
+AIWC imposes significant overheads compared to normal execution, for illustration, we examined the overheads of using AIWC on the `fft` benchmark -- from Chapter 3.
 The `fft` benchmark was selected as it has average runtime results -- it falls roughly in the middle of the other benchmarks.
 Table \ref{tbl:aiwc-overhead} shows the relative overhead in terms of the elapsed time per kernel invocation and the maximum resident set size (peak virtual memory usage) during the benchmark execution, the results report with and without AIWC on four sizes of the `fft` benchmark on the Intel i7-6700K CPU.
 These results were collected with LibSciBench, for the kernel execution time, and Unix GNU time tool for the maximum resident set size.
@@ -493,13 +492,13 @@ The execution times are the mean time from collecting a two second sample -- the
 We see that executing the same application on a simulator instead of directly on the Intel OpenCL runtime has significant performance costs, both in terms of execution time and memory usage.
 AIWC takes 1800-4300$\times$ longer to execute depending on the problem size and uses 1.07$\times$, 1.96$\times$, 6.2$\times$, and 10.8$\times$ more memory as the problem size increases from tiny, small, medium and large respectively.
 The large memory footprint was limiting for us on one of the benchmarks; we encountered an issue with running the largest `lud` application where we exhausted the available RAM on our test system (16 GB), this was overcome by running the same experiment on a system with more RAM.
-The memory usage of AIWC is currently due to storing every register accessed during the simulated kernel run, it is needed for the local and global memory accesses entropy metrics which are calculated over different striding distances once the kernel has finished.
-We propose instead of these addresses being stored in a linked list they instead could be written to disk -- which is much less of a factor on current development computers -- however this is future work.
+The memory usage of AIWC is due to storing the index of every memory location accessed during the simulated kernel run, it is needed for the local and global memory accesses entropy metrics which are calculated over different striding distances once the kernel has finished.
+Instead of these addresses being stored in memory they instead could be written to disk.
 Until this improvement is performed, alternatives exist if the user is running out of memory, instead of executing the full range of kernel invocations to completion -- since some applications will repeat kernel execution hundreds or thousands of times to completion -- the developer could use AIWC for performance analysis on just a few iterations or a subset of the larger problem.
-In general, the final performance of the tool was not a limiting factor on a majority of the codes examined with AIWC and can still be performed quickly on the computer systems of today; \si{2{\giga\byte}} is a fraction of the total RAM available on commodity PCs, and the detailed AIWC metrics are valuable and take a few minutes to be generated on large problem sizes.
+The performance of the tool was not a limiting factor on a majority of the codes examined with AIWC taking just a few minutes to be generated on large problem sizes.
 
 The envisaged use of AIWC is that it is only run once, for instance, a developer wished to examine the characteristics of the kernel in order to identify suitability for accelerators or verify that a high degree of SIMD vectorization had been achieved.
-In the predictive scheduling setting, AIWC would be run on the codes prior to them being shipped/delivered; since these characteristics are collected by the developer on a realistic problem size, the metrics can be included as a comment in each kernels SPIR code, and the scheduler can use them by evaluating the shipped metrics on the model.
+In the predictive scheduling setting, AIWC would be run on the codes prior to them being shipped/delivered; since these characteristics are collected by the developer on a realistic problem size, the metrics can be included as a comment in each kernel's SPIR code, and the scheduler can use them by evaluating the shipped metrics on the model.
 Given the proposed workflow, the overhead added by AIWC is not significant or prohibitive to the prediction and scheduler pipeline.
 The predictive model is presented in detail in Chapter 5.
 
@@ -509,14 +508,13 @@ Examples of how AIWC metrics can be used for diversity analysis and device predi
 ## Summary
 
 We have presented the Architecture-Independent Workload Characterization tool (AIWC), which supports the collection of architecture-independent features of OpenCL application kernels.
-It is the first workload characterization tool to support multi-threaded or parallel workloads.
-These features can be used to predict the most suitable device for a particular kernel, or to determine the limiting factors for performance on a particular device, allowing OpenCL developers to try alternative implementations of a program for the available accelerators -- for instance, by reorganizing branches, eliminating intermediate variables et cetera.
+It is the first workload characterization tool to support parallel workloads.
+The collected features can be used to predict the most suitable device for a particular kernel, or to determine the limiting factors for performance on a particular device, allowing OpenCL developers to try alternative implementations of a program for the available accelerators -- for instance, by reorganizing branches, eliminating intermediate variables et cetera.
 In addition, the architecture independent characteristics of a scientific workload will inform designers and integrators of HPC systems, who must ensure that accelerator architectures are suitable for the intended workloads.
 
 To identify which AIWC characteristics are the best indicators of opportunities for optimization, we are currently looking at how individual characteristics change for a particular code through the application of best-practice optimizations for CPUs and GPUs (as recommended in vendor optimization guides).
 
 AIWC was also used to evaluate the performance bottlenecks of bioinformatics codes from the EOD suite.
 When also coupled with the runtime performance results of Chapter 3, it is interesting to note that optimal accelerators are typically GPU based, given the high available thread parallelism and high barrier synchronization counts of many sequencing analysis applications.
-However, the bioinformatics applications examined contain few kernels with higher branch and memory access entropies, interspersed with the GPU suited workloads, which suggests that CPUs are critical to achieving good performance on these systems.
-Indeed, partitioning applications by scheduling kernel to their optimal accelerator may generally provide better performance for HPC bioinformatics applications.
+However, the bioinformatics applications examined contain a few kernels with higher branch and memory access entropies, which suggests that CPUs are critical to achieving good performance on these applications.
 
