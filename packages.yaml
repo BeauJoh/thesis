@@ -21,6 +21,7 @@ header-includes:
     - \usepackage{./style/thesis}
     - \usepackage{appendix}
     - \usepackage{multirow}
+    - \usepackage{textcomp}
 
 include-before:
     - \makeatletter

@@ -310,7 +310,7 @@ Thus, they depict the relative error in prediction -- lighter indicates a smalle
 Four different problem sizes are presented: tiny in the top-left, small in the top-right, medium bottom-left, large bottom-right.
 The kernels (y-axis) between each of problem size do not align due to the number of supported applications, and kernels, in each problem size -- this is discussed in Chapter 3.
 
-In general, we see highly accurate predictions which on average differ from the measured experimental run-times by 1.1%, which correspond to actual execution time mispredictions of 8 $\mu$s to 1s according to problem size.
+In general, we see highly accurate predictions which on average differ from the measured experimental run-times by 1.1%, which correspond to actual execution time mispredictions of 8 \textmu s to 1s according to problem size.
 
 The `init_alpha_dev` kernel is the worst predicted kernel over both the tiny and small problem sizes, with mean misprediction at 7.6%.
 However, this kernel is only run once per application run -- it is used in the initialization of the Hidden Markov Model -- and as such there are fewer samples available to influence the model, this may lead its poorer predictions.
