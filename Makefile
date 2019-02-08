@@ -20,14 +20,14 @@ grammarly-abstract: source/04-abstract.md
 		-o output/grammarly.txt source/04-abstract.md
 	open -a Grammarly output/grammarly.txt #and open it in grammarly
 
-grammarly-chapter-1: source/9-chapter-1-introduction.md
+grammarly-chapter-1: source/09-chapter-1-introduction.md
 	pkill Grammarly || true #if grammarly already exists kill it
 	pandoc  --wrap=preserve \
 		--filter pandoc-crossref \
 		--filter pandoc-citeproc \
 		--number-sections \
 		-t plain \
-		-o output/grammarly.txt source/9-chapter-1-introduction.md
+		-o output/grammarly.txt source/09-chapter-1-introduction.md
 	open -a Grammarly output/grammarly.txt #and open it in grammarly
 
 grammarly-chapter-2: source/10-chapter-2-background-information-and-related-work.md

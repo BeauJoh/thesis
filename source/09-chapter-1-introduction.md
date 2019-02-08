@@ -14,11 +14,11 @@ For bold and italic, add _** on either side of the text
 <!-- Introduction to the Introduction -->
 
 Supercomputers are used in computationally intensive tasks and are a critical component in current scientific research.
-They are essential in simulations for quantum mechanics, weather forecasting, climate research, oil and gas exploration and molecular modeling.
-However the largest supercomputers are requiring huge amounts of electricity to operate, for example the current worlds fastest supercomputer, Summit [@top500_2018], requires 8.8 MW to power, which is in the terms of the average Australian home (13.7 kWh per day) could power 15500 homes.
+They are essential in simulations for quantum mechanics, weather forecasting, climate research, oil and gas exploration and molecular modelling.
+However the largest supercomputers are requiring huge amounts of electricity to operate, for example, the current worlds fastest supercomputer, Summit [@top500_2018], requires 8.8 MW to power, which is in the terms of the average Australian home (13.7 kWh per day) could power 15500 homes.
 To reduce this large energy footprint supercomputers are becoming increasingly heterogeneous.
 At an individual node, there is a trend towards specialised hardware -- known as accelerators -- which can expedite the computation of codes from particular classes of scientific workloads.
-The use of accelerators for certain programs offers a shorter time to completion, and less energy expenditure, when compared to a conventional CPU architecture.
+The use of accelerators for certain programs offers a shorter time to completion, and less energy expenditure when compared to a conventional CPU architecture.
 The next generation of supercomputers has been designed to incorporate a greater number of accelerators, and of varying types per node.
 For instance, the CAPI [@stuecheli2018ibm] and NVLINK [@foley2017ultra] technologies included in the latest IBM POWER9 [@sadasivam2017ibm] processor offers a high-speed interconnect which allows the rapid movement data between processor and accelerator --  where Nvidia Graphical Processing Unit (GPU) use NVLink, whereas other accelerator devices such as Altera Field-Programmable Gate Array (FPGA), Digital Signal Processors (DSPs), Intel Many-Integrated-Core (MIC) devices, and both Intel and AMD Central Processing Unit (CPU) and AMD GPU devices can utilise the CAPI interconnect.
 The support from hardware vendors for a greater mix of heterogeneous devices indicates this is the future direction of supercomputing.
@@ -44,7 +44,7 @@ Accelerators can be programmed in a variety of different languages -- CUDA [@nvi
 The Open Compute Language (OpenCL) [@stone2010opencl] allows programs to be written once and run anywhere on a range of accelerators.
 A majority of accelerator vendors ship products with an OpenCL supported runtime, many of which will be components on the next-generation of supercomputing nodes.
 Programs in the OpenCL setting are structured into two parts, the host and the accelerator/device side.
-The developer is responsible for allocating and transferring memory between the host and device.
+The developer is responsible for allocating and transferring memory between the host and the device.
 This requires programs to be structured with computationally intensive regions of code -- known as kernels -- to be identified and written in the OpenCL C kernel language.
 Kernels are viewed as indivisible functions, and as such, the nature of these kernels is fixed for all executions.
 Specifically, a kernel does not suffer from the phase-transitions that are common when looking at larger scientific codes.
@@ -56,7 +56,7 @@ Instrumentation of the execution of a kernel measures computation, memory, branc
 To this end, we developed the Architecture Independent Workload Characterisation (AIWC) tool.
 This tool collects 28+ metrics that indicate computation, memory, branching and parallelism characteristics on a per kernel basis.
 It simulates an OpenCL device using the Oclgrind [@price:15] tool.
-The AIWC plugin analyses a kernels execution trace, including the memory locations accessed and thread-states, to generates simple metrics that are representative of the kernels behaviour.
+The AIWC plugin analyses a kernels execution trace, including the memory locations accessed and thread-states, to generates simple metrics that are representative of the kernel's behaviour.
 Metrics can be collected quickly since it is a multi-threaded simulator.
 AIWC features, are generated for each kernel invocation and can be embedded as a comment into the header of OpenCL kernel codes -- either in plain-text source or in the Standard Portable Intermediate Representation (SPIR) [@rupp2016opencl] format.
 
@@ -79,7 +79,7 @@ These AIWC metrics were used as predictor variables into the random forest, with
 The accelerators examined in these predictions range from CPU, GPU and MIC, although, the methodology presented is expected to perform with other accelerators such as DSPs and FPGAs.
 
 
-The final random forest model performs well and is capable of accurate predictions which on average differ from the measured experimental run-times by 1.1%, which correspond to actual execution time mispredictions of 8 $\mu s$ to 1 secs according to problem size.
+The final random forest model performs well and is capable of accurate predictions which on average differ from the measured experimental run-times by 1.1%, which correspond to actual execution time mispredictions of 8$\mu s$ to 1s according to problem size.
 The model is capable of predicting execution times for specific devices based on the computational characteristics captured by the AIWC tool, which in turn, provides a good prediction of an accelerator devices execution time needed for a real-world scheduler for nodes of future super-computing systems.
 
 <!-- Restatement of the problem -->
@@ -104,7 +104,7 @@ Both the difficulties in identifying characteristics of scientific hardware agno
 
 The OpenDwarfs [@krommydas2016opendwarfs] benchmark suite is extended to include a greater range of scientific applications and over multiple problem sizes.
 Additionally, the extended suite incorporates a high precision timing library which is capable of measuring energy usage and execution times on any OpenCL device.
-The benchmark suite is run on a range of devices allowing a direct comparison to be made between these devices on a per application basis.
+The benchmark suite is run on a range of devices allowing a direct comparison to be made between these devices on a per-application basis.
 From this data, the suitably of OpenCL as a hardware agnostic language is shown.
 
 Separately, an Architecture Independent Workload Characterisation (AIWC) tool is presented and shown to be capable of analysing kernels and extract a set of predefined features or characteristics.
@@ -126,7 +126,7 @@ Chapter 2 canvasses the existing literature and current techniques used to sched
 Chapter 3 discusses the extensions added to the OpenDwarfs Benchmarking Suite in EOD.
 Chapter 4 highlights the construction, design decisions made and usage of the AIWC tool.
 Chapter 5 develops the prediction model and examines the accuracy of the final predictions.
-Chapter 6 discusses conclusions of this thesis and the future work required for the predictive model to be incorporated into scheduling on future supercomputing systems.
+Chapter 6 discusses the conclusions of this thesis and the future work required for the predictive model to be incorporated into scheduling on future supercomputing systems.
 
 ##Publications
 \begin{itemize}
