@@ -199,7 +199,6 @@ The percentage of cores in each system that is made up of accelerator / co-proce
     \label{top500-ratio-of-cpu-vs-accelerator-cores}
 \end{figure*}
 
-\todo[inline]{accelerators for energy efficiency}
 -->
 
 
@@ -545,7 +544,8 @@ To some extent Chapter 5 does this even more formally by generating and clusteri
 The evaluation on the feature-space is critical to the inclusion of particular extended OpenDwarfs applications and is performed in Chapter 4.
 
 
-##Scheduling and Performance Prediction for Heterogeneous Architectures
+<!--##Scheduling and Performance Prediction for Heterogeneous Architectures-->
+##Performance Prediction for Heterogeneous Architectures
 
 Predicting the performance of a particular application on a given device is challenging due to complex interactions between the computational requirements of the code and the capabilities of the target device.
 Certain classes of application are better suited to a certain type of accelerator [@che2008accelerating], and choosing the wrong device results in slower and more energy-intensive computation.
@@ -563,22 +563,7 @@ Hoste et al. [@hoste2006performance] show that the prediction of performance can
 In particular, they show that the metrics collected from a program executing on a particular instruction set architecture (ISA) with a specific compiler offers a relatively accurate characterization of workload for the same application on a totally different micro-architecture.
 Che et al. [@che2009rodinia] broaden this finding by performing analysis on a single threaded CPU version and find that a benchmark application maintains the underlying set of instructions -- the composition of the application is largely the same.
 
-It is intuitive that the collection of characteristics a program collected using a simulator -- such as Oclgrind discussed in [Section @sec:offline-ahead-of-time-analysis] -- offers a more general purpose, abstract, representation of the composition of the kernel and is indifferent to which accelerator it is ultimately mapped.
-This device abstraction offers a more accurate architecture agnostic set of metrics for an application workload, which, in turn, can be used as a basis for performance prediction on general accelerators.
-
-##Predictions and Modelling
-
-Augonnet et al. [@augonnet2010data] propose a task scheduling framework for efficiently issuing work between multiple heterogeneous accelerators on a per-node basis.
-They focus on the dynamic scheduling of tasks while automating data transfers between processing units to better utilise GPU-based HPC systems.
-Much of this work is placed on evaluating the scaling of two applications over multiple nodes -- each of which are comprised of many GPUs.
-Unfortunately, the presented methodology requires code to be rewritten using their MPI-like library.
-<!-- OpenCL, by comparison, has been in use since 2008 and supports heterogeneous execution on most accelerator devices.-->
-The algorithms presented to automate data movement should be reused for scheduling of OpenCL kernels to heterogeneous accelerator systems.
-
-Existing works [@topcuoglu1999task], [@bajaj2004improving], [@xiaoyong2011novel], [@sinnen2004list], have addressed heterogeneous distributed system scheduling and in particular the use of Directed Acyclic Graphs to track dependencies of high priority tasks.
-Provided the parallelism of each dependency is expressed as OpenCL kernels, the model proposed here can be used to improve each of these scheduler algorithms by providing accurate estimates of execution time for each task for each potential accelerator on which the computation could be performed.
-
-One such approach uses partial execution, as introduced by Yang et al. [@yang2005cross] enables low-cost performance estimates over a wide range of execution platforms.
+Partial execution, as introduced by Yang et al. [@yang2005cross] enables low-cost performance estimates over a wide range of execution platforms.
 Here a short portion of parallel code is executed and, since parallel codes are iterative behave predictably after the initial startup portion.
 An important restriction for this approach is it requires execution on each of the accelerators for a given code, which may be complicated to achieve using common HPC scheduling systems.
 
@@ -612,6 +597,22 @@ Similarly, a GPU performance modelling framework is proposed by Boyer, Meng and 
 The main motivation of this work is to examine a CUDA kernels potential, in terms of performance, before it is optimized.
 This work shows that the inclusion of transfer time is significant when improving a predictive models accuracy and is especially useful for predicting speed-up on accelerators located over slower interconnect, such as PCIe -- including the data transfer time in the model improved prediction error from 255% to 9%.
 
+It is intuitive that the collection of characteristics a program collected using a simulator -- such as Oclgrind discussed in [Section @sec:offline-ahead-of-time-analysis] -- offers a more general purpose, abstract, representation of the composition of the kernel and is indifferent to which accelerator it is ultimately mapped.
+This device abstraction offers a more accurate architecture agnostic set of metrics for an application workload, which, in turn, can be used as a basis for performance prediction on general accelerators.
+
+
+<!--##Predictions and Modelling-->
+##Scheduling for Heterogeneous HPC Systems
+
+Augonnet et al. [@augonnet2010data] propose a task scheduling framework for efficiently issuing work between multiple heterogeneous accelerators on a per-node basis.
+They focus on the dynamic scheduling of tasks while automating data transfers between processing units to better utilise GPU-based HPC systems.
+Much of this work is placed on evaluating the scaling of two applications over multiple nodes -- each of which are comprised of many GPUs.
+Unfortunately, the presented methodology requires code to be rewritten using their MPI-like library.
+<!-- OpenCL, by comparison, has been in use since 2008 and supports heterogeneous execution on most accelerator devices.-->
+The algorithms presented to automate data movement should be reused for scheduling of OpenCL kernels to heterogeneous accelerator systems.
+
+Existing works [@topcuoglu1999task], [@bajaj2004improving], [@xiaoyong2011novel], [@sinnen2004list], have addressed heterogeneous distributed system scheduling and in particular the use of Directed Acyclic Graphs to track dependencies of high priority tasks.
+Provided the parallelism of each dependency is expressed as OpenCL kernels, the model proposed here can be used to improve each of these scheduler algorithms by providing accurate estimates of execution time for each task for each potential accelerator on which the computation could be performed.
 In Chapter 5, we propose an alternative model which allows accurate execution time predictions of OpenCL kernels on a wide range of architecturally-diverse accelerators.
 This methodology uses features from AIWC -- from Chapter 4 -- to form a basis for a predictive model bound to run-times measured or the benchmark codes presented in Chapter 3.
 
