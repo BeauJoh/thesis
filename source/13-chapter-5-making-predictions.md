@@ -279,17 +279,17 @@ However, the model proposed is a proof of concept and suggests that a general pu
 \centering
 %acm
 \includegraphics[width=0.6\columnwidth]{./figures/chapter-5/actual-vs-predicted-size-plot-1.pdf}
-\caption{\label{fig:selected-model-actual-vs-predicted-times}Predicted vs. measured execution time for all kernels}
+\caption{\label{fig:selected-model-actual-vs-predicted-times}Predicted vs. measured execution time (in log(\textmu s)) for all kernels}
 \end{figure}
 
-Figure \ref{fig:selected-model-actual-vs-predicted-times} presents the measured kernel execution times against the predicted execution times from the trained model.
+Figure \ref{fig:selected-model-actual-vs-predicted-times} presents the measured kernel execution times (in log(\textmu s)) against the predicted execution times from the trained model.
 Each point represents a single combination of kernel and problem size -- there are 64k points in total.
 The plot shows a strong linear correlation indicating a good model fit.
 Under-predictions typically occur on four kernels over the medium and large problem sizes, while over-predictions occur on the tiny and small problem sizes.
 However, these outliers are visually over-represented in this figure as the final mean absolute error is low, at ~0.1.
 
 
-### Predictions Kernel Execution Time
+### Predicting Kernel Execution Time
 
 In this section, we examine differences in the accuracy of predicted execution times between different kernels, which is of importance if the predictions are to be used in a scheduling setting.
 
@@ -393,7 +393,7 @@ This approach would allow the high accuracy of the predictive model without any 
 The training of the model would only need to occur when the HPC system is updated, such that, a new accelerator device is added, or the drivers, or compiler updated.
 The extent of model training is also largely automatic following the methodology presented in this thesis: EOD is run over updated devices and the performance runtimes provided into a newly trained regression model.
 
-Our predictive model can choose the most appropriate accelerator for a given kernel.
+The predictive model can choose the most appropriate accelerator for a given kernel.
 Given a workload of varied applications, execution time predictions can be used to choose which nodes to allocate for each application.
 The execution time predictions can be used to determine whether to migrate applications between nodes e.g. when new nodes become available.
 
